@@ -1,24 +1,83 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/SiteHeader";
+import hero from "@/assets/hero-villa.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Bâtir — Votre projet de construction conçu par un agent expert" },
+      { name: "description", content: "Décrivez votre projet : l'agent Bâtir établit le programme, la conception, les plans et la documentation, étape par étape." },
+      { property: "og:title", content: "Bâtir — Agent de conception architecturale" },
+      { property: "og:description", content: "Du besoin aux plans : un agent expert qui conçoit votre maison ou votre bâtiment avec vous." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const steps = [
+  ["01", "Découverte", "Terrain, budget, besoins : l'agent vous pose les bonnes questions."],
+  ["02", "Programme", "Liste des espaces et surfaces, chaque chiffre justifié."],
+  ["03", "Conception", "Parti architectural adapté au climat et à vos usages."],
+  ["04", "Plans", "Organisation précise de chaque niveau, cotée."],
+  ["05", "Documentation", "Notice descriptive et estimation budgétaire par lot."],
+];
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen">
+      <SiteHeader />
+      <section className="bg-grid">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_1fr] md:py-24 items-center">
+          <div>
+            <p className="label-mono text-primary">Agent de conception · Côte d'Ivoire & au-delà</p>
+            <h1 className="mt-4 text-5xl font-bold leading-[1.02] md:text-7xl">
+              De l'idée<br />aux plans,<br /><span className="text-primary">sans détour.</span>
+            </h1>
+            <p className="mt-6 max-w-md text-lg text-muted-foreground">
+              Particuliers et professionnels : décrivez votre projet, l'agent Bâtir le conçoit avec vous, étape par étape. Vous validez chaque étape.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg"><Link to="/projets">Démarrer un projet</Link></Button>
+              <Button asChild size="lg" variant="outline"><Link to="/tarifs">Voir les tarifs</Link></Button>
+            </div>
+          </div>
+          <div className="relative">
+            <img src={hero} alt="Villa contemporaine en terre de latérite" width={1600} height={1008} className="w-full border border-border object-cover aspect-[4/3]" />
+            <div className="absolute -bottom-4 -left-4 bg-ink px-4 py-3 text-ink-foreground">
+              <p className="label-mono opacity-70">Règle</p>
+              <p className="font-display text-lg">Preuve &gt; affirmation</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 py-20">
+        <p className="label-mono text-muted-foreground">Le déroulé</p>
+        <h2 className="mt-2 text-3xl font-bold md:text-4xl">Cinq étapes, une validation à chaque fois.</h2>
+        <div className="mt-10 grid border-t border-l border-border sm:grid-cols-2 lg:grid-cols-5">
+          {steps.map(([n, t, d]) => (
+            <div key={n} className="border-b border-r border-border p-6 bg-card">
+              <p className="label-mono text-primary">{n}</p>
+              <h3 className="mt-3 text-xl font-semibold">{t}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-ink text-ink-foreground">
+        <div className="mx-auto max-w-6xl px-5 py-16 md:flex items-center justify-between gap-8">
+          <div>
+            <h2 className="text-3xl font-bold">Prêt à poser la première pierre ?</h2>
+            <p className="mt-2 opacity-70">La découverte de votre projet est gratuite.</p>
+          </div>
+          <Button asChild size="lg" className="mt-6 md:mt-0"><Link to="/projets">Commencer gratuitement</Link></Button>
+        </div>
+      </section>
+      <footer className="mx-auto max-w-6xl px-5 py-8 text-xs text-muted-foreground">
+        Documents conceptuels, sans valeur contractuelle. À faire valider par un architecte et un ingénieur agréés.
+      </footer>
     </div>
   );
 }

@@ -10,33 +10,98 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
+import { Route as AuthenticatedProjetsIdRouteImport } from './routes/_authenticated.projets.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TarifsRoute = TarifsRouteImport.update({
+  id: '/tarifs',
+  path: '/tarifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedProjetsIndexRoute =
+  AuthenticatedProjetsIndexRouteImport.update({
+    id: '/projets/',
+    path: '/projets/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedProjetsIdRoute = AuthenticatedProjetsIdRouteImport.update({
+  id: '/projets/$id',
+  path: '/projets/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/tarifs': typeof TarifsRoute
+  '/api/chat': typeof ApiChatRoute
+  '/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/tarifs': typeof TarifsRoute
+  '/api/chat': typeof ApiChatRoute
+  '/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/projets': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/tarifs': typeof TarifsRoute
+  '/api/chat': typeof ApiChatRoute
+  '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/_authenticated/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/tarifs'
+    | '/api/chat'
+    | '/_authenticated/projets/$id'
+    | '/_authenticated/projets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  TarifsRoute: typeof TarifsRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +113,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tarifs': {
+      id: '/tarifs'
+      path: '/tarifs'
+      fullPath: '/tarifs'
+      preLoaderRoute: typeof TarifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/projets/': {
+      id: '/_authenticated/projets/'
+      path: '/projets'
+      fullPath: '/projets/'
+      preLoaderRoute: typeof AuthenticatedProjetsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/projets/$id': {
+      id: '/_authenticated/projets/$id'
+      path: '/projets/$id'
+      fullPath: '/projets/$id'
+      preLoaderRoute: typeof AuthenticatedProjetsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedProjetsIdRoute: typeof AuthenticatedProjetsIdRoute
+  AuthenticatedProjetsIndexRoute: typeof AuthenticatedProjetsIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedProjetsIdRoute: AuthenticatedProjetsIdRoute,
+  AuthenticatedProjetsIndexRoute: AuthenticatedProjetsIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRoute,
+  TarifsRoute: TarifsRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
