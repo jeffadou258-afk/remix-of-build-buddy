@@ -14,6 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_status: {
+        Row: {
+          reason: string | null
+          status: string
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+        }
+        Insert: {
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+        }
+        Update: {
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_roles: string[]
+          after: Json | null
+          at: string
+          before: Json | null
+          id: string
+          ip: string | null
+          permission: string | null
+          reason: string | null
+          request_id: string | null
+          result: string
+          target_id: string | null
+          target_type: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_roles?: string[]
+          after?: Json | null
+          at?: string
+          before?: Json | null
+          id?: string
+          ip?: string | null
+          permission?: string | null
+          reason?: string | null
+          request_id?: string | null
+          result: string
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_roles?: string[]
+          after?: Json | null
+          at?: string
+          before?: Json | null
+          id?: string
+          ip?: string | null
+          permission?: string | null
+          reason?: string | null
+          request_id?: string | null
+          result?: string
+          target_id?: string | null
+          target_type?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      project_access_grants: {
+        Row: {
+          created_at: string
+          expires_at: string
+          grantee_id: string
+          id: string
+          project_id: string
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          grantee_id: string
+          id?: string
+          project_id: string
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          grantee_id?: string
+          id?: string
+          project_id?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_access_grants_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           building_model: Json | null
@@ -106,14 +219,102 @@ export type Database = {
           },
         ]
       }
+      role_permissions: {
+        Row: {
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          permission?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          granted_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      grant_role: {
+        Args: {
+          _reason: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target: string
+        }
+        Returns: Json
+      }
+      has_permission: {
+        Args: { _perm: string; _user_id: string }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_suspended: { Args: { _user_id: string }; Returns: boolean }
+      log_admin_action: {
+        Args: {
+          _action: string
+          _after?: Json
+          _before?: Json
+          _ip?: string
+          _permission: string
+          _reason: string
+          _request_id?: string
+          _result: string
+          _target_id: string
+          _target_type: string
+          _user_agent?: string
+        }
+        Returns: string
+      }
+      read_project_content: { Args: { _project_id: string }; Returns: Json }
+      request_project_access: {
+        Args: { _project_id: string; _reason: string }
+        Returns: Json
+      }
+      revoke_role: {
+        Args: {
+          _reason: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _target: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
+      app_role: "user" | "support" | "ops" | "finance" | "admin" | "auditor"
       project_stage:
         | "decouverte"
         | "programme"
@@ -248,6 +449,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["user", "support", "ops", "finance", "admin", "auditor"],
       project_stage: [
         "decouverte",
         "programme",
