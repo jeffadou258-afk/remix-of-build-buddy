@@ -6,7 +6,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { isSuspended } from "./guard.server";
+import { getRequest } from "@tanstack/react-start/server";
+import { isSuspended, audit, requestMeta } from "./guard.server";
 import { ALL_PERMISSIONS } from "./permissions";
 import { canSeeSection, type AdminSectionId } from "./admin-sections";
 
@@ -27,10 +28,20 @@ async function effectivePermissions({ supabase, userId }: Ctx): Promise<{ suspen
 
 export const getAdminAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((d) => z.object({ enter: z.boolean().optional() }).optional().parse(d))
+  .handler(async ({ data, context }) => {
     const r = await effectivePermissions(context);
-    return { ...r, allowed: !r.suspended && r.permissions.length > 0 };
+    const allowed = !r.suspended && r.permissions.length > 0;
+    // Refus journalisé uniquement à l'entrée réelle dans /admin (pas pour l'affichage du lien d'en-tête).
+    if (!allowed && data?.enter) await logDenied(context, "dashboard");
+    return { ...r, allowed };
   });
+
+async function logDenied(context: Ctx, section: AdminSectionId) {
+  let meta = {};
+  try { meta = requestMeta(getRequest()); } catch { /* pas de requête */ }
+  await audit(context.supabase, "admin.access_denied", { targetType: "admin_section", targetId: section, ...meta });
+}
 
 export const requireAdminSection = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -38,5 +49,6 @@ export const requireAdminSection = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const r = await effectivePermissions(context);
     const ok = !r.suspended && canSeeSection(r.permissions, data.section as AdminSectionId);
+    if (!ok) await logDenied(context, data.section as AdminSectionId);
     return { allowed: ok, suspended: r.suspended };
   });
