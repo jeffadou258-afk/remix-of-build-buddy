@@ -3,7 +3,9 @@ import { ClientOnly } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { toRenderPayload, type BuildingModel, type ElementRef } from "@/lib/bim/schema";
+import { provenanceSummary, toRenderPayload, type BuildingModel, type DataStatus, type ElementRef } from "@/lib/bim/schema";
+
+const ST: Record<DataStatus, string> = { fourni: "FOURNI", deduit: "DÉDUIT", hypothese: "HYPOTHÈSE", inconnu: "INCONNU" };
 
 const BuildingViewer = lazy(() => import("./BuildingViewer"));
 
@@ -11,19 +13,19 @@ function describe(model: BuildingModel, sel: ElementRef): [string, [string, stri
   const lvl = (id: string) => model.levels.find((l) => l.id === id)?.name ?? id;
   if (sel.kind === "piece") {
     const r = model.rooms.find((x) => x.id === sel.id)!;
-    return [`Pièce · ${r.name}`, [["ID", r.id], ["Niveau", lvl(r.levelId)], ["Usage", r.usage ?? "—"], ["Surface", r.area ? `${r.area} m²` : "—"]]];
+    return [`Pièce · ${r.name}`, [["ID", r.id], ["Niveau", lvl(r.levelId)], ["Usage", r.usage ?? "inconnu"], ["Surface", r.area ? `${r.area} m²` : "inconnue"], ["Statut", ST[r.status]]]];
   }
   if (sel.kind === "mur") {
     const w = model.walls.find((x) => x.id === sel.id)!;
     const len = Math.hypot(w.end[0] - w.start[0], w.end[1] - w.start[1]);
-    return [`Mur ${w.type}`, [["ID", w.id], ["Niveau", lvl(w.levelId)], ["Longueur", `${len.toFixed(2)} m`], ["Épaisseur", `${w.thickness} m`]]];
+    return [`Mur ${w.type}`, [["ID", w.id], ["Niveau", lvl(w.levelId)], ["Longueur", `${len.toFixed(2)} m`], ["Épaisseur", `${w.thickness} m${model.defaultsApplied.includes(`mur:${w.id}.thickness`) ? " (valeur par défaut)" : ""}`], ["Statut", ST[w.status]]]];
   }
   if (sel.kind === "porte" || sel.kind === "fenetre") {
     const o = model.openings.find((x) => x.id === sel.id)!;
-    return [`${o.kind === "porte" ? "Porte" : "Fenêtre"}${o.name ? ` · ${o.name}` : ""}`, [["ID", o.id], ["Mur", o.wallId], ["Dimensions", `${o.width} × ${o.height} m`], ["Allège", `${o.sill} m`]]];
+    return [`${o.kind === "porte" ? "Porte" : "Fenêtre"}${o.name ? ` · ${o.name}` : ""}`, [["ID", o.id], ["Mur", o.wallId], ["Dimensions", `${o.width} × ${o.height} m`], ["Allège", `${o.sill} m`], ["Statut", ST[o.status]]]];
   }
   const r = model.roof!;
-  return ["Toiture", [["Type", r.type.replace("_", " ")], ["Pente", `${r.pitch}°`], ["Débord", `${r.overhang} m`]]];
+  return ["Toiture", [["Type", r.type.replace("_", " ")], ["Pente", `${r.pitch}°`], ["Débord", `${r.overhang} m`], ["Statut", ST[r.status]]]];
 }
 
 export function ModelPanel({ projectId, model }: { projectId: string; model: BuildingModel | null }) {
@@ -50,6 +52,7 @@ export function ModelPanel({ projectId, model }: { projectId: string; model: Bui
   }
 
   const info = selected ? describe(model, selected) : null;
+  const prov = provenanceSummary(model);
   return (
     <div className="flex flex-col border border-border bg-card">
       <div className="flex flex-wrap items-center gap-2 border-b border-border p-3">
@@ -63,6 +66,12 @@ export function ModelPanel({ projectId, model }: { projectId: string; model: Bui
           <Button size="sm" variant="outline" onClick={exportJson}>Exporter (JSON)</Button>
           <Button size="sm" variant="outline" onClick={requestRender}>Demander un rendu réaliste</Button>
         </div>
+      </div>
+      <div className="border-b border-border p-3 text-xs">
+        <p><span className="font-semibold">{prov.validated ? "Maquette validée" : "Maquette conceptuelle NON VALIDÉE"}</span>
+          {" · "}Fourni {prov.counts.fourni} · Déduit {prov.counts.deduit} · Hypothèse {prov.counts.hypothese} · Inconnu {prov.counts.inconnu}</p>
+        {prov.unknowns.length > 0 && <p className="mt-1 text-muted-foreground">Inconnu : {prov.unknowns.map((u) => u.reason ? `${u.field} (${u.reason})` : u.field).join(" ; ")}</p>}
+        {prov.defaultsApplied.length > 0 && <p className="mt-1 text-muted-foreground">Valeurs par défaut affichées (non fournies) : {prov.defaultsApplied.length} champ(s)</p>}
       </div>
       <div className="relative h-[65vh]">
         <ClientOnly fallback={<p className="p-10 text-center text-muted-foreground">Chargement de la 3D…</p>}>
