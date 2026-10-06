@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
 import { Route as AuthenticatedProjetsIdRouteImport } from './routes/_authenticated.projets.$id'
@@ -36,6 +37,11 @@ const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
   path: '/tarifs',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/tarifs'
+    | '/admin'
     | '/api/chat'
     | '/projets/$id'
     | '/api/ca/$'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/tarifs'
+    | '/admin'
     | '/api/chat'
     | '/projets/$id'
     | '/api/ca/$'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/tarifs'
+    | '/_authenticated/admin'
     | '/api/chat'
     | '/_authenticated/projets/$id'
     | '/api/ca/$'
@@ -158,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TarifsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -190,11 +209,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedProjetsIdRoute: typeof AuthenticatedProjetsIdRoute
   AuthenticatedProjetsIndexRoute: typeof AuthenticatedProjetsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedProjetsIdRoute: AuthenticatedProjetsIdRoute,
   AuthenticatedProjetsIndexRoute: AuthenticatedProjetsIndexRoute,
 }

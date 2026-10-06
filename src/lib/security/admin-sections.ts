@@ -12,7 +12,7 @@ export type AdminSectionId =
 export type AdminSectionDef = {
   id: AdminSectionId;
   label: string;
-  path: string;
+  path: "/admin" | "/admin/utilisateurs" | "/admin/projets" | "/admin/gates" | "/admin/moteurs" | "/admin/usage" | "/admin/audit" | "/admin/sante" | "/admin/securite";
   /** Au moins une de ces permissions est requise. */
   anyOf: readonly Permission[];
   description: string;
