@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ export function SiteHeader() {
           ) : (
             <Button asChild size="sm"><Link to="/auth">Se connecter</Link></Button>
           )}
+          <ThemeToggle />
         </nav>
       </div>
     </header>

@@ -62,6 +62,32 @@
   --blueprint: oklch(0.78 0.11 215 / 0.07);
 }
 
+/* Variante claire ivoire & bleu — activée via html[data-theme="light"] */
+html[data-theme="light"] {
+  --background: oklch(0.97 0.014 90);
+  --foreground: oklch(0.28 0.04 258);
+  --card: oklch(0.995 0.005 95);
+  --card-foreground: oklch(0.28 0.04 258);
+  --popover: oklch(0.995 0.005 95);
+  --popover-foreground: oklch(0.28 0.04 258);
+  --primary: oklch(0.45 0.14 258);
+  --primary-foreground: oklch(0.98 0.008 250);
+  --secondary: oklch(0.92 0.02 250);
+  --secondary-foreground: oklch(0.28 0.04 258);
+  --muted: oklch(0.93 0.012 90);
+  --muted-foreground: oklch(0.5 0.03 258);
+  --accent: oklch(0.62 0.11 240);
+  --accent-foreground: oklch(0.99 0.005 250);
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.88 0.015 250);
+  --input: oklch(0.88 0.015 250);
+  --ring: oklch(0.45 0.14 258);
+  --ink: oklch(0.45 0.14 258);
+  --ink-foreground: oklch(0.98 0.008 250);
+  --blueprint: oklch(0.45 0.14 258 / 0.06);
+}
+
 @layer base {
   * { border-color: var(--color-border); }
   body {
