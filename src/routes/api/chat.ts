@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createOpenAI } from "@ai-sdk/openai";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { createClient } from "@supabase/supabase-js";
+import { isSuspended } from "@/lib/security/guard.server";
 import {
   createLovableAiGatewayRunIdFetch,
   getLovableAiGatewayRunId,
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/api/chat")({
         });
         const { data: userData, error: userErr } = await supabase.auth.getUser(token);
         if (userErr || !userData.user) return json(401, { error: "Session invalide." });
+        if (await isSuspended(supabase, userData.user.id)) return json(403, { error: "Compte suspendu." });
 
         const body = (await request.json()) as { messages?: UIMessage[]; projectId?: string };
         if (!body.projectId || !Array.isArray(body.messages)) return json(400, { error: "Requête invalide." });

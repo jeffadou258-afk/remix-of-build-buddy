@@ -8,6 +8,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { isAllowed, upstreamPath } from "@/lib/ca/allowlist";
+import { canDecideGate, isGateDecisionPath } from "@/lib/security/permissions";
+import { audit, isSuspended, requestMeta } from "@/lib/security/guard.server";
+import { redactBody } from "@/lib/security/redact.server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -30,7 +33,7 @@ async function callCa(method: string, path: string, ownerId: string, body?: stri
   } catch {
     return json(502, { error: "Backend ConstructionAgent injoignable." });
   }
-  const text = await res.text();
+  const text = redactBody(await res.text()); // aucun secret ne ressort du relais
   return new Response(text, { status: res.status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
 }
 
@@ -43,13 +46,20 @@ async function handle(request: Request, splat: string) {
   });
   const { data: u, error: ue } = await supabase.auth.getUser(token);
   if (ue || !u.user) return json(401, { error: "Session invalide." });
+  if (await isSuspended(supabase, u.user.id)) return json(403, { error: "Compte suspendu." });
 
   const [projectId = "", ...restParts] = splat.split("/");
   const sub = restParts.join("/");
   if (!UUID.test(projectId)) return json(404, { error: "Projet introuvable." });
 
-  const { data: project } = await supabase.from("projects").select("id, title, ca_project_id").eq("id", projectId).maybeSingle();
+  const { data: project } = await supabase.from("projects").select("id, title, ca_project_id, user_id").eq("id", projectId).maybeSingle();
   if (!project) return json(404, { error: "Projet introuvable." });
+
+  // Gate métier : seul le propriétaire du projet décide, quel que soit le rôle de l'appelant.
+  if (isGateDecisionPath(sub) && !canDecideGate(u.user.id, project.user_id)) {
+    await audit(supabase, "gates.decide", "gates.decide_on_behalf", "denied", { targetType: "project", targetId: project.id, ...requestMeta(request) });
+    return json(403, { error: "Seul le client propriétaire peut décider de ce Gate." });
+  }
 
   const method = request.method.toUpperCase();
   let body: string | undefined;
