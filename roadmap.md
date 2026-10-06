@@ -13,3 +13,5 @@
 - [x] Shell /admin (9 sections, accès contrôlé serveur)
 - [ ] Brancher les données réelles des sections Admin + double authentification
 - [x] Premier admin désigné
+
+- [ ] Validation réelle Gates : API ConstructionAgent déployée sur Render (en attente : déploiement Render par le propriétaire, puis adresse HTTPS + clé), puis vrai projet relié et contrôle /admin/gates.
