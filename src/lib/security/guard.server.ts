@@ -15,10 +15,18 @@ export async function isSuspended(sb: Sb, userId: string): Promise<boolean> {
   return (data as { status?: string } | null)?.status === "suspended";
 }
 
-export async function audit(sb: Sb, action: string, permission: string | null, result: "allowed" | "denied" | "error", m: AuditMeta = {}) {
-  await sb.rpc("log_admin_action", {
-    _action: action, _permission: permission, _target_type: m.targetType ?? null, _target_id: m.targetId ?? null,
-    _reason: m.reason ?? null, _result: result, _ip: m.ip ?? null, _user_agent: m.userAgent ?? null, _request_id: m.requestId ?? null,
+/** Actions que le serveur applicatif peut journaliser ; la base refuse toute autre. */
+export const LOGGABLE_ACTIONS = ["audit.list", "gates.decide"] as const;
+export type LoggableAction = (typeof LOGGABLE_ACTIONS)[number];
+
+/**
+ * Journalise via log_security_event : la base fixe elle-même permission, résultat,
+ * motif et avant/après. L'appelant ne transmet que l'action et la cible.
+ */
+export async function audit(sb: Sb, action: LoggableAction, m: Pick<AuditMeta, "targetType" | "targetId" | "ip" | "userAgent" | "requestId"> = {}) {
+  await sb.rpc("log_security_event", {
+    _action: action, _target_type: m.targetType ?? null, _target_id: m.targetId ?? null,
+    _ip: m.ip ?? null, _user_agent: m.userAgent ?? null, _request_id: m.requestId ?? null,
   });
 }
 
@@ -26,18 +34,13 @@ export class PermissionError extends Error {
   constructor(public status: 401 | 403, message: string) { super(message); }
 }
 
-export async function requirePermission(sb: Sb, userId: string, perm: string, action: string, m: AuditMeta = {}) {
+export async function requirePermission(sb: Sb, userId: string, perm: string, action: LoggableAction, m: AuditMeta = {}) {
   if (!userId) throw new PermissionError(401, "Connexion requise.");
-  if (await isSuspended(sb, userId)) {
-    await audit(sb, action, perm, "denied", { ...m, reason: "compte suspendu" });
-    throw new PermissionError(403, "Compte suspendu.");
-  }
-  const { data, error } = await sb.rpc("has_permission", { _user_id: userId, _perm: perm });
-  if (error || data !== true) {
-    await audit(sb, action, perm, "denied", m);
-    throw new PermissionError(403, "Accès refusé.");
-  }
-  await audit(sb, action, perm, "allowed", m);
+  const suspended = await isSuspended(sb, userId);
+  const { data, error } = suspended ? { data: false, error: null } : await sb.rpc("has_permission", { _user_id: userId, _perm: perm });
+  await audit(sb, action, m);
+  if (suspended) throw new PermissionError(403, "Compte suspendu.");
+  if (error || data !== true) throw new PermissionError(403, "Accès refusé.");
 }
 
 export function requestMeta(req: Request | undefined): Pick<AuditMeta, "ip" | "userAgent" | "requestId"> {
