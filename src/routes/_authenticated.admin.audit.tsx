@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -96,8 +96,8 @@ function Table({ data, page, setPage, open, setOpen }: {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <>
-                <tr key={r.id} className="border-t border-border align-top">
+              <Fragment key={r.id}>
+                <tr className="border-t border-border align-top">
                   <td className="p-2 whitespace-nowrap">{new Date(r.at).toLocaleString("fr-FR")}</td>
                   <td className="p-2"><span className="font-mono text-xs" title={r.actor_id ?? ""}>{r.actor_id ? r.actor_id.slice(0, 8) : "—"}</span><br /><span className="text-xs text-muted-foreground">{r.actor_roles.join(", ") || "client"}</span></td>
                   <td className="p-2 font-mono text-xs">{r.action}</td>
@@ -117,7 +117,7 @@ function Table({ data, page, setPage, open, setOpen }: {
                     </td>
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
