@@ -24,7 +24,7 @@ async function callCa(method: string, path: string, ownerId: string, body?: stri
     res = await fetch(base.replace(/\/+$/, "") + path, {
       method,
       headers: { Authorization: `Bearer ${key}`, "X-Owner-Id": ownerId, "Content-Type": "application/json" },
-      body,
+      body: body ?? null,
       signal: AbortSignal.timeout(180_000),
     });
   } catch {
