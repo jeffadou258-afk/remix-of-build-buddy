@@ -299,6 +299,17 @@ export type Database = {
         }
         Returns: string
       }
+      log_security_event: {
+        Args: {
+          _action: string
+          _ip?: string
+          _request_id?: string
+          _target_id?: string
+          _target_type?: string
+          _user_agent?: string
+        }
+        Returns: string
+      }
       read_project_content: { Args: { _project_id: string }; Returns: Json }
       request_project_access: {
         Args: { _project_id: string; _reason: string }
