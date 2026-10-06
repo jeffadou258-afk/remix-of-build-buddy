@@ -50,7 +50,7 @@ function Index() {
             <img src={hero} alt="Villa contemporaine en terre de latérite" width={1600} height={1008} className="w-full border border-border object-cover aspect-[4/3]" />
             <div className="absolute -bottom-4 -left-4 border border-primary bg-card px-4 py-3 text-foreground">
               <p className="label-mono text-accent">Règle</p>
-              <p className="font-display text-lg">Preuve > affirmation</p>
+              <p className="font-display text-lg">{"Preuve > affirmation"}</p>
             </div>
           </div>
         </div>
