@@ -20,6 +20,7 @@ export type Database = {
           client_type: string
           created_at: string
           id: string
+          inputs: Json | null
           messages: Json
           stage: Database["public"]["Enums"]["project_stage"]
           title: string
@@ -31,6 +32,7 @@ export type Database = {
           client_type?: string
           created_at?: string
           id?: string
+          inputs?: Json | null
           messages?: Json
           stage?: Database["public"]["Enums"]["project_stage"]
           title?: string
@@ -42,6 +44,7 @@ export type Database = {
           client_type?: string
           created_at?: string
           id?: string
+          inputs?: Json | null
           messages?: Json
           stage?: Database["public"]["Enums"]["project_stage"]
           title?: string
