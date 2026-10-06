@@ -122,7 +122,7 @@ function ProjectChat({ id, title, initialStage, initialMessages, initialModel }:
         <Button size="sm" variant={tab === "3d" ? "default" : "outline"} onClick={() => setTab("3d")}>Maquette 3D{model ? "" : " (à venir)"}</Button>
       </div>
       {tab === "3d" && <ModelPanel projectId={id} model={model} />}
-      <section className={`${tab === "chat" ? "flex" : "hidden"} min-h-[70vh] flex-col border border-border bg-card">
+      <section className={`${tab === "chat" ? "flex" : "hidden"} min-h-[70vh] flex-col border border-border bg-card`}>
         <div className="flex-1 space-y-6 overflow-y-auto p-6">
           {messages.map((m) => (
             <div key={m.id} className={m.role === "user" ? "flex justify-end" : ""}>
