@@ -140,7 +140,7 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
 
 /** Valeur qui a remplacé l'entrée d'historique idx : la prochaine entrée du même champ, sinon la valeur courante. */
 function NextVal({ d, idx }: { d: Inputs; idx: number }) {
-  const h = d.history[idx];
+  const h = d.history[idx]!;
   const later = d.history.slice(idx + 1).find((x) => x.field === h.field);
   const v = later ? later.previous.value : h.field === "budget.declared" ? d.budget.declared.value : d.fields[h.field]?.value;
   return <>{formatValue(h.field, v)}</>;
