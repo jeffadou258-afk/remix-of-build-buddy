@@ -14,7 +14,7 @@ function WallMesh({ wall, level, model, selected, onSelect }: { wall: Wall; leve
   const [x1, y1] = wall.start, [x2, y2] = wall.end;
   const len = Math.hypot(x2 - x1, y2 - y1);
   const h = wall.height ?? level.height;
-  const angle = -Math.atan2(y2 - y1, x2 - x1);
+  const angle = Math.atan2(y2 - y1, x2 - x1);
   const ops = model.openings.filter((o) => o.wallId === wall.id).sort((a, b) => a.offset - b.offset);
   // segments [start, end, bottom, top] le long du mur
   const segs: [number, number, number, number][] = [];
