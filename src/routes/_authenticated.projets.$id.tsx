@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { STAGES, type StageKey } from "@/lib/stages";
 import { ModelPanel } from "@/components/bim/ModelPanel";
+import { InputsPanel } from "@/components/extraction/InputsPanel";
+import { inputsSchema, type Inputs } from "@/lib/extraction/inputs";
 import { buildingModelSchema, extractModel, stripModelBlocks, type BuildingModel } from "@/lib/bim/schema";
 
 export const Route = createFileRoute("/_authenticated/projets/$id")({
@@ -37,7 +39,7 @@ function ProjectPage() {
   });
   if (isLoading) return <p className="p-10 text-center text-muted-foreground">Chargement…</p>;
   if (!project) return <p className="p-10 text-center">Projet introuvable.</p>;
-  return <ProjectChat id={id} title={project.title} initialStage={project.stage as StageKey} initialMessages={(project.messages as unknown as UIMessage[]) ?? []} initialModel={buildingModelSchema.safeParse(project.building_model).data ?? null} />;
+  return <ProjectChat id={id} title={project.title} initialStage={project.stage as StageKey} initialMessages={(project.messages as unknown as UIMessage[]) ?? []} initialModel={buildingModelSchema.safeParse(project.building_model).data ?? null} initialInputs={inputsSchema.safeParse((project as { inputs?: unknown }).inputs).data ?? null} />;
 }
 
 const STAGE_TAG = /\[\[ETAPE:([a-z]+)\]\]/g;
@@ -46,9 +48,9 @@ function textOf(m: UIMessage) {
   return m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
 }
 
-function ProjectChat({ id, title, initialStage, initialMessages, initialModel }: { id: string; title: string; initialStage: StageKey; initialMessages: UIMessage[]; initialModel: BuildingModel | null }) {
+function ProjectChat({ id, title, initialStage, initialMessages, initialModel, initialInputs }: { id: string; title: string; initialStage: StageKey; initialMessages: UIMessage[]; initialModel: BuildingModel | null; initialInputs: Inputs | null }) {
   const [model, setModel] = useState<BuildingModel | null>(initialModel);
-  const [tab, setTab] = useState<"chat" | "3d">("chat");
+  const [tab, setTab] = useState<"chat" | "3d" | "infos">("chat");
   const [stage, setStage] = useState<StageKey>(initialStage);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -120,8 +122,10 @@ function ProjectChat({ id, title, initialStage, initialMessages, initialModel }:
       <div className="mb-3 flex gap-2">
         <Button size="sm" variant={tab === "chat" ? "default" : "outline"} onClick={() => setTab("chat")}>Assistant</Button>
         <Button size="sm" variant={tab === "3d" ? "default" : "outline"} onClick={() => setTab("3d")}>Maquette 3D{model ? "" : " (à venir)"}</Button>
+        <Button size="sm" variant={tab === "infos" ? "default" : "outline"} onClick={() => setTab("infos")}>Informations</Button>
       </div>
       {tab === "3d" && <ModelPanel projectId={id} model={model} />}
+      {tab === "infos" && <InputsPanel projectId={id} initial={initialInputs} />}
       <section className={`${tab === "chat" ? "flex" : "hidden"} min-h-[70vh] flex-col border border-border bg-card`}>
         <div className="flex-1 space-y-6 overflow-y-auto p-6">
           {messages.map((m) => (
