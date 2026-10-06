@@ -16,12 +16,12 @@ export type AdminUserRow = {
 
 export function toAdminUserRow(r: Record<string, unknown>): AdminUserRow {
   return {
-    user_id: String(r.user_id),
-    email: typeof r.email === "string" ? r.email : null,
-    created_at: String(r.created_at),
-    last_sign_in_at: typeof r.last_sign_in_at === "string" ? r.last_sign_in_at : null,
-    roles: Array.isArray(r.roles) ? r.roles.map(String) : [],
-    status: r.status === "suspended" ? "suspended" : "active",
-    project_count: Number(r.project_count ?? 0),
+    user_id: String(r["user_id"]),
+    email: typeof r["email"] === "string" ? r["email"] : null,
+    created_at: String(r["created_at"]),
+    last_sign_in_at: typeof r["last_sign_in_at"] === "string" ? r["last_sign_in_at"] : null,
+    roles: Array.isArray(r["roles"]) ? r["roles"].map(String) : [],
+    status: r["status"] === "suspended" ? "suspended" : "active",
+    project_count: Number(r["project_count"] ?? 0),
   };
 }
