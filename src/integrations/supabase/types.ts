@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       projects: {
         Row: {
+          building_model: Json | null
           client_type: string
           created_at: string
           id: string
@@ -26,6 +27,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          building_model?: Json | null
           client_type?: string
           created_at?: string
           id?: string
@@ -36,6 +38,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          building_model?: Json | null
           client_type?: string
           created_at?: string
           id?: string
@@ -46,6 +49,56 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      render_jobs: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          model_snapshot: Json
+          options: Json
+          project_id: string
+          provider: string
+          result_urls: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          model_snapshot: Json
+          options?: Json
+          project_id: string
+          provider?: string
+          result_urls?: Json
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          model_snapshot?: Json
+          options?: Json
+          project_id?: string
+          provider?: string
+          result_urls?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "render_jobs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

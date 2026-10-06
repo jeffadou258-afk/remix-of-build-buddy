@@ -21,5 +21,13 @@ Règles absolues :
 - En cas de blocage (information manquante critique), réponds avec le format : STATUT: BLOQUÉ · CAUSE · CE QUI MANQUE · PROCHAINE ACTION.
 - Documents conceptuels, sans valeur contractuelle. Utilise le Markdown (titres, listes, tableaux).
 
-Quand le client a validé une étape et que tu commences la suivante, ajoute à la toute fin de ta réponse, sur une ligne seule, la balise exacte : [[ETAPE:nom]] où nom est l'une de : programme, conception, plans, documentation, livre.`;
+Quand le client a validé une étape et que tu commences la suivante, ajoute à la toute fin de ta réponse, sur une ligne seule, la balise exacte : [[ETAPE:nom]] où nom est l'une de : programme, conception, plans, documentation, livre.
+
+MAQUETTE 3D : à l'étape Plans (et à chaque modification validée du plan), ajoute un bloc de code \`\`\`bim contenant UNIQUEMENT un JSON valide décrivant le bâtiment, en mètres, origine (0,0) au coin du plan, x vers la droite, y vers le haut :
+{"version":1,"units":"m","levels":[{"id":"rdc","name":"RDC","elevation":0,"height":2.8}],
+"rooms":[{"id":"p1","name":"Séjour","levelId":"rdc","polygon":[[0,0],[5,0],[5,4],[0,4]],"usage":"sejour","area":20}],
+"walls":[{"id":"m1","levelId":"rdc","start":[0,0],"end":[5,0],"thickness":0.2,"type":"exterieur"}],
+"openings":[{"id":"o1","wallId":"m1","kind":"porte","offset":1,"width":0.9,"height":2.1,"sill":0},{"id":"o2","wallId":"m1","kind":"fenetre","offset":3,"width":1.2,"height":1.2,"sill":1}],
+"roof":{"type":"deux_pans","pitch":25,"overhang":0.4}}
+Règles : IDs uniques et stables d'une version à l'autre ; chaque pièce du programme a son polygone ; murs extérieurs fermés ; offset = distance depuis le point start du mur ; les niveaux supérieurs ont elevation = somme des hauteurs inférieures ; roof.type ∈ plat, deux_pans, quatre_pans. Ce bloc est la source de la maquette 3D affichée au client ; ne le décris pas, ne le commente pas. Le JSON entier est [HYPOTHÈSE] conceptuelle tant que non validé.`;
 }

@@ -11,3 +11,4 @@
 
 - Agent chat streams through `src/routes/api/chat.ts` (bearer-token checked, project read under RLS); the system prompt lives in `src/lib/ai/agent-prompt.server.ts`. Why: keeps AI key and prompt server-side.
 - Conversation and stage are stored on the `projects` row (`messages` jsonb); stage advances when the agent emits `[[ETAPE:x]]`. Why: one row per project keeps the MVP simple.
+- Building model (`src/lib/bim/schema.ts`, versioned JSON on `projects.building_model`) is the single source for the in-browser 3D viewer and future Blender renders (`render_jobs.model_snapshot`); the agent emits it as a ```bim block. Why: Blender/RunPod can be plugged in later without reshaping data.
