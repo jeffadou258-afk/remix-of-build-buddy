@@ -30,7 +30,7 @@ function Index() {
       <section className="bg-grid">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_1fr] md:py-24 items-center">
           <div>
-            <p className="label-mono text-primary">Agent de conception · Côte d'Ivoire & au-delà</p>
+            <p className="label-mono text-accent">Agent de conception · Côte d'Ivoire & au-delà</p>
             <h1 className="mt-4 text-5xl font-bold leading-[1.02] md:text-7xl">
               De l'idée<br />aux plans,<br /><span className="text-primary">sans détour.</span>
             </h1>
@@ -43,10 +43,14 @@ function Index() {
             </div>
           </div>
           <div className="relative">
+            <span aria-hidden className="absolute -left-2 -top-2 font-mono text-accent">+</span>
+            <span aria-hidden className="absolute -right-2 -top-2 font-mono text-accent">+</span>
+            <span aria-hidden className="absolute -bottom-2 -left-2 font-mono text-accent">+</span>
+            <span aria-hidden className="absolute -bottom-2 -right-2 font-mono text-accent">+</span>
             <img src={hero} alt="Villa contemporaine en terre de latérite" width={1600} height={1008} className="w-full border border-border object-cover aspect-[4/3]" />
-            <div className="absolute -bottom-4 -left-4 bg-ink px-4 py-3 text-ink-foreground">
-              <p className="label-mono opacity-70">Règle</p>
-              <p className="font-display text-lg">Preuve &gt; affirmation</p>
+            <div className="absolute -bottom-4 -left-4 border border-primary bg-card px-4 py-3 text-foreground">
+              <p className="label-mono text-accent">Règle</p>
+              <p className="font-display text-lg">Preuve > affirmation</p>
             </div>
           </div>
         </div>
@@ -72,7 +76,7 @@ function Index() {
             <h2 className="text-3xl font-bold">Prêt à poser la première pierre ?</h2>
             <p className="mt-2 opacity-70">La découverte de votre projet est gratuite.</p>
           </div>
-          <Button asChild size="lg" className="mt-6 md:mt-0"><Link to="/projets">Commencer gratuitement</Link></Button>
+          <Button asChild size="lg" variant="outline" className="mt-6 md:mt-0 border-ink-foreground/40 bg-transparent text-ink-foreground hover:bg-ink-foreground/10"><Link to="/projets">Commencer gratuitement</Link></Button>
         </div>
       </section>
       <footer className="mx-auto max-w-6xl px-5 py-8 text-xs text-muted-foreground">
