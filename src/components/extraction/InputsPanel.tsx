@@ -12,7 +12,7 @@ function parse(key: FieldKey, raw: string): unknown | null {
   if (k === "int") { const n = parseInt(s, 10); if (Number.isNaN(n) || n < 0) throw new Error("Nombre entier attendu"); return n; }
   if (k === "number") { const n = Number(s.replace(",", ".")); if (Number.isNaN(n) || n <= 0) throw new Error("Nombre attendu"); return n; }
   if (k === "bool") { if (/^(oui|o|yes|true)$/i.test(s)) return true; if (/^(non|n|no|false)$/i.test(s)) return false; throw new Error("Oui ou Non"); }
-  if (k === "dims") { const m = s.match(/^(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)$/i); if (!m) throw new Error("Format : 20 x 30"); return [Number(m[1].replace(",", ".")), Number(m[2].replace(",", "."))]; }
+  if (k === "dims") { const m = s.match(/^(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)$/i); if (!m) throw new Error("Format : 20 x 30"); return [Number(m[1]!.replace(",", ".")), Number(m[2]!.replace(",", "."))]; }
   if (s.length > 100) throw new Error("100 caractères max");
   return s;
 }
@@ -81,7 +81,7 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
 
   const provided = FIELDS.filter((k) => d.fields[k]?.status === "USER_PROVIDED");
   const unknown = FIELDS.filter((k) => d.fields[k]?.status !== "USER_PROVIDED");
-  const rowProps = (k: FieldKey) => ({ label: FIELD_META[k].label, entry: d.fields[k], value: formatValue(k, d.fields[k]?.value), editing: editing === k, onEdit: () => setEditing(k), onCancel: () => setEditing(null), onSave: (raw: string) => save(k, raw) });
+  const rowProps = (k: FieldKey) => ({ label: FIELD_META[k].label, entry: d.fields[k] ?? { value: null, status: "UNKNOWN" as const, source: null, technically_validated: false as const }, value: formatValue(k, d.fields[k]?.value), editing: editing === k, onEdit: () => setEditing(k), onCancel: () => setEditing(null), onSave: (raw: string) => save(k, raw) });
   const Section = ({ n, title, children }: { n: string; title: string; children: React.ReactNode }) => (
     <section className="border border-border bg-card p-5">
       <h3 className="mb-2 flex items-baseline gap-3 font-display text-lg"><span className="font-mono text-xs text-primary">{n}</span>{title}</h3>
