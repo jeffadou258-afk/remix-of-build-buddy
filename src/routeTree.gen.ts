@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as E2eBimTempRouteImport } from './routes/e2e-bim-temp'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
@@ -29,6 +30,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const E2eBimTempRoute = E2eBimTempRouteImport.update({
+  id: '/e2e-bim-temp',
+  path: '/e2e-bim-temp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TarifsRoute = TarifsRouteImport.update({
@@ -56,6 +62,7 @@ const AuthenticatedProjetsIdRoute = AuthenticatedProjetsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/e2e-bim-temp': typeof E2eBimTempRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/e2e-bim-temp': typeof E2eBimTempRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -74,6 +82,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/e2e-bim-temp': typeof E2eBimTempRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -82,14 +91,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets/'
+    | '/'
+    | '/auth'
+    | '/e2e-bim-temp'
+    | '/tarifs'
+    | '/api/chat'
+    | '/projets/$id'
+    | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets'
+  to:
+    | '/'
+    | '/auth'
+    | '/e2e-bim-temp'
+    | '/tarifs'
+    | '/api/chat'
+    | '/projets/$id'
+    | '/projets'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/e2e-bim-temp'
     | '/tarifs'
     | '/api/chat'
     | '/_authenticated/projets/$id'
@@ -100,6 +123,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  E2eBimTempRoute: typeof E2eBimTempRoute
   TarifsRoute: typeof TarifsRoute
   ApiChatRoute: typeof ApiChatRoute
 }
@@ -125,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/e2e-bim-temp': {
+      id: '/e2e-bim-temp'
+      path: '/e2e-bim-temp'
+      fullPath: '/e2e-bim-temp'
+      preLoaderRoute: typeof E2eBimTempRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tarifs': {
@@ -176,6 +207,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  E2eBimTempRoute: E2eBimTempRoute,
   TarifsRoute: TarifsRoute,
   ApiChatRoute: ApiChatRoute,
 }

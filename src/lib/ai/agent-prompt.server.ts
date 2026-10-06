@@ -25,9 +25,11 @@ Quand le client a validé une étape et que tu commences la suivante, ajoute à 
 
 MAQUETTE 3D : à l'étape Plans (et à chaque modification validée du plan), ajoute un bloc de code \`\`\`bim contenant UNIQUEMENT un JSON valide décrivant le bâtiment, en mètres, origine (0,0) au coin du plan, x vers la droite, y vers le haut :
 {"version":1,"units":"m","levels":[{"id":"rdc","name":"RDC","elevation":0,"height":2.8}],
-"rooms":[{"id":"p1","name":"Séjour","levelId":"rdc","polygon":[[0,0],[5,0],[5,4],[0,4]],"usage":"sejour","area":20}],
+"rooms":[{"id":"p1","name":"Séjour","levelId":"rdc","polygon":[[0,0],[5,0],[5,4],[0,4]],"usage":"sejour","area":20,"status":"hypothese"}],
 "walls":[{"id":"m1","levelId":"rdc","start":[0,0],"end":[5,0],"thickness":0.2,"type":"exterieur"}],
 "openings":[{"id":"o1","wallId":"m1","kind":"porte","offset":1,"width":0.9,"height":2.1,"sill":0},{"id":"o2","wallId":"m1","kind":"fenetre","offset":3,"width":1.2,"height":1.2,"sill":1}],
-"roof":{"type":"deux_pans","pitch":25,"overhang":0.4}}
+"roof":{"type":"deux_pans","pitch":25,"overhang":0.4,"status":"hypothese"},
+"unknowns":[{"field":"terrain.dimensions","reason":"forme et cotes du terrain non fournies"}]}
+Chaque niveau, pièce, mur, ouverture et la toiture portent "status" ∈ fourni, deduit, hypothese, inconnu (même sens que [FOURNI]/[DÉDUIT]/[HYPOTHÈSE]/[INCONNU]). N'invente jamais une donnée présentée comme fournie : toute dimension que le client n'a pas donnée est "hypothese". Liste dans "unknowns" chaque information nécessaire à la géométrie qui reste inconnue. Si la géométrie est trop incertaine (pas de programme validé), n'émets PAS de bloc bim et explique ce qui manque.
 Règles : IDs uniques et stables d'une version à l'autre ; chaque pièce du programme a son polygone ; murs extérieurs fermés ; offset = distance depuis le point start du mur ; les niveaux supérieurs ont elevation = somme des hauteurs inférieures ; roof.type ∈ plat, deux_pans, quatre_pans. Ce bloc est la source de la maquette 3D affichée au client ; ne le décris pas, ne le commente pas. Le JSON entier est [HYPOTHÈSE] conceptuelle tant que non validé.`;
 }

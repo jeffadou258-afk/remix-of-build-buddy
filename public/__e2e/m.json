@@ -1,0 +1,1352 @@
+{
+  "schema": "batir.building-model",
+  "version": 1,
+  "projectId": "test",
+  "exportedAt": "2026-10-06T11:55:35.004Z",
+  "conventions": {
+    "units": "m",
+    "axes": "plan x→droite, y→haut ; hauteur z (Blender Z-up)",
+    "openingOffset": "distance depuis wall.start le long du mur",
+    "roofPitch": "degrés"
+  },
+  "provenance": {
+    "counts": {
+      "fourni": 0,
+      "deduit": 0,
+      "hypothese": 81,
+      "inconnu": 0
+    },
+    "unknowns": [
+      {
+        "field": "terrain.dimensions",
+        "reason": "Longueurs des côtés et forme exacte non fournies"
+      },
+      {
+        "field": "terrain.orientation",
+        "reason": "Nord et orientation de la voie inconnus"
+      },
+      {
+        "field": "terrain.acces",
+        "reason": "Position et largeur de l’accès inconnues"
+      },
+      {
+        "field": "terrain.altimetrie",
+        "reason": "Pente et niveaux du terrain inconnus"
+      },
+      {
+        "field": "implantation",
+        "reason": "Limites, contraintes locales et distances d’implantation non établies ; largeur extérieure proposée portée à 13.8 m"
+      },
+      {
+        "field": "salon.extension_direction",
+        "reason": "Prolongement de 1 m vers la droite du plan proposé ; direction précise à confirmer par le client"
+      },
+      {
+        "field": "stairs.geometry",
+        "reason": "Escalier non dessiné ; marches, paliers, échappée et trémie à étudier dans la réserve"
+      },
+      {
+        "field": "circulation.clearances",
+        "reason": "Desserte réelle des portes à vérifier après dessin de l’escalier et du mobilier"
+      },
+      {
+        "field": "floors.thickness",
+        "reason": "Épaisseur et système des planchers non définis"
+      },
+      {
+        "field": "structure.grid",
+        "reason": "Positions des poteaux, poutres et appuis à définir avec un ingénieur en tenant compte du salon de 7 m par 6 m"
+      },
+      {
+        "field": "walls.construction",
+        "reason": "Épaisseurs uniformes provisoires ; parois porteuses et cloisons non distinguées"
+      },
+      {
+        "field": "roof.geometry",
+        "reason": "Faîtage, raccords des décrochements et couvertures des parties basses non définis, notamment la nouvelle bande de RDC non surmontée par l’étage"
+      },
+      {
+        "field": "openings.operation",
+        "reason": "Sens d’ouverture, débattements et protections solaires non définis"
+      },
+      {
+        "field": "ventilation.wc_rdc",
+        "reason": "WC intérieur sans fenêtre ; solution de ventilation à étudier"
+      }
+    ],
+    "defaultsApplied": [],
+    "validated": false
+  },
+  "model": {
+    "version": 1,
+    "units": "m",
+    "levels": [
+      {
+        "id": "rdc",
+        "name": "RDC",
+        "elevation": 0,
+        "height": 3.2,
+        "status": "hypothese"
+      },
+      {
+        "id": "etage",
+        "name": "Étage",
+        "elevation": 3.2,
+        "height": 3.2,
+        "status": "hypothese"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "r_salon",
+        "name": "Salon et repas",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            6.6,
+            0.2
+          ],
+          [
+            13.6,
+            0.2
+          ],
+          [
+            13.6,
+            6.2
+          ],
+          [
+            6.6,
+            6.2
+          ]
+        ],
+        "usage": "sejour",
+        "area": 42,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_cuisine",
+        "name": "Cuisine",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            6.6,
+            6.4
+          ],
+          [
+            10.1,
+            6.4
+          ],
+          [
+            10.1,
+            10.4
+          ],
+          [
+            6.6,
+            10.4
+          ]
+        ],
+        "usage": "cuisine",
+        "area": 14,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_amis",
+        "name": "Chambre d’amis",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            0.2,
+            5.4
+          ],
+          [
+            4.2,
+            5.4
+          ],
+          [
+            4.2,
+            8.9
+          ],
+          [
+            0.2,
+            8.9
+          ]
+        ],
+        "usage": "chambre",
+        "area": 14,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_sde",
+        "name": "Salle d’eau invités",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            4.4,
+            7.6
+          ],
+          [
+            6.4,
+            7.6
+          ],
+          [
+            6.4,
+            9.6
+          ],
+          [
+            4.4,
+            9.6
+          ]
+        ],
+        "usage": "salle_eau",
+        "area": 4,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_wc",
+        "name": "WC visiteurs",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            4.4,
+            6.4
+          ],
+          [
+            6.4,
+            6.4
+          ],
+          [
+            6.4,
+            7.4
+          ],
+          [
+            4.4,
+            7.4
+          ]
+        ],
+        "usage": "wc",
+        "area": 2,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_circulation",
+        "name": "Entrée, circulation et réserve escalier",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            4.4,
+            0.2
+          ],
+          [
+            6.4,
+            0.2
+          ],
+          [
+            6.4,
+            6.2
+          ],
+          [
+            4.4,
+            6.2
+          ]
+        ],
+        "usage": "circulation",
+        "area": 12,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_garage",
+        "name": "Garage une voiture",
+        "levelId": "rdc",
+        "polygon": [
+          [
+            0.2,
+            0.2
+          ],
+          [
+            4.2,
+            0.2
+          ],
+          [
+            4.2,
+            5.2
+          ],
+          [
+            0.2,
+            5.2
+          ]
+        ],
+        "usage": "garage",
+        "area": 20,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_principale",
+        "name": "Chambre principale",
+        "levelId": "etage",
+        "polygon": [
+          [
+            6.6,
+            0.2
+          ],
+          [
+            12.6,
+            0.2
+          ],
+          [
+            12.6,
+            3.2
+          ],
+          [
+            6.6,
+            3.2
+          ]
+        ],
+        "usage": "chambre",
+        "area": 18,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_dressing",
+        "name": "Dressing",
+        "levelId": "etage",
+        "polygon": [
+          [
+            6.6,
+            3.4
+          ],
+          [
+            9.1,
+            3.4
+          ],
+          [
+            9.1,
+            5.4
+          ],
+          [
+            6.6,
+            5.4
+          ]
+        ],
+        "usage": "dressing",
+        "area": 5,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_sde",
+        "name": "Salle d’eau principale avec WC",
+        "levelId": "etage",
+        "polygon": [
+          [
+            9.3,
+            3.4
+          ],
+          [
+            11.8,
+            3.4
+          ],
+          [
+            11.8,
+            5.4
+          ],
+          [
+            9.3,
+            5.4
+          ]
+        ],
+        "usage": "salle_eau",
+        "area": 5,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_ch2",
+        "name": "Chambre 2",
+        "levelId": "etage",
+        "polygon": [
+          [
+            0.2,
+            0.2
+          ],
+          [
+            4.2,
+            0.2
+          ],
+          [
+            4.2,
+            3.7
+          ],
+          [
+            0.2,
+            3.7
+          ]
+        ],
+        "usage": "chambre",
+        "area": 14,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_ch3",
+        "name": "Chambre 3",
+        "levelId": "etage",
+        "polygon": [
+          [
+            0.2,
+            3.9
+          ],
+          [
+            4.2,
+            3.9
+          ],
+          [
+            4.2,
+            7.4
+          ],
+          [
+            0.2,
+            7.4
+          ]
+        ],
+        "usage": "chambre",
+        "area": 14,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_sdb",
+        "name": "Salle de bains commune",
+        "levelId": "etage",
+        "polygon": [
+          [
+            4.4,
+            6.6
+          ],
+          [
+            6.4,
+            6.6
+          ],
+          [
+            6.4,
+            9.1
+          ],
+          [
+            4.4,
+            9.1
+          ]
+        ],
+        "usage": "salle_bains",
+        "area": 5,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_wc",
+        "name": "WC commun",
+        "levelId": "etage",
+        "polygon": [
+          [
+            4.4,
+            0.2
+          ],
+          [
+            6.4,
+            0.2
+          ],
+          [
+            6.4,
+            1.2
+          ],
+          [
+            4.4,
+            1.2
+          ]
+        ],
+        "usage": "wc",
+        "area": 2,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_palier",
+        "name": "Palier et réserve arrivée escalier",
+        "levelId": "etage",
+        "polygon": [
+          [
+            4.4,
+            1.4
+          ],
+          [
+            6.4,
+            1.4
+          ],
+          [
+            6.4,
+            6.4
+          ],
+          [
+            4.4,
+            6.4
+          ]
+        ],
+        "usage": "circulation",
+        "area": 10,
+        "status": "hypothese"
+      }
+    ],
+    "walls": [
+      {
+        "id": "r_m01",
+        "levelId": "rdc",
+        "start": [
+          0.1,
+          0.1
+        ],
+        "end": [
+          13.7,
+          0.1
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m02",
+        "levelId": "rdc",
+        "start": [
+          13.7,
+          0.1
+        ],
+        "end": [
+          13.7,
+          6.3
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m03",
+        "levelId": "rdc",
+        "start": [
+          13.7,
+          6.3
+        ],
+        "end": [
+          10.2,
+          6.3
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m04",
+        "levelId": "rdc",
+        "start": [
+          10.2,
+          6.3
+        ],
+        "end": [
+          10.2,
+          10.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m05",
+        "levelId": "rdc",
+        "start": [
+          10.2,
+          10.5
+        ],
+        "end": [
+          6.5,
+          10.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m06",
+        "levelId": "rdc",
+        "start": [
+          6.5,
+          10.5
+        ],
+        "end": [
+          6.5,
+          9.7
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m07",
+        "levelId": "rdc",
+        "start": [
+          6.5,
+          9.7
+        ],
+        "end": [
+          4.3,
+          9.7
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m08",
+        "levelId": "rdc",
+        "start": [
+          4.3,
+          9.7
+        ],
+        "end": [
+          4.3,
+          9
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m09",
+        "levelId": "rdc",
+        "start": [
+          4.3,
+          9
+        ],
+        "end": [
+          0.1,
+          9
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m10",
+        "levelId": "rdc",
+        "start": [
+          0.1,
+          9
+        ],
+        "end": [
+          0.1,
+          0.1
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m11",
+        "levelId": "rdc",
+        "start": [
+          4.3,
+          0.1
+        ],
+        "end": [
+          4.3,
+          9
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m12",
+        "levelId": "rdc",
+        "start": [
+          6.5,
+          0.1
+        ],
+        "end": [
+          6.5,
+          9.7
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m13",
+        "levelId": "rdc",
+        "start": [
+          0.1,
+          5.3
+        ],
+        "end": [
+          4.3,
+          5.3
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m14",
+        "levelId": "rdc",
+        "start": [
+          4.3,
+          6.3
+        ],
+        "end": [
+          10.2,
+          6.3
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "r_m15",
+        "levelId": "rdc",
+        "start": [
+          4.3,
+          7.5
+        ],
+        "end": [
+          6.5,
+          7.5
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m01",
+        "levelId": "etage",
+        "start": [
+          0.1,
+          0.1
+        ],
+        "end": [
+          12.7,
+          0.1
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m02",
+        "levelId": "etage",
+        "start": [
+          12.7,
+          0.1
+        ],
+        "end": [
+          12.7,
+          3.3
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m03",
+        "levelId": "etage",
+        "start": [
+          12.7,
+          3.3
+        ],
+        "end": [
+          11.9,
+          3.3
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m04",
+        "levelId": "etage",
+        "start": [
+          11.9,
+          3.3
+        ],
+        "end": [
+          11.9,
+          5.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m05",
+        "levelId": "etage",
+        "start": [
+          11.9,
+          5.5
+        ],
+        "end": [
+          6.5,
+          5.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m06",
+        "levelId": "etage",
+        "start": [
+          6.5,
+          5.5
+        ],
+        "end": [
+          6.5,
+          9.2
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m07",
+        "levelId": "etage",
+        "start": [
+          6.5,
+          9.2
+        ],
+        "end": [
+          4.3,
+          9.2
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m08",
+        "levelId": "etage",
+        "start": [
+          4.3,
+          9.2
+        ],
+        "end": [
+          4.3,
+          7.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m09",
+        "levelId": "etage",
+        "start": [
+          4.3,
+          7.5
+        ],
+        "end": [
+          0.1,
+          7.5
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m10",
+        "levelId": "etage",
+        "start": [
+          0.1,
+          7.5
+        ],
+        "end": [
+          0.1,
+          0.1
+        ],
+        "thickness": 0.2,
+        "type": "exterieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m11",
+        "levelId": "etage",
+        "start": [
+          4.3,
+          0.1
+        ],
+        "end": [
+          4.3,
+          7.5
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m12",
+        "levelId": "etage",
+        "start": [
+          6.5,
+          0.1
+        ],
+        "end": [
+          6.5,
+          5.5
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m13",
+        "levelId": "etage",
+        "start": [
+          0.1,
+          3.8
+        ],
+        "end": [
+          4.3,
+          3.8
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m14",
+        "levelId": "etage",
+        "start": [
+          4.3,
+          1.3
+        ],
+        "end": [
+          6.5,
+          1.3
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m15",
+        "levelId": "etage",
+        "start": [
+          4.3,
+          6.5
+        ],
+        "end": [
+          6.5,
+          6.5
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m16",
+        "levelId": "etage",
+        "start": [
+          6.5,
+          3.3
+        ],
+        "end": [
+          11.9,
+          3.3
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      },
+      {
+        "id": "e_m17",
+        "levelId": "etage",
+        "start": [
+          9.2,
+          3.3
+        ],
+        "end": [
+          9.2,
+          5.5
+        ],
+        "thickness": 0.2,
+        "type": "interieur",
+        "status": "hypothese"
+      }
+    ],
+    "openings": [
+      {
+        "id": "r_o01",
+        "wallId": "r_m01",
+        "kind": "porte",
+        "offset": 0.7,
+        "width": 3,
+        "height": 2.4,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o02",
+        "wallId": "r_m01",
+        "kind": "porte",
+        "offset": 4.6,
+        "width": 1,
+        "height": 2.2,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o03",
+        "wallId": "r_m11",
+        "kind": "porte",
+        "offset": 0.5,
+        "width": 0.9,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o04",
+        "wallId": "r_m12",
+        "kind": "porte",
+        "offset": 0.5,
+        "width": 1,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o05",
+        "wallId": "r_m11",
+        "kind": "porte",
+        "offset": 5.3,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o06",
+        "wallId": "r_m11",
+        "kind": "porte",
+        "offset": 7.6,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o07",
+        "wallId": "r_m14",
+        "kind": "porte",
+        "offset": 0.6,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o08",
+        "wallId": "r_m14",
+        "kind": "porte",
+        "offset": 3.2,
+        "width": 0.9,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o09",
+        "wallId": "r_m01",
+        "kind": "fenetre",
+        "offset": 8,
+        "width": 2.4,
+        "height": 1.4,
+        "sill": 0.9,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o10",
+        "wallId": "r_m02",
+        "kind": "fenetre",
+        "offset": 2.4,
+        "width": 2,
+        "height": 1.4,
+        "sill": 0.9,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o11",
+        "wallId": "r_m05",
+        "kind": "fenetre",
+        "offset": 1,
+        "width": 1.5,
+        "height": 1.1,
+        "sill": 1.1,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o12",
+        "wallId": "r_m09",
+        "kind": "fenetre",
+        "offset": 1.2,
+        "width": 1.5,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o13",
+        "wallId": "r_m10",
+        "kind": "fenetre",
+        "offset": 1.1,
+        "width": 1.2,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "r_o14",
+        "wallId": "r_m07",
+        "kind": "fenetre",
+        "offset": 0.7,
+        "width": 0.6,
+        "height": 0.6,
+        "sill": 1.7,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o01",
+        "wallId": "e_m11",
+        "kind": "porte",
+        "offset": 1.8,
+        "width": 0.9,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o02",
+        "wallId": "e_m11",
+        "kind": "porte",
+        "offset": 4.8,
+        "width": 0.9,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o03",
+        "wallId": "e_m12",
+        "kind": "porte",
+        "offset": 1.8,
+        "width": 0.9,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o04",
+        "wallId": "e_m14",
+        "kind": "porte",
+        "offset": 0.6,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o05",
+        "wallId": "e_m15",
+        "kind": "porte",
+        "offset": 0.6,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o06",
+        "wallId": "e_m16",
+        "kind": "porte",
+        "offset": 0.7,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o07",
+        "wallId": "e_m16",
+        "kind": "porte",
+        "offset": 3.4,
+        "width": 0.8,
+        "height": 2.1,
+        "sill": 0,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o08",
+        "wallId": "e_m01",
+        "kind": "fenetre",
+        "offset": 1.3,
+        "width": 1.5,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o09",
+        "wallId": "e_m10",
+        "kind": "fenetre",
+        "offset": 4.8,
+        "width": 1.2,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o10",
+        "wallId": "e_m09",
+        "kind": "fenetre",
+        "offset": 1.2,
+        "width": 1.5,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o11",
+        "wallId": "e_m10",
+        "kind": "fenetre",
+        "offset": 1.2,
+        "width": 1.2,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o12",
+        "wallId": "e_m01",
+        "kind": "fenetre",
+        "offset": 8,
+        "width": 2,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o13",
+        "wallId": "e_m02",
+        "kind": "fenetre",
+        "offset": 1,
+        "width": 1.2,
+        "height": 1.3,
+        "sill": 1,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o14",
+        "wallId": "e_m05",
+        "kind": "fenetre",
+        "offset": 0.8,
+        "width": 0.6,
+        "height": 0.6,
+        "sill": 1.7,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o15",
+        "wallId": "e_m05",
+        "kind": "fenetre",
+        "offset": 3.5,
+        "width": 0.8,
+        "height": 1,
+        "sill": 1.2,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o16",
+        "wallId": "e_m07",
+        "kind": "fenetre",
+        "offset": 0.7,
+        "width": 0.6,
+        "height": 0.6,
+        "sill": 1.7,
+        "status": "hypothese"
+      },
+      {
+        "id": "e_o17",
+        "wallId": "e_m01",
+        "kind": "fenetre",
+        "offset": 4.9,
+        "width": 0.6,
+        "height": 0.6,
+        "sill": 1.7,
+        "status": "hypothese"
+      }
+    ],
+    "roof": {
+      "type": "deux_pans",
+      "pitch": 20,
+      "overhang": 0.6,
+      "status": "hypothese"
+    },
+    "unknowns": [
+      {
+        "field": "terrain.dimensions",
+        "reason": "Longueurs des côtés et forme exacte non fournies"
+      },
+      {
+        "field": "terrain.orientation",
+        "reason": "Nord et orientation de la voie inconnus"
+      },
+      {
+        "field": "terrain.acces",
+        "reason": "Position et largeur de l’accès inconnues"
+      },
+      {
+        "field": "terrain.altimetrie",
+        "reason": "Pente et niveaux du terrain inconnus"
+      },
+      {
+        "field": "implantation",
+        "reason": "Limites, contraintes locales et distances d’implantation non établies ; largeur extérieure proposée portée à 13.8 m"
+      },
+      {
+        "field": "salon.extension_direction",
+        "reason": "Prolongement de 1 m vers la droite du plan proposé ; direction précise à confirmer par le client"
+      },
+      {
+        "field": "stairs.geometry",
+        "reason": "Escalier non dessiné ; marches, paliers, échappée et trémie à étudier dans la réserve"
+      },
+      {
+        "field": "circulation.clearances",
+        "reason": "Desserte réelle des portes à vérifier après dessin de l’escalier et du mobilier"
+      },
+      {
+        "field": "floors.thickness",
+        "reason": "Épaisseur et système des planchers non définis"
+      },
+      {
+        "field": "structure.grid",
+        "reason": "Positions des poteaux, poutres et appuis à définir avec un ingénieur en tenant compte du salon de 7 m par 6 m"
+      },
+      {
+        "field": "walls.construction",
+        "reason": "Épaisseurs uniformes provisoires ; parois porteuses et cloisons non distinguées"
+      },
+      {
+        "field": "roof.geometry",
+        "reason": "Faîtage, raccords des décrochements et couvertures des parties basses non définis, notamment la nouvelle bande de RDC non surmontée par l’étage"
+      },
+      {
+        "field": "openings.operation",
+        "reason": "Sens d’ouverture, débattements et protections solaires non définis"
+      },
+      {
+        "field": "ventilation.wc_rdc",
+        "reason": "WC intérieur sans fenêtre ; solution de ventilation à étudier"
+      }
+    ],
+    "defaultsApplied": [],
+    "validated": false
+  }
+}
