@@ -8,7 +8,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Sb = SupabaseClient<any, any, any>;
 
-export type AuditMeta = { targetType?: string; targetId?: string; reason?: string; ip?: string; userAgent?: string; requestId?: string };
+export type AuditMeta = { targetType?: string | undefined; targetId?: string | undefined; reason?: string | undefined; ip?: string | undefined; userAgent?: string | undefined; requestId?: string | undefined };
 
 export async function isSuspended(sb: Sb, userId: string): Promise<boolean> {
   const { data } = await sb.from("account_status").select("status").eq("user_id", userId).maybeSingle();

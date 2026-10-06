@@ -12,7 +12,8 @@ import { redactSecrets, serverSecretValues } from "./redact.server";
 const ROLE = z.enum(["user", "support", "ops", "finance", "admin", "auditor"]);
 const reason = z.string().trim().min(10, "Motif de 10 caractères minimum").max(1000);
 
-type RpcResult = { ok: boolean; error?: string; [k: string]: unknown };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RpcResult = { ok: boolean; error?: string } & Record<string, any>;
 
 function unwrap(r: { data: unknown; error: { message: string } | null }): RpcResult {
   if (r.error) throw new Error("Opération refusée.");
