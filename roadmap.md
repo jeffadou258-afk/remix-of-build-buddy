@@ -8,3 +8,7 @@
 - [ ] Test du parcours dans l'application depuis un compte réel — attend la création d'un premier compte
 - [ ] Brancher : décisions de gates, Memory, programme, plans, BIM/maquette 3D, historique
 - [ ] Mise en ligne de l'API (tunnel/serveur) puis remplacement de CA_API_URL / CA_API_KEY
+
+- [x] Socle de sécurité Admin v1 (rôles, permissions serveur, journal immuable, accès audité, filtre des secrets)
+- [ ] Dashboard Admin /admin (+ double authentification) — attend votre feu vert
+- [ ] Désigner le premier admin — attend votre choix
