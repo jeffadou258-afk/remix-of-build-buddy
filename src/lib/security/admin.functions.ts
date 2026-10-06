@@ -8,6 +8,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { requirePermission, requestMeta, isSuspended } from "./guard.server";
 import { redactSecrets, serverSecretValues } from "./redact.server";
+import { AUDIT_SELECT, AUDIT_PAGE_SIZE, cleanAuditFilter, endOfDay } from "./admin-audit";
 
 const ROLE = z.enum(["user", "support", "ops", "finance", "admin", "auditor"]);
 const reason = z.string().trim().min(10, "Motif de 10 caractères minimum").max(1000);
@@ -64,11 +65,21 @@ export const revokeRole = createServerFn({ method: "POST" })
 
 export const listAuditLog = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ limit: z.number().int().min(1).max(500).default(100) }).parse(d ?? {}))
+  .inputValidator((d) => cleanAuditFilter((d ?? {}) as Record<string, unknown>))
   .handler(async ({ data, context }) => {
+    // Permission vérifiée en base + consultation journalisée (refus compris) ; puis lecture sous RLS (audit.read).
     await requirePermission(context.supabase, context.userId, "audit.read", "audit.list", requestMeta(getRequest()));
-    const { data: rows, error } = await context.supabase
-      .from("admin_audit_log").select("*").order("at", { ascending: false }).limit(data.limit);
+    let q = context.supabase.from("admin_audit_log").select(AUDIT_SELECT, { count: "exact" });
+    if (data.action) q = q.eq("action", data.action);
+    if (data.result) q = q.eq("result", data.result);
+    if (data.actorId) q = q.eq("actor_id", data.actorId);
+    if (data.from) q = q.gte("at", `${data.from}T00:00:00Z`);
+    if (data.to) q = q.lte("at", endOfDay(data.to));
+    const start = data.page * AUDIT_PAGE_SIZE;
+    const { data: rows, error, count } = await q.order("at", { ascending: false }).range(start, start + AUDIT_PAGE_SIZE - 1);
     if (error) throw new Error("Lecture du journal impossible.");
-    return redactSecrets(rows ?? [], serverSecretValues());
+    // Actions réellement présentes dans le journal (pour le filtre).
+    const { data: acts } = await context.supabase.from("admin_audit_log").select("action").limit(5000);
+    const actions = [...new Set(((acts ?? []) as { action: string }[]).map((a) => a.action))].sort();
+    return redactSecrets({ rows: rows ?? [], total: count ?? 0, page: data.page, pageSize: AUDIT_PAGE_SIZE, actions }, serverSecretValues());
   });
