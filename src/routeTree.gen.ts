@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as Demo3dRouteImport } from './routes/demo3d'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
@@ -30,11 +29,6 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Demo3dRoute = Demo3dRouteImport.update({
-  id: '/demo3d',
-  path: '/demo3d',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TarifsRoute = TarifsRouteImport.update({
@@ -62,7 +56,6 @@ const AuthenticatedProjetsIdRoute = AuthenticatedProjetsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/demo3d': typeof Demo3dRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -71,7 +64,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/demo3d': typeof Demo3dRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -82,7 +74,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
-  '/demo3d': typeof Demo3dRoute
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
@@ -91,28 +82,14 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/auth'
-    | '/demo3d'
-    | '/tarifs'
-    | '/api/chat'
-    | '/projets/$id'
-    | '/projets/'
+    '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/auth'
-    | '/demo3d'
-    | '/tarifs'
-    | '/api/chat'
-    | '/projets/$id'
-    | '/projets'
+  to: '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/demo3d'
     | '/tarifs'
     | '/api/chat'
     | '/_authenticated/projets/$id'
@@ -123,7 +100,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
-  Demo3dRoute: typeof Demo3dRoute
   TarifsRoute: typeof TarifsRoute
   ApiChatRoute: typeof ApiChatRoute
 }
@@ -149,13 +125,6 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo3d': {
-      id: '/demo3d'
-      path: '/demo3d'
-      fullPath: '/demo3d'
-      preLoaderRoute: typeof Demo3dRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tarifs': {
@@ -207,7 +176,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
-  Demo3dRoute: Demo3dRoute,
   TarifsRoute: TarifsRoute,
   ApiChatRoute: ApiChatRoute,
 }
