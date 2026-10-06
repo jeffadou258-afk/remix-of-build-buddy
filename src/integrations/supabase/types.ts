@@ -263,6 +263,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_projects: {
+        Args: never
+        Returns: {
+          ca_linked: boolean
+          client_type: string
+          created_at: string
+          owner_id: string
+          project_id: string
+          stage: string
+          updated_at: string
+        }[]
+      }
       admin_list_users: {
         Args: never
         Returns: {
