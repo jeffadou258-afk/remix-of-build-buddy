@@ -17,6 +17,7 @@ export type Database = {
       projects: {
         Row: {
           building_model: Json | null
+          ca_project_id: string | null
           client_type: string
           created_at: string
           id: string
@@ -29,6 +30,7 @@ export type Database = {
         }
         Insert: {
           building_model?: Json | null
+          ca_project_id?: string | null
           client_type?: string
           created_at?: string
           id?: string
@@ -41,6 +43,7 @@ export type Database = {
         }
         Update: {
           building_model?: Json | null
+          ca_project_id?: string | null
           client_type?: string
           created_at?: string
           id?: string

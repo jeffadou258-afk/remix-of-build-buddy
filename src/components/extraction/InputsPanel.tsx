@@ -50,7 +50,12 @@ function Row({ label, value, entry, editing, onEdit, onSave, onCancel }: { label
   );
 }
 
-export function InputsPanel({ projectId, initial }: { projectId: string; initial: Inputs | null }) {
+export type RemoteInputs = {
+  patch: (changes: Record<string, unknown>) => Promise<Inputs>;
+  addRoom: (room: { name: string; surface_m2: number; level: string }) => Promise<Inputs>;
+};
+
+export function InputsPanel({ projectId, initial, remote }: { projectId: string; initial: Inputs | null; remote?: RemoteInputs }) {
   const [d, setD] = useState<Inputs>(initial ?? emptyInputs(projectId));
   const [editing, setEditing] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -67,6 +72,7 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
         const n = Number(raw.replace(/\s/g, "").replace(",", "."));
         v = raw.trim() ? (Number.isNaN(n) || n <= 0 ? (() => { throw new Error("Montant attendu"); })() : { amount: Math.round(n), currency: "XOF" }) : null;
       } else v = parse(key, raw);
+      if (remote) { setD(await remote.patch({ [key]: v })); setEditing(null); return; }
       const { data } = await supabase.auth.getUser();
       await persist(applyEdit(d, { [key]: v }, data.user?.id ?? null));
     } catch (e) { toast.error((e as Error).message); }
@@ -77,6 +83,15 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
       if (!r.success) { toast.error("Fichier non conforme au module d'extraction (inputs.json v1)"); return; }
       await persist(r.data); toast.success("Données extraites importées");
     } catch { toast.error("Fichier illisible"); }
+  }
+  const [room, setRoom] = useState({ name: "", surface: "", level: "" });
+  async function addRoom(ev: React.FormEvent) {
+    ev.preventDefault();
+    if (!remote) return;
+    const surface = Number(room.surface.replace(",", "."));
+    if (!room.name.trim() || !room.level.trim() || !(surface > 0)) { toast.error("Nom, surface (> 0) et niveau requis"); return; }
+    try { setD(await remote.addRoom({ name: room.name.trim(), surface_m2: surface, level: room.level.trim() })); setRoom({ name: "", surface: "", level: "" }); }
+    catch (e) { toast.error((e as Error).message); }
   }
 
   const provided = FIELDS.filter((k) => d.fields[k]?.status === "USER_PROVIDED");
@@ -95,14 +110,25 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
         <p className="max-w-xl text-muted-foreground">Une information fournie par vous est enregistrée comme telle, mais elle n'est <strong>pas validée techniquement</strong>. Rien n'est complété automatiquement.</p>
         <div className="flex gap-2">
           <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])} />
-          <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>Importer l'extraction</Button>
+          {!remote && <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>Importer l'extraction</Button>}
           <Button size="sm" variant="outline" onClick={() => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], { type: "application/json" })); a.download = "inputs.json"; a.click(); }}>Exporter</Button>
         </div>
       </div>
 
       <Section n="01" title="Informations fournies">
         {provided.length === 0 ? <p className="py-3 text-sm text-muted-foreground">Aucune information fournie pour l'instant.</p> : provided.map((k) => <Row key={k} {...rowProps(k)} />)}
-        {d.rooms.map((r, i) => <div key={i} className="border-t border-border py-3 text-sm"><span className="text-muted-foreground">Pièce · {r.name} : </span>{formatValue("", r.surface_m2.value)} m² <Badges e={r.surface_m2} /></div>)}
+        {d.rooms.map((r, i) => {
+          const level = (r as { level?: string }).level;
+          return <div key={i} className="border-t border-border py-3 text-sm"><span className="text-muted-foreground">Pièce · {r.name}{level ? ` (${level})` : " (niveau inconnu)"} : </span>{formatValue("", r.surface_m2.value)} m² <Badges e={r.surface_m2} /></div>;
+        })}
+        {remote && (
+          <form onSubmit={addRoom} className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3" aria-label="Ajouter une pièce">
+            <Input aria-label="Nom de la pièce" placeholder="Pièce (ex : Salon)" value={room.name} onChange={(e) => setRoom({ ...room, name: e.target.value })} className="w-40" maxLength={60} />
+            <Input aria-label="Surface" placeholder="Surface m²" value={room.surface} onChange={(e) => setRoom({ ...room, surface: e.target.value })} className="w-28" />
+            <Input aria-label="Niveau" placeholder="Niveau (RDC…)" value={room.level} onChange={(e) => setRoom({ ...room, level: e.target.value })} className="w-32" maxLength={30} />
+            <Button size="sm" type="submit">Ajouter la pièce</Button>
+          </form>
+        )}
       </Section>
 
       <Section n="02" title="Informations inconnues">

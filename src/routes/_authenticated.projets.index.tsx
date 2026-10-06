@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { STAGES } from "@/lib/stages";
+import { ca } from "@/lib/ca/client";
 
 export const Route = createFileRoute("/_authenticated/projets/")({
   head: () => ({
@@ -40,6 +41,9 @@ function Projets() {
     const t = title.trim().slice(0, 120) || "Nouveau projet";
     const { data, error } = await supabase.from("projects").insert({ title: t, client_type: clientType, user_id: user.id }).select("id").single();
     if (error) { toast.error("Création impossible."); return; }
+    // Création du projet réel côté ConstructionAgent (POST /v1/projects via le relais)
+    try { await ca(data.id, "POST", "link"); }
+    catch (e) { toast.error(`Projet créé, mais non relié à ConstructionAgent : ${(e as Error).message}`); }
     navigate({ to: "/projets/$id", params: { id: data.id } });
   }
 

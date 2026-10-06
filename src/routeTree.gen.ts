@@ -16,6 +16,7 @@ import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
 import { Route as AuthenticatedProjetsIdRouteImport } from './routes/_authenticated.projets.$id'
+import { Route as ApiCaSplatRouteImport } from './routes/api/ca.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const AuthenticatedProjetsIdRoute = AuthenticatedProjetsIdRouteImport.update({
   path: '/projets/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiCaSplatRoute = ApiCaSplatRouteImport.update({
+  id: '/api/ca/$',
+  path: '/api/ca/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/api/ca/$': typeof ApiCaSplatRoute
   '/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/api/ca/$': typeof ApiCaSplatRoute
   '/projets': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesById {
@@ -77,14 +85,28 @@ export interface FileRoutesById {
   '/tarifs': typeof TarifsRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
+  '/api/ca/$': typeof ApiCaSplatRoute
   '/_authenticated/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets/'
+    | '/'
+    | '/auth'
+    | '/tarifs'
+    | '/api/chat'
+    | '/projets/$id'
+    | '/api/ca/$'
+    | '/projets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/tarifs' | '/api/chat' | '/projets/$id' | '/projets'
+  to:
+    | '/'
+    | '/auth'
+    | '/tarifs'
+    | '/api/chat'
+    | '/projets/$id'
+    | '/api/ca/$'
+    | '/projets'
   id:
     | '__root__'
     | '/'
@@ -93,6 +115,7 @@ export interface FileRouteTypes {
     | '/tarifs'
     | '/api/chat'
     | '/_authenticated/projets/$id'
+    | '/api/ca/$'
     | '/_authenticated/projets/'
   fileRoutesById: FileRoutesById
 }
@@ -102,6 +125,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   TarifsRoute: typeof TarifsRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiCaSplatRoute: typeof ApiCaSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -155,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjetsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/ca/$': {
+      id: '/api/ca/$'
+      path: '/api/ca/$'
+      fullPath: '/api/ca/$'
+      preLoaderRoute: typeof ApiCaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -178,6 +209,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   TarifsRoute: TarifsRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiCaSplatRoute: ApiCaSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
