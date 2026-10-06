@@ -56,7 +56,7 @@ export function extractModel(text: string): BuildingModel | null {
   let found: BuildingModel | null = null;
   for (const m of text.matchAll(BIM_BLOCK)) {
     try {
-      const r = buildingModelSchema.safeParse(JSON.parse(m[1]));
+      const r = buildingModelSchema.safeParse(JSON.parse(m[1] ?? ""));
       if (r.success) found = r.data;
     } catch { /* bloc invalide ignoré */ }
   }

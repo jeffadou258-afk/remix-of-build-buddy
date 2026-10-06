@@ -59,14 +59,14 @@ function RoomFloor({ room, level, idx, selected, onSelect }: { room: BuildingMod
   const sel = selected?.kind === "piece" && selected.id === room.id;
   return (
     <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]} position={[0, level.elevation - 0.12, 0]} receiveShadow onClick={(e) => pick(e, { kind: "piece", id: room.id }, onSelect)}>
-      <meshStandardMaterial color={sel ? C.sel : C.floor[idx % C.floor.length]} roughness={0.8} />
+      <meshStandardMaterial color={sel ? C.sel : (C.floor[idx % C.floor.length] ?? "#d9c7a7")} roughness={0.8} />
     </mesh>
   );
 }
 
 function Roof({ model, selected, onSelect }: { model: BuildingModel; selected: ElementRef | null; onSelect: Props["onSelect"] }) {
   const roof = model.roof!;
-  const top = model.levels.find((l) => l.id === roof.levelId) ?? [...model.levels].sort((a, b) => b.elevation - a.elevation)[0];
+  const top = model.levels.find((l) => l.id === roof.levelId) ?? [...model.levels].sort((a, b) => b.elevation - a.elevation)[0]!;
   const b = bounds(model, top.id);
   const o = roof.overhang;
   const minX = b.minX - o, maxX = b.maxX + o, minY = b.minY - o, maxY = b.maxY + o;
