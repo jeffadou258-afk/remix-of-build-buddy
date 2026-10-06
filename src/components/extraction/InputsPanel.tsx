@@ -130,8 +130,6 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
       <Section n="05" title="Historique des modifications">
         {d.history.length === 0 ? <p className="text-sm text-muted-foreground">Aucune modification.</p> : [...d.history].reverse().map((h, i) => {
           const key = h.field === "budget.declared" ? "budget_declared" : h.field;
-          const current = h.field === "budget.declared" ? null : null;
-          void current;
           const label = h.field === "budget.declared" ? "Budget annoncé" : FIELD_META[key as FieldKey]?.label ?? h.field;
           return <p key={i} className="border-t border-border py-2 font-mono text-xs">{h.replaced_at.replace("T", " ")} · {label} : {formatValue(h.field, h.previous.value)} → <NextVal d={d} idx={d.history.length - 1 - i} /></p>;
         })}
