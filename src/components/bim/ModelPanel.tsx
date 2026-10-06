@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { Fragment, lazy, Suspense, useState } from "react";
 import { ClientOnly } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ export function ModelPanel({ projectId, model }: { projectId: string; model: Bui
         <div className="pointer-events-none absolute left-3 top-3 max-w-xs border border-border bg-card/90 p-3 text-xs backdrop-blur">
           {info ? (<>
             <p className="font-semibold">{info[0]}</p>
-            <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">{info[1].map(([k, v]) => <><dt className="text-muted-foreground">{k}</dt><dd>{v}</dd></>)}</dl>
+            <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">{info[1].map(([k, v]) => <Fragment key={k}><dt className="text-muted-foreground">{k}</dt><dd>{v}</dd></Fragment>)}</dl>
           </>) : <p className="text-muted-foreground">Cliquez sur un élément pour l'identifier · glisser pour tourner · molette pour zoomer</p>}
         </div>
         <p className="absolute bottom-2 right-3 label-mono text-muted-foreground">{model.rooms.length} pièces · {model.walls.length} murs · {model.openings.length} ouvertures</p>
