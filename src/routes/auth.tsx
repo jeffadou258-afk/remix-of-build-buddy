@@ -40,13 +40,13 @@ function AuthPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse({ email, password });
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Champs invalides"); return; }
     setBusy(true);
     const { error } = mode === "in"
       ? await supabase.auth.signInWithPassword(parsed.data)
       : await supabase.auth.signUp({ ...parsed.data, options: { emailRedirectTo: window.location.origin + "/projets" } });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (mode === "up") toast.success("Compte créé. Vérifiez votre boîte mail pour confirmer.");
   }
 

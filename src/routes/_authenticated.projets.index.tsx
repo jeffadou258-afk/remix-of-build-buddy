@@ -39,7 +39,7 @@ function Projets() {
     if (!user) return;
     const t = title.trim().slice(0, 120) || "Nouveau projet";
     const { data, error } = await supabase.from("projects").insert({ title: t, client_type: clientType, user_id: user.id }).select("id").single();
-    if (error) return toast.error("Création impossible.");
+    if (error) { toast.error("Création impossible."); return; }
     navigate({ to: "/projets/$id", params: { id: data.id } });
   }
 
