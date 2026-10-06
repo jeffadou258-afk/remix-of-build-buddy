@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminLayout() {
   const fetchAccess = useServerFn(getAdminAccess);
-  const q = useQuery({ queryKey: ["admin-access"], queryFn: () => fetchAccess() });
+  const q = useQuery({ queryKey: ["admin-access", "enter"], queryFn: () => fetchAccess({ data: { enter: true } }) });
 
   if (q.isLoading) return <p className="p-10 text-center text-muted-foreground">Vérification des droits…</p>;
   if (q.isError || !q.data?.allowed) {

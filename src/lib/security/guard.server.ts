@@ -16,7 +16,7 @@ export async function isSuspended(sb: Sb, userId: string): Promise<boolean> {
 }
 
 /** Actions que le serveur applicatif peut journaliser ; la base refuse toute autre. */
-export const LOGGABLE_ACTIONS = ["audit.list", "gates.decide"] as const;
+export const LOGGABLE_ACTIONS = ["audit.list", "gates.decide", "admin.access_denied"] as const;
 export type LoggableAction = (typeof LOGGABLE_ACTIONS)[number];
 
 /**
@@ -24,6 +24,7 @@ export type LoggableAction = (typeof LOGGABLE_ACTIONS)[number];
  * motif et avant/après. L'appelant ne transmet que l'action et la cible.
  */
 export async function audit(sb: Sb, action: LoggableAction, m: Pick<AuditMeta, "targetType" | "targetId" | "ip" | "userAgent" | "requestId"> = {}) {
+  // Les échecs d'écriture ne doivent jamais transformer un refus en accès : on ignore l'erreur.
   await sb.rpc("log_security_event", {
     _action: action, _target_type: m.targetType ?? null, _target_id: m.targetId ?? null,
     _ip: m.ip ?? null, _user_agent: m.userAgent ?? null, _request_id: m.requestId ?? null,
