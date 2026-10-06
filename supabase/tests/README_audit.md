@@ -1,1 +1,0 @@
--- Vérification SQL du journal d'audit (exécutée dans BEGIN…ROLLBACK, 14/14 OK le 2026-10-06). Voir conversation.
