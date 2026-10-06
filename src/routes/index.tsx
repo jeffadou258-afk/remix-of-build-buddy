@@ -16,11 +16,11 @@ export const Route = createFileRoute("/")({
 });
 
 const steps = [
-  ["01", "Découverte", "Terrain, budget, besoins : l'agent vous pose les bonnes questions."],
-  ["02", "Programme", "Liste des espaces et surfaces, chaque chiffre justifié."],
-  ["03", "Conception", "Parti architectural adapté au climat et à vos usages."],
-  ["04", "Plans", "Organisation précise de chaque niveau, cotée."],
-  ["05", "Documentation", "Notice descriptive et estimation budgétaire par lot."],
+  ["01", "Découverte", "Besoins, budget et analyse de votre terrain."],
+  ["02", "Programme", "Espaces, surfaces et liens entre les pièces, contrôlés."],
+  ["03", "Conception", "2 à 3 variantes comparées, adaptées au climat. Vous choisissez."],
+  ["04", "Plans", "Dimensions, plans par niveau et trame de structure indicative."],
+  ["05", "Documentation", "Rapport, notice, budget par lot et contrôle qualité."],
 ];
 
 function Index() {
