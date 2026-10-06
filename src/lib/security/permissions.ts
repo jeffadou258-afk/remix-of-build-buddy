@@ -24,6 +24,16 @@ export type Permission =
   | "usage.read" | "costs.read" | "providers.read" | "providers.manage"
   | "errors.read" | "health.read" | "audit.read" | "security.read" | "security.manage";
 
+export const ALL_PERMISSIONS: readonly Permission[] = [
+  "users.read", "users.suspend", "roles.manage",
+  "projects.read_meta", "projects.read_content", "projects.archive",
+  "activity.read", "jobs.read", "jobs.retry", "jobs.cancel",
+  "engines.read", "engines.toggle",
+  "gates.read", "gates.unblock_technical",
+  "usage.read", "costs.read", "providers.read", "providers.manage",
+  "errors.read", "health.read", "audit.read", "security.read", "security.manage",
+];
+
 /** Copie exacte de la matrice §1.2 insérée dans la migration (role_permissions). */
 export const ROLE_PERMISSIONS: Record<AppRole, readonly Permission[]> = {
   user: [],

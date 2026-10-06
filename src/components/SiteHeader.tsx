@@ -1,8 +1,18 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { getAdminAccess } from "@/lib/security/admin-access.functions";
+
+function AdminLink() {
+  const fetchAccess = useServerFn(getAdminAccess);
+  const q = useQuery({ queryKey: ["admin-access"], queryFn: () => fetchAccess(), retry: false });
+  if (!q.data?.allowed) return null;
+  return <Link to="/admin" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">Admin</Link>;
+}
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -19,6 +29,7 @@ export function SiteHeader() {
           {user ? (
             <>
               <Link to="/projets" className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">Mes projets</Link>
+              <AdminLink />
               <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }}>
                 Déconnexion
               </Button>
