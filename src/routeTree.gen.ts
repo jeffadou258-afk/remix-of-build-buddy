@@ -15,6 +15,15 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated.admin.index'
+import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated.admin.audit'
+import { Route as AuthenticatedAdminGatesRouteImport } from './routes/_authenticated.admin.gates'
+import { Route as AuthenticatedAdminMoteursRouteImport } from './routes/_authenticated.admin.moteurs'
+import { Route as AuthenticatedAdminProjetsRouteImport } from './routes/_authenticated.admin.projets'
+import { Route as AuthenticatedAdminSanteRouteImport } from './routes/_authenticated.admin.sante'
+import { Route as AuthenticatedAdminSecuriteRouteImport } from './routes/_authenticated.admin.securite'
+import { Route as AuthenticatedAdminUsageRouteImport } from './routes/_authenticated.admin.usage'
+import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_authenticated.admin.utilisateurs'
 import { Route as AuthenticatedProjetsIndexRouteImport } from './routes/_authenticated.projets.index'
 import { Route as AuthenticatedProjetsIdRouteImport } from './routes/_authenticated.projets.$id'
 import { Route as ApiCaSplatRouteImport } from './routes/api/ca.$'
@@ -48,6 +57,55 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminGatesRoute = AuthenticatedAdminGatesRouteImport.update({
+  id: '/gates',
+  path: '/gates',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminMoteursRoute =
+  AuthenticatedAdminMoteursRouteImport.update({
+    id: '/moteurs',
+    path: '/moteurs',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProjetsRoute =
+  AuthenticatedAdminProjetsRouteImport.update({
+    id: '/projets',
+    path: '/projets',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSanteRoute = AuthenticatedAdminSanteRouteImport.update({
+  id: '/sante',
+  path: '/sante',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminSecuriteRoute =
+  AuthenticatedAdminSecuriteRouteImport.update({
+    id: '/securite',
+    path: '/securite',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminUsageRoute = AuthenticatedAdminUsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminUtilisateursRoute =
+  AuthenticatedAdminUtilisateursRouteImport.update({
+    id: '/utilisateurs',
+    path: '/utilisateurs',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedProjetsIndexRoute =
   AuthenticatedProjetsIndexRouteImport.update({
     id: '/projets/',
@@ -69,20 +127,37 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/chat': typeof ApiChatRoute
+  '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/gates': typeof AuthenticatedAdminGatesRoute
+  '/admin/moteurs': typeof AuthenticatedAdminMoteursRoute
+  '/admin/projets': typeof AuthenticatedAdminProjetsRoute
+  '/admin/sante': typeof AuthenticatedAdminSanteRoute
+  '/admin/securite': typeof AuthenticatedAdminSecuriteRoute
+  '/admin/usage': typeof AuthenticatedAdminUsageRoute
+  '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
+  '/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/admin/gates': typeof AuthenticatedAdminGatesRoute
+  '/admin/moteurs': typeof AuthenticatedAdminMoteursRoute
+  '/admin/projets': typeof AuthenticatedAdminProjetsRoute
+  '/admin/sante': typeof AuthenticatedAdminSanteRoute
+  '/admin/securite': typeof AuthenticatedAdminSecuriteRoute
+  '/admin/usage': typeof AuthenticatedAdminUsageRoute
+  '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/projets': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRoutesById {
@@ -91,10 +166,19 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/tarifs': typeof TarifsRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/chat': typeof ApiChatRoute
+  '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
+  '/_authenticated/admin/gates': typeof AuthenticatedAdminGatesRoute
+  '/_authenticated/admin/moteurs': typeof AuthenticatedAdminMoteursRoute
+  '/_authenticated/admin/projets': typeof AuthenticatedAdminProjetsRoute
+  '/_authenticated/admin/sante': typeof AuthenticatedAdminSanteRoute
+  '/_authenticated/admin/securite': typeof AuthenticatedAdminSecuriteRoute
+  '/_authenticated/admin/usage': typeof AuthenticatedAdminUsageRoute
+  '/_authenticated/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/_authenticated/projets/$id': typeof AuthenticatedProjetsIdRoute
   '/api/ca/$': typeof ApiCaSplatRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/projets/': typeof AuthenticatedProjetsIndexRoute
 }
 export interface FileRouteTypes {
@@ -105,18 +189,35 @@ export interface FileRouteTypes {
     | '/tarifs'
     | '/admin'
     | '/api/chat'
+    | '/admin/audit'
+    | '/admin/gates'
+    | '/admin/moteurs'
+    | '/admin/projets'
+    | '/admin/sante'
+    | '/admin/securite'
+    | '/admin/usage'
+    | '/admin/utilisateurs'
     | '/projets/$id'
     | '/api/ca/$'
+    | '/admin/'
     | '/projets/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/tarifs'
-    | '/admin'
     | '/api/chat'
+    | '/admin/audit'
+    | '/admin/gates'
+    | '/admin/moteurs'
+    | '/admin/projets'
+    | '/admin/sante'
+    | '/admin/securite'
+    | '/admin/usage'
+    | '/admin/utilisateurs'
     | '/projets/$id'
     | '/api/ca/$'
+    | '/admin'
     | '/projets'
   id:
     | '__root__'
@@ -126,8 +227,17 @@ export interface FileRouteTypes {
     | '/tarifs'
     | '/_authenticated/admin'
     | '/api/chat'
+    | '/_authenticated/admin/audit'
+    | '/_authenticated/admin/gates'
+    | '/_authenticated/admin/moteurs'
+    | '/_authenticated/admin/projets'
+    | '/_authenticated/admin/sante'
+    | '/_authenticated/admin/securite'
+    | '/_authenticated/admin/usage'
+    | '/_authenticated/admin/utilisateurs'
     | '/_authenticated/projets/$id'
     | '/api/ca/$'
+    | '/_authenticated/admin/'
     | '/_authenticated/projets/'
   fileRoutesById: FileRoutesById
 }
@@ -184,6 +294,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/audit': {
+      id: '/_authenticated/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AuthenticatedAdminAuditRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/gates': {
+      id: '/_authenticated/admin/gates'
+      path: '/gates'
+      fullPath: '/admin/gates'
+      preLoaderRoute: typeof AuthenticatedAdminGatesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/moteurs': {
+      id: '/_authenticated/admin/moteurs'
+      path: '/moteurs'
+      fullPath: '/admin/moteurs'
+      preLoaderRoute: typeof AuthenticatedAdminMoteursRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/projets': {
+      id: '/_authenticated/admin/projets'
+      path: '/projets'
+      fullPath: '/admin/projets'
+      preLoaderRoute: typeof AuthenticatedAdminProjetsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/sante': {
+      id: '/_authenticated/admin/sante'
+      path: '/sante'
+      fullPath: '/admin/sante'
+      preLoaderRoute: typeof AuthenticatedAdminSanteRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/securite': {
+      id: '/_authenticated/admin/securite'
+      path: '/securite'
+      fullPath: '/admin/securite'
+      preLoaderRoute: typeof AuthenticatedAdminSecuriteRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/usage': {
+      id: '/_authenticated/admin/usage'
+      path: '/usage'
+      fullPath: '/admin/usage'
+      preLoaderRoute: typeof AuthenticatedAdminUsageRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/utilisateurs': {
+      id: '/_authenticated/admin/utilisateurs'
+      path: '/utilisateurs'
+      fullPath: '/admin/utilisateurs'
+      preLoaderRoute: typeof AuthenticatedAdminUtilisateursRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/projets/': {
       id: '/_authenticated/projets/'
       path: '/projets'
@@ -208,14 +381,41 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
+  AuthenticatedAdminGatesRoute: typeof AuthenticatedAdminGatesRoute
+  AuthenticatedAdminMoteursRoute: typeof AuthenticatedAdminMoteursRoute
+  AuthenticatedAdminProjetsRoute: typeof AuthenticatedAdminProjetsRoute
+  AuthenticatedAdminSanteRoute: typeof AuthenticatedAdminSanteRoute
+  AuthenticatedAdminSecuriteRoute: typeof AuthenticatedAdminSecuriteRoute
+  AuthenticatedAdminUsageRoute: typeof AuthenticatedAdminUsageRoute
+  AuthenticatedAdminUtilisateursRoute: typeof AuthenticatedAdminUtilisateursRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
+  AuthenticatedAdminGatesRoute: AuthenticatedAdminGatesRoute,
+  AuthenticatedAdminMoteursRoute: AuthenticatedAdminMoteursRoute,
+  AuthenticatedAdminProjetsRoute: AuthenticatedAdminProjetsRoute,
+  AuthenticatedAdminSanteRoute: AuthenticatedAdminSanteRoute,
+  AuthenticatedAdminSecuriteRoute: AuthenticatedAdminSecuriteRoute,
+  AuthenticatedAdminUsageRoute: AuthenticatedAdminUsageRoute,
+  AuthenticatedAdminUtilisateursRoute: AuthenticatedAdminUtilisateursRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedProjetsIdRoute: typeof AuthenticatedProjetsIdRoute
   AuthenticatedProjetsIndexRoute: typeof AuthenticatedProjetsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedProjetsIdRoute: AuthenticatedProjetsIdRoute,
   AuthenticatedProjetsIndexRoute: AuthenticatedProjetsIndexRoute,
 }

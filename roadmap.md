@@ -10,5 +10,6 @@
 - [ ] Mise en ligne de l'API (tunnel/serveur) puis remplacement de CA_API_URL / CA_API_KEY
 
 - [x] Socle de sécurité Admin v1 (rôles, permissions serveur, journal immuable, accès audité, filtre des secrets)
-- [ ] Dashboard Admin /admin (+ double authentification) — attend votre feu vert
-- [ ] Désigner le premier admin — attend votre choix
+- [x] Shell /admin (9 sections, accès contrôlé serveur)
+- [ ] Brancher les données réelles des sections Admin + double authentification
+- [x] Premier admin désigné
