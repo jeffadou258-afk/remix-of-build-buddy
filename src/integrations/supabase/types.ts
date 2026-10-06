@@ -263,6 +263,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_users: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          last_sign_in_at: string
+          project_count: number
+          roles: string[]
+          status: string
+          user_id: string
+        }[]
+      }
       grant_role: {
         Args: {
           _reason: string
