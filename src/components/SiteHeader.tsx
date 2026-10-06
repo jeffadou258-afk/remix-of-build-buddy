@@ -26,6 +26,7 @@ export function SiteHeader() {
           ) : (
             <Button asChild size="sm"><Link to="/auth">Se connecter</Link></Button>
           )}
+          <ThemeToggle />
         </nav>
       </div>
     </header>

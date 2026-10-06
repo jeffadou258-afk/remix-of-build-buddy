@@ -106,6 +106,11 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="fr">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem("theme")==="light"){document.documentElement.dataset.theme="light";}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         {children}
