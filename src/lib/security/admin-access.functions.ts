@@ -22,7 +22,7 @@ async function effectivePermissions({ supabase, userId }: Ctx): Promise<{ suspen
       return !error && data === true ? p : null;
     }),
   );
-  return { suspended: false, permissions: results.filter((p): p is string => p !== null) };
+  return { suspended: false, permissions: results.filter((p): p is NonNullable<typeof p> => p !== null) as string[] };
 }
 
 export const getAdminAccess = createServerFn({ method: "GET" })

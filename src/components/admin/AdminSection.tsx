@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { requireAdminSection } from "@/lib/security/admin-access.functions";
 import { sectionById, type AdminSectionId } from "@/lib/security/admin-sections";
 
-export function AdminDenied({ message = "Accès refusé. Votre compte n'a pas la permission requise." }: { message?: string }) {
+export function AdminDenied({ message = "Accès refusé. Votre compte n'a pas la permission requise." }: { message?: string | undefined }) {
   return (
     <div className="border border-destructive/40 bg-destructive/5 p-6">
       <p className="font-display text-lg font-semibold">Accès refusé</p>
