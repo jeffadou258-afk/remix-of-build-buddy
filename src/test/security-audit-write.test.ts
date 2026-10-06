@@ -17,7 +17,7 @@ describe("écriture d'audit contrôlée", () => {
   it("ne transmet ni résultat, ni permission, ni motif, ni avant/après", async () => {
     const sb = fakeSb(true);
     await audit(sb as never, "audit.list");
-    const args = sb.rpc.mock.calls[0][1] as Record<string, unknown>;
+    const args = (sb.rpc.mock.calls[0] as unknown[])[1] as Record<string, unknown>;
     for (const k of ["_result", "_permission", "_reason", "_before", "_after"]) expect(args).not.toHaveProperty(k);
   });
 
