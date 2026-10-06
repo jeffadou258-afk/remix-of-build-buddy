@@ -57,7 +57,7 @@ async function handle(request: Request, splat: string) {
 
   // Gate métier : seul le propriétaire du projet décide, quel que soit le rôle de l'appelant.
   if (isGateDecisionPath(sub) && !canDecideGate(u.user.id, project.user_id)) {
-    await audit(supabase, "gates.decide", "gates.decide_on_behalf", "denied", { targetType: "project", targetId: project.id, ...requestMeta(request) });
+    await audit(supabase, "gates.decide", { targetType: "project", targetId: project.id, ...requestMeta(request) });
     return json(403, { error: "Seul le client propriétaire peut décider de ce Gate." });
   }
 
