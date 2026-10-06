@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { CaProjectView } from "@/components/ca/CaProjectView";
+import { ca } from "@/lib/ca/client";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -39,7 +41,30 @@ function ProjectPage() {
   });
   if (isLoading) return <p className="p-10 text-center text-muted-foreground">Chargement…</p>;
   if (!project) return <p className="p-10 text-center">Projet introuvable.</p>;
-  return <ProjectChat id={id} title={project.title} initialStage={project.stage as StageKey} initialMessages={(project.messages as unknown as UIMessage[]) ?? []} initialModel={buildingModelSchema.safeParse(project.building_model).data ?? null} initialInputs={inputsSchema.safeParse((project as { inputs?: unknown }).inputs).data ?? null} />;
+  const model = buildingModelSchema.safeParse(project.building_model).data ?? null;
+  if (project.ca_project_id) return <CaProjectView id={id} title={project.title} model={model} />;
+  return (
+    <>
+      <LegacyBanner id={id} />
+      <ProjectChat id={id} title={project.title} initialStage={project.stage as StageKey} initialMessages={(project.messages as unknown as UIMessage[]) ?? []} initialModel={model} initialInputs={inputsSchema.safeParse((project as { inputs?: unknown }).inputs).data ?? null} />
+    </>
+  );
+}
+
+function LegacyBanner({ id }: { id: string }) {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  async function link() {
+    setBusy(true);
+    try { await ca(id, "POST", "link"); await qc.invalidateQueries({ queryKey: ["project", id] }); }
+    catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+  }
+  return (
+    <div className="mx-auto mt-6 flex max-w-6xl flex-wrap items-center justify-between gap-3 border border-border bg-card px-5 py-3 text-sm">
+      <span className="text-muted-foreground">Ancien mode : assistant local, <strong>non relié</strong> au backend ConstructionAgent.</span>
+      <Button size="sm" onClick={link} disabled={busy}>{busy ? "Liaison…" : "Relier à ConstructionAgent"}</Button>
+    </div>
+  );
 }
 
 const STAGE_TAG = /\[\[ETAPE:([a-z]+)\]\]/g;
