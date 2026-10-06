@@ -13,7 +13,7 @@ export async function ca<T = unknown>(projectId: string, method: "GET" | "POST" 
       "Content-Type": "application/json",
       ...(data.session ? { Authorization: `Bearer ${data.session.access_token}` } : {}),
     },
-    body: body === undefined ? (method === "GET" ? undefined : "{}") : JSON.stringify(body),
+    body: body === undefined ? (method === "GET" ? null : "{}") : JSON.stringify(body),
   });
   const json = (await res.json().catch(() => ({}))) as { error?: string };
   if (!res.ok) throw new CaError(res.status, json.error ?? `Erreur ${res.status}`);
