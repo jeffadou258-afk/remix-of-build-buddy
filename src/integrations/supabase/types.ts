@@ -263,6 +263,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_gate_projects: {
+        Args: never
+        Returns: {
+          ca_project_id: string
+          owner_id: string
+          project_id: string
+          stage: string
+        }[]
+      }
       admin_list_projects: {
         Args: never
         Returns: {
