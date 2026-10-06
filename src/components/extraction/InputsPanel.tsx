@@ -50,7 +50,12 @@ function Row({ label, value, entry, editing, onEdit, onSave, onCancel }: { label
   );
 }
 
-export function InputsPanel({ projectId, initial }: { projectId: string; initial: Inputs | null }) {
+export type RemoteInputs = {
+  patch: (changes: Record<string, unknown>) => Promise<Inputs>;
+  addRoom: (room: { name: string; surface_m2: number; level: string }) => Promise<Inputs>;
+};
+
+export function InputsPanel({ projectId, initial, remote }: { projectId: string; initial: Inputs | null; remote?: RemoteInputs }) {
   const [d, setD] = useState<Inputs>(initial ?? emptyInputs(projectId));
   const [editing, setEditing] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -67,6 +72,7 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
         const n = Number(raw.replace(/\s/g, "").replace(",", "."));
         v = raw.trim() ? (Number.isNaN(n) || n <= 0 ? (() => { throw new Error("Montant attendu"); })() : { amount: Math.round(n), currency: "XOF" }) : null;
       } else v = parse(key, raw);
+      if (remote) { setD(await remote.patch({ [key]: v })); setEditing(null); return; }
       const { data } = await supabase.auth.getUser();
       await persist(applyEdit(d, { [key]: v }, data.user?.id ?? null));
     } catch (e) { toast.error((e as Error).message); }
@@ -77,6 +83,15 @@ export function InputsPanel({ projectId, initial }: { projectId: string; initial
       if (!r.success) { toast.error("Fichier non conforme au module d'extraction (inputs.json v1)"); return; }
       await persist(r.data); toast.success("Données extraites importées");
     } catch { toast.error("Fichier illisible"); }
+  }
+  const [room, setRoom] = useState({ name: "", surface: "", level: "" });
+  async function addRoom(ev: React.FormEvent) {
+    ev.preventDefault();
+    if (!remote) return;
+    const surface = Number(room.surface.replace(",", "."));
+    if (!room.name.trim() || !room.level.trim() || !(surface > 0)) { toast.error("Nom, surface (> 0) et niveau requis"); return; }
+    try { setD(await remote.addRoom({ name: room.name.trim(), surface_m2: surface, level: room.level.trim() })); setRoom({ name: "", surface: "", level: "" }); }
+    catch (e) { toast.error((e as Error).message); }
   }
 
   const provided = FIELDS.filter((k) => d.fields[k]?.status === "USER_PROVIDED");
