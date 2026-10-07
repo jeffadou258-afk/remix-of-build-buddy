@@ -34,6 +34,10 @@
   --color-ink: var(--ink);
   --color-ink-foreground: var(--ink-foreground);
   --color-blueprint: var(--blueprint);
+  --color-on-image: var(--on-image);
+  --color-champagne: var(--champagne);
+  --color-stone: var(--stone);
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
 }
 
 :root {
@@ -110,4 +114,44 @@ html[data-theme="light"] {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+/* Accueil premium : palette blanc cassé / noir profond / pierre / champagne, limitée à la page d'accueil */
+.luxe {
+  --background: oklch(0.975 0.006 85);
+  --foreground: oklch(0.16 0.005 60);
+  --card: oklch(0.955 0.008 80);
+  --card-foreground: oklch(0.16 0.005 60);
+  --primary: oklch(0.16 0.005 60);
+  --primary-foreground: oklch(0.975 0.006 85);
+  --muted: oklch(0.93 0.008 75);
+  --muted-foreground: oklch(0.48 0.012 65);
+  --border: oklch(0.86 0.01 75);
+  --input: oklch(0.86 0.01 75);
+  --ring: oklch(0.72 0.06 80);
+  --on-image: oklch(0.985 0.005 85);
+  --champagne: oklch(0.8 0.07 80);
+  --stone: oklch(0.62 0.012 70);
+  background: var(--background);
+  color: var(--foreground);
+}
+.luxe h1, .luxe h2, .luxe h3 { font-family: var(--font-serif); letter-spacing: -0.01em; font-weight: 500; }
+
+@utility shade-hero {
+  background: linear-gradient(180deg, oklch(0.12 0 0 / 0.45) 0%, oklch(0.12 0 0 / 0.1) 40%, oklch(0.12 0 0 / 0.55) 100%);
+}
+@utility shade-bottom {
+  background: linear-gradient(180deg, oklch(0.12 0 0 / 0) 30%, oklch(0.12 0 0 / 0.7) 100%);
+}
+
+@keyframes luxe-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes luxe-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+.luxe-rise { animation: luxe-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.luxe-zoom { animation: luxe-zoom 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .luxe-rise, .luxe-zoom { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .luxe * { transition-duration: 0.01ms !important; }
 }
