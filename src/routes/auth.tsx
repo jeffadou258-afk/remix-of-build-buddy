@@ -9,15 +9,17 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [
-      { title: "Connexion — Bâtir" },
-      { name: "description", content: "Connectez-vous ou créez un compte pour démarrer votre projet de construction." },
-      { property: "og:title", content: "Connexion — Bâtir" },
-      { property: "og:description", content: "Accédez à vos projets de construction." },
-    ],
+    ...pageHead({
+      title: "Connexion — ConstructionAgent",
+      description:
+        "Connectez-vous ou créez un compte pour démarrer votre projet de construction.",
+      path: "/auth",
+      noindex: true,
+    }),
   }),
   component: AuthPage,
 });

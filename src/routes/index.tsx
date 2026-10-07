@@ -7,34 +7,40 @@ import { StepsCarousel } from "@/components/home/StepsCarousel";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { ca } from "@/lib/ca/client";
+import { FAQ, ETAPES, SERVICES } from "@/lib/content";
+import { pageHead, faqNode, howToNode, serviceNode } from "@/lib/seo";
 
 const PENDING_KEY = "ca:home-description";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "ConstructionAgent — De l'idée à la construction" },
-      { name: "description", content: "L'intelligence qui transforme votre vision en projet : programme, conception, 3D et documents, avec votre validation à chaque étape." },
-      { property: "og:title", content: "ConstructionAgent — De l'idée à la construction" },
-      { property: "og:description", content: "Décrivez votre projet. ConstructionAgent l'analyse, identifie ce qui manque et vous accompagne jusqu'à la construction." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+/** Balises + données structurées de l'accueil (SEO / AEO / GEO / LLMO). */
+function homeHead() {
+  const h = pageHead({
+    title: "ConstructionAgent — De l'idée à la construction",
+    description:
+      "Décrivez votre projet en quelques phrases : l'agent structure le programme, propose des variantes, produit une maquette 3D, des plans et un dossier de documents. Vous validez chaque étape.",
+    path: "/",
+    jsonLd: [
+      faqNode(FAQ.map((f) => ({ question: f.question, answer: f.answer }))),
+      howToNode({
+        name: "Concevoir un projet de construction avec ConstructionAgent",
+        description:
+          "Parcours complet, de la description écrite du projet jusqu'au dossier remis aux professionnels, avec validation humaine à chaque décision importante.",
+        steps: ETAPES.map((e) => ({ name: e.name, text: e.text })),
+      }),
+      ...SERVICES.map((s) => serviceNode({ name: s.name, description: s.description, path: "/" })),
     ],
-    links: [{ rel: "preload", as: "image", href: "/constructionagent/hero.webp", type: "image/webp" }],
-  }),
+  });
+  return {
+    meta: h.meta,
+    links: [...h.links, { rel: "preload", as: "image", href: "/constructionagent/hero.webp", type: "image/webp" }],
+    scripts: h.scripts,
+  };
+}
+
+export const Route = createFileRoute("/")({
+  head: homeHead,
   component: Home,
 });
-
-const PARCOURS = [
-  ["Idée", "Vous décrivez simplement votre projet."],
-  ["Programme", "Pièces, surfaces et besoins structurés."],
-  ["Conception", "Des variantes adaptées à votre terrain."],
-  ["Validation", "Vous choisissez avant toute suite."],
-  ["Structure", "Un concept structurel indicatif."],
-  ["3D / BIM", "Une maquette fidèle aux données du projet."],
-  ["Documents", "Plans, notices et contrôle qualité."],
-  ["Construction", "Un dossier prêt pour vos professionnels."],
-] as const;
 
 function useReveal() {
   useEffect(() => {
@@ -152,11 +158,11 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 py-28 md:px-8 md:py-36">
           <h2 className="reveal max-w-3xl text-4xl md:text-6xl">DE L’IDÉE À LA CONSTRUCTION.</h2>
           <ol className="mt-16 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {PARCOURS.map(([t, d], k) => (
-              <li key={t} className="reveal bg-card p-8" style={{ transitionDelay: `${(k % 4) * 80}ms` }}>
+            {ETAPES.map((e, k) => (
+              <li key={e.name} id={e.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")} className="reveal bg-card p-8" style={{ transitionDelay: `${(k % 4) * 80}ms` }}>
                 <p className="text-xs tabular-nums tracking-[0.3em] text-stone">{String(k + 1).padStart(2, "0")}</p>
-                <h3 className="mt-6 text-3xl">{t}</h3>
-                <p className="mt-3 text-sm text-muted-foreground">{d}</p>
+                <h3 className="mt-6 text-3xl">{e.name}</h3>
+                <p className="mt-3 text-sm text-muted-foreground">{e.text}</p>
               </li>
             ))}
           </ol>
@@ -220,6 +226,24 @@ function Home() {
         </div>
       </section>
 
+      {/* FAQ — contenu de réponse directe (AEO), source du JSON-LD FAQPage */}
+      <section id="faq" className="border-t border-border bg-card">
+        <div className="mx-auto max-w-4xl px-5 py-28 md:px-8 md:py-36">
+          <h2 className="reveal text-4xl md:text-6xl">QUESTIONS FRÉQUENTES.</h2>
+          <p className="reveal mt-4 text-muted-foreground">
+            Les réponses courtes sur ConstructionAgent, ses tarifs et ses limites.
+          </p>
+          <div className="mt-16 divide-y divide-border border-t border-border">
+            {FAQ.map((f) => (
+              <article key={f.question} className="reveal py-8">
+                <h3 className="font-serif text-2xl md:text-3xl">{f.question}</h3>
+                <p className="mt-4 text-muted-foreground">{f.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="mx-auto max-w-7xl px-5 py-16 md:px-8">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr]">
@@ -233,6 +257,7 @@ function Home() {
             <a href="#parcours" className="hover:text-foreground">Comment ça marche</a>
             <Link to="/tarifs" className="hover:text-foreground">Tarifs</Link>
             <a href="#a-propos" className="hover:text-foreground">À propos</a>
+            <a href="#faq" className="hover:text-foreground">FAQ</a>
           </nav>
           <nav className="flex flex-col gap-3 text-sm text-muted-foreground" aria-label="Compte">
             <Link to="/auth" className="hover:text-foreground">Connexion</Link>

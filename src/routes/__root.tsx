@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE, absoluteUrl } from "@/lib/site";
 
 function NotFoundComponent() {
   return (
@@ -79,11 +80,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Bâtir — Agent de conception architecturale" },
-      { name: "description", content: "Concevez votre projet de construction avec un agent expert." },
-      { property: "og:type", content: "website" },
+      // Valeurs par défaut ; chaque page les surcharge via pageHead().
+      { title: `${SITE.name} — ${SITE.tagline}` },
+      { name: "description", content: SITE.description },
+      { name: "author", content: SITE.name },
+      { name: "theme-color", content: SITE.themeColor },
+      { name: "application-name", content: SITE.name },
+      { property: "og:site_name", content: SITE.name },
+      { property: "og:locale", content: SITE.locale },
+      { property: "og:image", content: absoluteUrl(SITE.ogImage) },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

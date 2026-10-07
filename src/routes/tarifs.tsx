@@ -1,15 +1,46 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
+import { pageHead, serviceNode, breadcrumbNode } from "@/lib/seo";
 
 export const Route = createFileRoute("/tarifs")({
   head: () => ({
-    meta: [
-      { title: "Tarifs — Bâtir, paiement par projet" },
-      { name: "description", content: "Payez par projet : découverte gratuite, puis forfait Particulier ou Professionnel." },
-      { property: "og:title", content: "Tarifs Bâtir — paiement par projet" },
-      { property: "og:description", content: "Découverte gratuite. Forfaits par projet pour particuliers et professionnels." },
-    ],
+    ...pageHead({
+      title: "Tarifs — ConstructionAgent, paiement par projet",
+      description:
+        "Payez par projet : découverte gratuite, forfait Particulier à 50 000 FCFA par maison, forfait Professionnel à 150 000 FCFA tous bâtiments.",
+      path: "/tarifs",
+      jsonLd: [
+        serviceNode({
+          name: "Forfait Particulier — conception de maison",
+          description:
+            "Programme des espaces, conception et plans, notice et budget indicatif pour un projet de maison.",
+          path: "/tarifs",
+          offer: {
+            name: "Particulier",
+            price: "50000",
+            currency: "XOF",
+            description: "Par projet de maison.",
+          },
+        }),
+        serviceNode({
+          name: "Forfait Professionnel — tous bâtiments",
+          description:
+            "Tout le forfait Particulier, plus les projets multi-niveaux et une documentation détaillée par lot.",
+          path: "/tarifs",
+          offer: {
+            name: "Professionnel",
+            price: "150000",
+            currency: "XOF",
+            description: "Par projet, tous bâtiments.",
+          },
+        }),
+        breadcrumbNode([
+          { name: "Accueil", path: "/" },
+          { name: "Tarifs", path: "/tarifs" },
+        ]),
+      ],
+    }),
   }),
   component: Tarifs,
 });

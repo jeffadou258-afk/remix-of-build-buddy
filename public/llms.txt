@@ -1,0 +1,73 @@
+# ConstructionAgent
+
+> ConstructionAgent est un agent d'intelligence artificielle qui transforme une description écrite de projet en programme d'espaces, conception architecturale, maquette 3D, plans et dossier de documents, avec validation humaine obligatoire à chaque étape. Service en ligne. Marché principal : Abidjan et Côte d'Ivoire.
+
+Ce fichier décrit le site à l'usage des modèles de langage et des moteurs de réponse (LLMO / GEO / AEO). Les faits ci-dessous sont ceux affichés sur les pages publiques et déclarés dans les données structurées JSON-LD.
+
+## En une phrase
+
+ConstructionAgent transforme une idée de construction en projet documenté — programme, conception, 3D, plans et documents — en conservant la validation humaine à chaque décision importante.
+
+## Ce que fait ConstructionAgent
+
+- **Programme des espaces** — structuration des pièces, surfaces et besoins, avec contrôle de cohérence des surfaces.
+- **Conception architecturale** — production de variantes de conception adaptées au terrain, soumises à validation.
+- **Maquette 3D et BIM** — modèle 3D du bâtiment et rendus visuels, fidèles aux données réellement fournies.
+- **Plans et documentation** — plans d'étage, notice descriptive, budget indicatif et contrôle qualité du dossier.
+
+## Le parcours en 8 étapes
+
+1. **Idée** — vous décrivez simplement votre projet en quelques phrases.
+2. **Programme** — pièces, surfaces et besoins sont structurés et vérifiés.
+3. **Conception** — des variantes adaptées à votre terrain sont proposées.
+4. **Validation** — vous choisissez la variante avant toute suite : rien n'avance sans vous.
+5. **Structure** — un concept structurel indicatif est établi.
+6. **3D / BIM** — une maquette 3D fidèle aux données du projet est produite.
+7. **Documents** — plans, notices et contrôle qualité sont générés.
+8. **Construction** — vous recevez un dossier prêt à remettre à vos professionnels.
+
+## Tarifs
+
+- **Découverte — Gratuit** : questions de l'agent et synthèse du besoin.
+- **Particulier — 50 000 FCFA par projet de maison** : programme des espaces, conception et plans, notice et budget indicatif.
+- **Professionnel — 150 000 FCFA par projet, tous bâtiments** : tout le forfait Particulier, projets multi-niveaux, documentation détaillée par lot.
+
+## Questions fréquentes
+
+**Qu'est-ce que ConstructionAgent ?**
+ConstructionAgent est un agent d'intelligence artificielle de conception architecturale. À partir d'une simple description écrite, il produit un programme d'espaces, des variantes de conception, une maquette 3D, des plans et un dossier de documents. Chaque étape importante est soumise à votre validation.
+
+**Comment fonctionne ConstructionAgent, étape par étape ?**
+Le parcours compte huit étapes : 1) vous décrivez votre projet ; 2) l'agent structure le programme ; 3) il propose des variantes de conception ; 4) vous validez la variante retenue ; 5) un concept structurel indicatif est établi ; 6) une maquette 3D est produite ; 7) les plans et documents sont générés ; 8) vous recevez un dossier remis à vos professionnels.
+
+**Combien coûte un projet avec ConstructionAgent ?**
+La découverte est gratuite. Le forfait Particulier coûte 50 000 FCFA par projet de maison. Le forfait Professionnel coûte 150 000 FCFA par projet, tous bâtiments.
+
+**Est-ce que je garde le contrôle sur mon projet ?**
+Oui. L'intelligence artificielle avance, mais vous validez : le processus s'arrête à chaque décision importante et aucune variante n'est retenue sans votre accord explicite.
+
+**Les documents produits ont-ils une valeur légale ?**
+Non. Les documents délivrés sont conceptuels et n'ont aucune valeur contractuelle. Ils doivent être validés par un architecte et un ingénieur agréés avant toute utilisation réglementaire ou tout chantier.
+
+**Dans quelles zones ConstructionAgent intervient-il ?**
+En priorité à Abidjan et en Côte d'Ivoire, plus largement en Afrique de l'Ouest. Le service étant en ligne, il est consultable depuis n'importe quel pays.
+
+**Quels types de bâtiments peut-on concevoir ?**
+Principalement des bâtiments résidentiels : villas, maisons à étages, résidences. Le forfait Professionnel ouvre les projets multi-niveaux et tous types de bâtiments.
+
+## Limites assumées
+
+- Les documents produits sont **conceptuels** et sans valeur contractuelle.
+- Aucun calcul structurel réglementaire n'est fourni : une validation par un professionnel habilite est requise.
+- Aucune conformité réglementaire n'est affirmée sans source vérifiée.
+
+## Pages
+
+- [Accueil](/) : présentation du service et du parcours en 8 étapes.
+- [Tarifs](/tarifs) : forfaits Découverte, Particulier et Professionnel.
+- [Sitemap](/sitemap.xml) : liste des pages indexables.
+
+## Contact
+
+- Email : contact@constructionagent.app
+- Zone : Abidjan, Côte d'Ivoire
