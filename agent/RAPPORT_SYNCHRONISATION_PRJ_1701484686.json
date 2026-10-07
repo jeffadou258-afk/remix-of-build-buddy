@@ -1,0 +1,188 @@
+{
+  "PROJECT_ID": "PRJ_1701484686",
+  "PROJECT_PATH": "/Users/mac/ConstructionAgent/projects/PRJ_1701484686",
+  "PROJECT_STATUS": "INCOMPLET — 6 fichiers, 1 dossier (3D/), aucun fichier de donnees",
+  "VARIANT": "NON ENREGISTREE — 0 occurrence de VARIANT_B dans le projet",
+  "USER_VALIDATION": "NON_TRACEE — la variante n'existe que dans le message utilisateur, pas sur disque",
+  "SURFACE_RDC": {
+    "valeur_validee": 81.0,
+    "statut": "USER_PROVIDED",
+    "persistee": false,
+    "fichier": null
+  },
+  "SURFACE_ETAGE": {
+    "valeur_validee": 69.0,
+    "statut": "USER_PROVIDED",
+    "persistee": false,
+    "fichier": null
+  },
+  "SURFACE_INTERIEURE": {
+    "valeur_validee": 150.0,
+    "statut": "USER_PROVIDED",
+    "persistee": false,
+    "fichier": null
+  },
+  "SURFACE_TERRASSE": {
+    "valeur_validee": 24.0,
+    "statut": "USER_PROVIDED",
+    "persistee": false,
+    "fichier": null
+  },
+  "SURFACE_GARAGE": {
+    "valeur_validee": 25.0,
+    "statut": "USER_PROVIDED",
+    "persistee": false,
+    "fichier": null
+  },
+  "BLENDER_FILE": {
+    "path": "3D/scene_villa_conceptuelle.blend",
+    "size_bytes": 113869,
+    "sha256": "4afddfae76f69022e9065be433b5469e08e8e93b81e1f291a35bd3e477efdab1"
+  },
+  "BLENDER_FILE_FORMAT": "Zstandard compressed (format .blend Blender 5.x) — contenu NON inspecte : instruction 13 interdit de relancer Blender",
+  "RENDERS_COUNT": 5,
+  "RENDERS": [
+    {
+      "path": "3D/Renders/01_Facade.png",
+      "size_bytes": 2121304,
+      "sha256": "77cb95683ef101536b642108c9e47610145297b5ab69ba506e1c1a42130ed063",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/02_Entree.png",
+      "size_bytes": 1893977,
+      "sha256": "728a2e7d4359df289e54f19828fe1a7bc9a9b251439a7ebc3f9dce630fe8e1dc",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/03_Terrasse.png",
+      "size_bytes": 2168360,
+      "sha256": "7bce7824be59e20df907e05fa608b1d17b297e86e67623b128d5a475df67ede0",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/04_Aerienne.png",
+      "size_bytes": 2082257,
+      "sha256": "4452cb54953461ba99582a3b3e88d616c29703b0068780ed45d50f05bad80cec",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/05_Generale.png",
+      "size_bytes": 1964087,
+      "sha256": "195d010588bbe7c0b8fdd7e71a267232597aa2e898531d0438a0335994eb1f52",
+      "resolution": "1920x1080"
+    }
+  ],
+  "RENDERS_RESOLUTION": "1920x1080 (mesure sips) — NON 4K",
+  "REAL_FILES_VERIFIED": 6,
+  "REAL_FILES_DETAIL": [
+    {
+      "path": "3D/Renders/01_Facade.png",
+      "size_bytes": 2121304,
+      "sha256": "77cb95683ef101536b642108c9e47610145297b5ab69ba506e1c1a42130ed063",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/02_Entree.png",
+      "size_bytes": 1893977,
+      "sha256": "728a2e7d4359df289e54f19828fe1a7bc9a9b251439a7ebc3f9dce630fe8e1dc",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/03_Terrasse.png",
+      "size_bytes": 2168360,
+      "sha256": "7bce7824be59e20df907e05fa608b1d17b297e86e67623b128d5a475df67ede0",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/04_Aerienne.png",
+      "size_bytes": 2082257,
+      "sha256": "4452cb54953461ba99582a3b3e88d616c29703b0068780ed45d50f05bad80cec",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/Renders/05_Generale.png",
+      "size_bytes": 1964087,
+      "sha256": "195d010588bbe7c0b8fdd7e71a267232597aa2e898531d0438a0335994eb1f52",
+      "resolution": "1920x1080"
+    },
+    {
+      "path": "3D/scene_villa_conceptuelle.blend",
+      "size_bytes": 113869,
+      "sha256": "4afddfae76f69022e9065be433b5469e08e8e93b81e1f291a35bd3e477efdab1"
+    }
+  ],
+  "EVIDENCE_FILES": [],
+  "EVIDENCE_FILES_COUNT": 0,
+  "DECISION_HISTORY": {
+    "fichiers": 0,
+    "agent_memory_decisions_jsonl_octets": 0
+  },
+  "DATA_CONFLICTS": [
+    {
+      "champ": "SURFACE_TERRASSE",
+      "valeur_validee_m2": 24.0,
+      "valeur_dans_les_fichiers_existants_m2": 48.0,
+      "ecart_m2": 24.0,
+      "source": "build_villa.py — geometrie des 5 PNG existants",
+      "regle": "correction silencieuse INTERDITE (instruction 12)"
+    },
+    {
+      "champ": "SURFACE_GARAGE",
+      "valeur_validee_m2": 25.0,
+      "valeur_dans_les_fichiers_existants_m2": 36.0,
+      "ecart_m2": 11.0,
+      "source": "build_villa.py — geometrie des 5 PNG existants",
+      "regle": "correction silencieuse INTERDITE (instruction 12)"
+    }
+  ],
+  "DATA_CONFLICTS_COUNT": 2,
+  "MISSING_DATA": {
+    "dossiers_absents": [
+      "source",
+      "program",
+      "site",
+      "design",
+      "dimensions",
+      "floorplan",
+      "bim",
+      "renders",
+      "documentation",
+      "reports",
+      "exports",
+      "evidence",
+      "history",
+      "memory"
+    ],
+    "project_context_json": "MANQUANT",
+    "fichiers_json_dans_projet": 0,
+    "terrain_15x25_375m2": "NON ENREGISTRE",
+    "foyer_6_personnes": "NON ENREGISTRE",
+    "pieces_salon_sam_cuisine_bureau_buanderie_3sdb_wc_terrasse_garage": "NON ENREGISTREES",
+    "localisation_abidjan": "NON ENREGISTREE",
+    "variantes_A_B_C": "NON ENREGISTREES"
+  },
+  "CONTAMINATION_DETECTED": false,
+  "CONTAMINATION_PREUVE": [],
+  "CONTAMINATION_TEST": "grep -ril 'PRJ_VILLA_2026' / '162.54' / '162,54' dans le projet reel -> 0 occurrence",
+  "VARIANT_B_HORS_PROJET": [
+    "/Users/mac/ConstructionAgent/projects/PRJ_VILLA_2026/design/design_variants.json",
+    "/Users/mac/ConstructionAgent/projects/PRJ_VILLA_2026/reports/pipeline_run.json",
+    "/Users/mac/ConstructionAgent/RAPPORT_SYNCHRONISATION_PRJ_1701484686.json",
+    "/Users/mac/ConstructionAgent/engines/design/engine.py",
+    "/Users/mac/ConstructionAgent/_build/gen1.py",
+    "/Users/mac/ConstructionAgent/_build/gen2.py",
+    "/Users/mac/ConstructionAgent/SOUL.md",
+    "/Users/mac/ConstructionAgent/skills/architectural_design/SKILL.md"
+  ],
+  "INSTRUCTIONS_13_A_17_RESPECTEES": [
+    "13 Blender NON relance",
+    "14 rendus NON refaits",
+    "15 Budget Engine NON cree",
+    "16 Planning Engine NON cree",
+    "17 projet reel NON modifie"
+  ],
+  "STATUS": "HUMAN_VALIDATION_REQUIRED",
+  "STATUS_MOTIF": "VARIANT_B non persistee + aucune surface persistee + 2 conflits de donnees (TERRASSE 48 vs 24 ; GARAGE 36 vs 25)",
+  "GENERE_LE": "2026-10-02T11:36:50"
+}

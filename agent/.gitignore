@@ -1,0 +1,42 @@
+# ============================================================================
+# Construction Agent — fichiers exclus du versionnement
+# ============================================================================
+
+# --- Secrets et configuration locale (JAMAIS sur GitHub) ---
+.env
+.env.*
+*.key
+*.pem
+*credentials*
+*secret*
+secrets/
+
+# --- Fichiers GENERES (reconstruits par les scripts, pas versionnes) ---
+web/frontend/Villa_Test_001_APP.html
+*.zip
+Exports/
+
+# --- Versions rejetees / historique lourd ---
+projects/*/history/renders_v1_rejected/
+
+# --- Caches et parasites systeme ---
+__pycache__/
+*.py[cod]
+*.pyo
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+*.log
+*.tmp
+
+# --- Environnements virtuels ---
+venv/
+.venv/
+env/
+node_modules/
+
+# --- Editeurs ---
+.vscode/
+.idea/
+*.swp

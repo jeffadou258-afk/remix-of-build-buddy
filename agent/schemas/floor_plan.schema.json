@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "floor_plan",
+  "type": "object",
+  "required": [
+    "project_id",
+    "levels"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "unit": {
+      "enum": [
+        "m",
+        "mm"
+      ]
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "level",
+          "width_m",
+          "depth_m",
+          "wall_thickness_m",
+          "rooms",
+          "files"
+        ],
+        "properties": {
+          "level": {
+            "type": "string"
+          },
+          "width_m": {
+            "type": "number"
+          },
+          "depth_m": {
+            "type": "number"
+          },
+          "wall_thickness_m": {
+            "type": "number"
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

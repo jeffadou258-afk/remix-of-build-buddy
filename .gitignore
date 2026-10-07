@@ -16,6 +16,16 @@ dist-ssr
 .nitro
 *.local
 
+# Vercel (sortie de build — ne jamais committer)
+.vercel
+
+# Moteur ConstructionAgent : projects/ ne contient que des sorties régénérables
+# (rendus PNG, .blend, ZIP — ~46 Mo). À régénérer avec les moteurs.
+agent/projects/
+agent/**/__pycache__/
+agent/**/*.pyc
+agent/**/.DS_Store
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

@@ -1,0 +1,273 @@
+{
+  "source": "src/integrations/supabase/types.ts (genere par Supabase)",
+  "project_id": "huaztikucbniycexlkem",
+  "enums": {
+    "app_role": [
+      "user",
+      "support",
+      "ops",
+      "finance",
+      "admin",
+      "auditor"
+    ],
+    "project_stage": [
+      "decouverte",
+      "programme",
+      "conception",
+      "plans",
+      "documentation",
+      "livre"
+    ]
+  },
+  "tables": {
+    "account_status": [
+      {
+        "name": "reason",
+        "type": "string | null"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "updated_at",
+        "type": "string"
+      },
+      {
+        "name": "updated_by",
+        "type": "string | null"
+      },
+      {
+        "name": "user_id",
+        "type": "string"
+      }
+    ],
+    "admin_audit_log": [
+      {
+        "name": "action",
+        "type": "string"
+      },
+      {
+        "name": "actor_id",
+        "type": "string | null"
+      },
+      {
+        "name": "actor_roles",
+        "type": "string[]"
+      },
+      {
+        "name": "after",
+        "type": "Json | null"
+      },
+      {
+        "name": "at",
+        "type": "string"
+      },
+      {
+        "name": "before",
+        "type": "Json | null"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "ip",
+        "type": "string | null"
+      },
+      {
+        "name": "permission",
+        "type": "string | null"
+      },
+      {
+        "name": "reason",
+        "type": "string | null"
+      },
+      {
+        "name": "request_id",
+        "type": "string | null"
+      },
+      {
+        "name": "result",
+        "type": "string"
+      },
+      {
+        "name": "target_id",
+        "type": "string | null"
+      },
+      {
+        "name": "target_type",
+        "type": "string | null"
+      },
+      {
+        "name": "user_agent",
+        "type": "string | null"
+      }
+    ],
+    "project_access_grants": [
+      {
+        "name": "created_at",
+        "type": "string"
+      },
+      {
+        "name": "expires_at",
+        "type": "string"
+      },
+      {
+        "name": "grantee_id",
+        "type": "string"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "project_id",
+        "type": "string"
+      },
+      {
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "projects": [
+      {
+        "name": "building_model",
+        "type": "Json | null"
+      },
+      {
+        "name": "ca_project_id",
+        "type": "string | null"
+      },
+      {
+        "name": "client_type",
+        "type": "string"
+      },
+      {
+        "name": "created_at",
+        "type": "string"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "inputs",
+        "type": "Json | null"
+      },
+      {
+        "name": "messages",
+        "type": "Json"
+      },
+      {
+        "name": "stage",
+        "type": "Database[\"public\"][\"Enums\"][\"project_stage\"]"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "updated_at",
+        "type": "string"
+      },
+      {
+        "name": "user_id",
+        "type": "string"
+      }
+    ],
+    "render_jobs": [
+      {
+        "name": "created_at",
+        "type": "string"
+      },
+      {
+        "name": "error",
+        "type": "string | null"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "model_snapshot",
+        "type": "Json"
+      },
+      {
+        "name": "options",
+        "type": "Json"
+      },
+      {
+        "name": "project_id",
+        "type": "string"
+      },
+      {
+        "name": "provider",
+        "type": "string"
+      },
+      {
+        "name": "result_urls",
+        "type": "Json"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "updated_at",
+        "type": "string"
+      },
+      {
+        "name": "user_id",
+        "type": "string"
+      }
+    ],
+    "role_permissions": [
+      {
+        "name": "permission",
+        "type": "string"
+      },
+      {
+        "name": "role",
+        "type": "Database[\"public\"][\"Enums\"][\"app_role\"]"
+      }
+    ],
+    "user_roles": [
+      {
+        "name": "created_at",
+        "type": "string"
+      },
+      {
+        "name": "granted_by",
+        "type": "string | null"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "role",
+        "type": "Database[\"public\"][\"Enums\"][\"app_role\"]"
+      },
+      {
+        "name": "user_id",
+        "type": "string"
+      }
+    ]
+  },
+  "functions": [
+    "admin_list_gate_projects",
+    "admin_list_projects",
+    "admin_list_users",
+    "grant_role",
+    "has_permission",
+    "has_role",
+    "is_suspended",
+    "log_admin_action",
+    "log_security_event",
+    "read_project_content",
+    "request_project_access",
+    "revoke_role"
+  ],
+  "avertissement": "Inventaire de TYPES uniquement. Les politiques RLS, les triggers et les corps de fonctions SECURITY DEFINER doivent etre obtenus par `supabase db dump` apres `supabase login` + `supabase link`."
+}

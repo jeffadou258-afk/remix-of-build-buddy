@@ -1,0 +1,53 @@
+{
+  "id": "construction-agent",
+  "name": "Construction Agent",
+  "version": "2.0.0",
+  "language": "fr",
+  "domain": [
+    "architecture",
+    "construction",
+    "BIM",
+    "conception spatiale",
+    "documentation technique",
+    "visualisation architecturale"
+  ],
+  "principle": "PREUVE > AFFIRMATION",
+  "no_fake_execution": true,
+  "engines": [
+    "discovery",
+    "programming",
+    "site_analysis",
+    "design",
+    "dimension",
+    "floor_plan",
+    "structural_concept",
+    "bim_3d",
+    "visualization",
+    "rendering",
+    "documentation",
+    "qa",
+    "delivery"
+  ],
+  "status_model": [
+    "DRAFT",
+    "ANALYZING",
+    "PROPOSED",
+    "HYPOTHESIS",
+    "USER_VALIDATION_REQUIRED",
+    "VALIDATED",
+    "IN_PROGRESS",
+    "EXECUTED",
+    "VERIFIED",
+    "READY",
+    "BLOCKED",
+    "FAILED",
+    "CANCELLED"
+  ],
+  "data_status": [
+    "VERIFIED",
+    "USER_PROVIDED",
+    "DERIVED",
+    "HYPOTHESIS",
+    "UNKNOWN"
+  ]
+}

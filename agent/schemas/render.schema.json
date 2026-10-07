@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "render",
+  "type": "object",
+  "required": [
+    "project_id",
+    "views"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "engine": {
+      "type": "string"
+    },
+    "views": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "file",
+          "exists",
+          "verified"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "size_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "resolution": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "camera": {
+            "type": "object"
+          },
+          "intention": {
+            "type": "string"
+          },
+          "inspected": {
+            "type": "boolean"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "all_verified": {
+      "type": "boolean"
+    }
+  }
+}

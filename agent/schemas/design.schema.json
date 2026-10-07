@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "design_variants",
+  "type": "object",
+  "required": [
+    "project_id",
+    "variants"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "selected": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "concept",
+          "zoning",
+          "advantages",
+          "constraints",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "concept": {
+            "type": "string"
+          },
+          "zoning": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "advantages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "enum": [
+              "PROPOSED",
+              "USER_VALIDATION_REQUIRED",
+              "VALIDATED",
+              "CANCELLED"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

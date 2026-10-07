@@ -1,0 +1,16 @@
+{
+ "RDC": {
+  "erreur": "echec",
+  "info": {
+   "sols": 0,
+   "nodes": 8000279
+  }
+ },
+ "ETAGE": {
+  "erreur": "echec",
+  "info": {
+   "sols": 0,
+   "nodes": 8000282
+  }
+ }
+}

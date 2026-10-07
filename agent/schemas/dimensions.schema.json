@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dimensions",
+  "type": "object",
+  "required": [
+    "project_id",
+    "levels"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "level",
+          "width_m",
+          "depth_m",
+          "surface_m2"
+        ],
+        "properties": {
+          "level": {
+            "enum": [
+              "RDC",
+              "ETAGE",
+              "SOUS_SOL"
+            ]
+          },
+          "width_m": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "depth_m": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "surface_m2": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "source": {
+            "enum": [
+              "DERIVED",
+              "USER_PROVIDED",
+              "HYPOTHESIS"
+            ]
+          }
+        }
+      }
+    },
+    "total_surface_m2": {
+      "type": "number"
+    },
+    "surface_check": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_EXECUTED"
+      ]
+    }
+  }
+}

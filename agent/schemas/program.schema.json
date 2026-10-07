@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "program",
+  "type": "object",
+  "required": [
+    "project_id",
+    "rooms",
+    "total_surface_m2"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "surface_m2",
+          "status"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surface_m2": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "level": {
+            "enum": [
+              "RDC",
+              "ETAGE",
+              "SOUS_SOL",
+              "EXTERIEUR"
+            ]
+          },
+          "status": {
+            "enum": [
+              "USER_PROVIDED",
+              "DERIVED",
+              "HYPOTHESIS",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    },
+    "total_surface_m2": {
+      "type": "number"
+    },
+    "computed_surface_m2": {
+      "type": "number"
+    },
+    "coherent": {
+      "type": "boolean"
+    }
+  }
+}

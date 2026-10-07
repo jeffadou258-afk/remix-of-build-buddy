@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "model_3d",
+  "type": "object",
+  "required": [
+    "project_id",
+    "blend_file",
+    "blender_version",
+    "verified"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "blend_file": {
+      "type": "string"
+    },
+    "blend_exists": {
+      "type": "boolean"
+    },
+    "blend_size_bytes": {
+      "type": "integer"
+    },
+    "blend_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "blender_path": {
+      "type": "string"
+    },
+    "blender_version": {
+      "type": "string"
+    },
+    "objects": {
+      "type": "integer"
+    },
+    "verified": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+ "RDC": {
+  "rects": [
+   [
+    0.0,
+    0.0,
+    4.0,
+    8.0,
+    32,
+    "Salon"
+   ],
+   [
+    4.0,
+    0.0,
+    4.0,
+    4.5,
+    18,
+    "Salle a manger"
+   ],
+   [
+    4.5,
+    6.0,
+    3.0,
+    4.0,
+    12,
+    "Cuisine"
+   ],
+   [
+    7.5,
+    6.0,
+    2.5,
+    4.0,
+    10,
+    "Bureau"
+   ],
+   [
+    0.0,
+    8.0,
+    3.0,
+    2.0,
+    6,
+    "Buanderie"
+   ],
+   [
+    3.0,
+    8.0,
+    1.5,
+    2.0,
+    3,
+    "WC visiteur"
+   ]
+  ],
+  "corridor": {
+   "cellules_libres": 76,
+   "composantes": 1,
+   "principale": 76,
+   "erodee": 29,
+   "largeur_min_m": 1.5,
+   "adjacent_a_toutes_les_pieces": false,
+   "detail_adj": [
+    true,
+    true,
+    true,
+    true,
+    false,
+    true
+   ],
+   "ok": false
+  },
+  "info": {
+   "sols": 141,
+   "nodes": 686471
+  }
+ },
+ "ETAGE": {
+  "erreur": "aucun pavage",
+  "info": {
+   "sols": 0,
+   "nodes": 74920
+  }
+ }
+}

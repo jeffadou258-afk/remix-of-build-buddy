@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Construction Agent — Villa_Test_001</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#111a2b; --panel2:#17233a; --line:#22314d;
+  --txt:#f2f5f9; --muted:#93a5c0; --accent:#ff6a1f; --accent2:#1f4e8c;
+  --ok:#3fa86b; --warn:#d99b2b; --bad:#d4534e; --gate:#b06dd4; --unk:#6b7a88;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.imm{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#0b1220 0%,#0e1a2e 55%,#0b1220 100%);padding:24px}
+.immBox{max-width:760px;width:100%;text-align:center}
+.immLb{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700;margin-bottom:14px}
+.immBox h2{font-size:clamp(24px,4vw,38px);color:#fff;margin:0 0 12px;letter-spacing:-.7px}
+.immBox p{color:var(--muted);font-size:15px;max-width:520px;margin:0 auto 30px;line-height:1.6}
+.immGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.immC{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;
+  background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:14px;
+  padding:20px;cursor:pointer;font-family:inherit;transition:.16s}
+.immC:hover{border-color:var(--accent);background:rgba(255,106,31,.09);transform:translateY(-2px)}
+.immC .immI{font-size:22px;color:var(--accent)}
+.immC b{color:#fff;font-size:15.5px;font-weight:700}
+.immC i{color:var(--muted);font-size:12.5px;font-style:normal;line-height:1.45}
+.immNote{margin-top:24px;font-size:11.5px;color:var(--muted);opacity:.75}
+.app{display:flex;min-height:100vh}
+/* ===== HERO PLEIN ECRAN + CAROUSEL (2 rendus REELS du projet) ===== */
+.hero{position:relative;width:100%;min-height:clamp(430px,72vh,780px);
+  display:flex;align-items:flex-end;overflow:hidden;background:#070d18;
+  border-bottom:1px solid var(--line)}
+.hero .sl{position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 2.6s ease-in-out,transform 12s linear;
+  transform:scale(1.06)}
+.hero .sl.on{opacity:1;transform:scale(1)}
+.hero .ov{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(4,9,18,.94) 0%,rgba(4,9,18,.80) 42%,
+             rgba(4,9,18,.42) 72%,rgba(4,9,18,.20) 100%)}
+.hero .in{position:relative;z-index:3;padding:clamp(28px,5vw,64px);max-width:760px}
+.hero .lb{font-size:11px;letter-spacing:3.2px;font-weight:700;color:var(--accent);
+  margin-bottom:16px;text-transform:uppercase}
+.hero h1{font-size:clamp(32px,5.6vw,62px);line-height:1.04;font-weight:800;
+  color:#fff;letter-spacing:-1.6px;margin:0 0 16px}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero p{font-size:clamp(14px,1.5vw,17.5px);color:#c4d2e4;line-height:1.6;
+  max-width:520px;margin:0 0 26px}
+.hero .acts{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hero .b1{background:var(--accent);color:#fff;border:0;padding:14px 24px;border-radius:9px;
+  font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:9px;transition:.15s}
+.hero .b1:hover{background:#ff8347;transform:translateY(-1px)}
+.hero .b2{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.28);
+  padding:13px 22px;border-radius:9px;font-weight:600;font-size:14.5px;cursor:pointer;
+  font-family:inherit;display:inline-flex;align-items:center;gap:9px;backdrop-filter:blur(6px)}
+.hero .b2:hover{background:rgba(255,255,255,.14);border-color:#fff}
+.hero .dots{position:absolute;bottom:16px;right:22px;z-index:4;display:flex;gap:7px}
+.hero .dots i{width:26px;height:3px;border-radius:2px;background:rgba(255,255,255,.28);
+  cursor:pointer;transition:.3s}
+.hero .dots i.on{background:var(--accent);width:40px}
+.hero .cap{position:absolute;bottom:16px;left:clamp(28px,5vw,64px);z-index:4;
+  font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.4px}
+.hcaps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border-top:1px solid var(--line)}
+.hcaps > div{background:var(--panel);padding:18px 20px;display:flex;gap:11px;align-items:flex-start}
+.hcaps b{display:block;font-size:13px;color:var(--txt);font-weight:700;letter-spacing:.2px}
+.hcaps span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.hcaps .ic{font-size:17px;line-height:1;flex:0 0 auto}
+@media(max-width:900px){
+  .hero{min-height:520px}
+  .hcaps{grid-template-columns:1fr 1fr}
+  .hero .cap{display:none}
+}
+/* ===== M1 : HEADER HORIZONTAL STICKY ===== */
+.hd{position:sticky;top:0;z-index:80;display:flex;align-items:center;gap:20px;
+  padding:0 26px;height:62px;background:rgba(11,18,32,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line)}
+.hd .brand{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;flex:0 0 auto}
+.hd .mk{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,var(--accent),#b2460f);
+  display:grid;place-items:center;font-weight:800;color:#fff;font-size:14px}
+.hd .nm{font-size:14.5px;font-weight:800;color:var(--txt);letter-spacing:-.2px;line-height:1}
+.hd .nm small{display:block;font-size:9.5px;color:var(--accent);letter-spacing:1.6px;font-weight:700;margin-top:2px}
+.hd nav{display:flex;gap:2px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:7px;color:var(--muted);
+  font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.13s}
+.hd nav a:hover{background:var(--panel2);color:var(--txt)}
+.hd nav a.on{background:rgba(255,106,31,.13);color:var(--accent)}
+.hd .cta{flex:0 0 auto;background:var(--accent);color:#fff;border:0;padding:9px 16px;border-radius:8px;
+  font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:.13s}
+.hd .cta:hover{background:#ff8347;transform:translateY(-1px)}
+.hd .cta:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.hd .more{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--muted);
+  padding:8px 11px;border-radius:7px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600}
+.hd .more:hover{border-color:var(--accent);color:var(--accent)}
+.hdmenu{position:absolute;right:26px;top:58px;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;padding:6px;min-width:180px;box-shadow:0 12px 30px rgba(0,0,0,.5);z-index:90}
+.hdmenu a{display:block;padding:9px 12px;border-radius:6px;color:var(--muted);font-size:13.5px;cursor:pointer}
+.hdmenu a:hover{background:var(--panel2);color:var(--txt)}
+/* ---------- SIDEBAR ---------- */
+aside{display:none;width:246px;flex:0 0 246px;background:var(--panel);border-right:1px solid var(--line);
+  padding:20px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:22px;padding:0 6px}
+.brand .mk{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#8a6f34);
+  display:grid;place-items:center;font-weight:800;color:#141414;font-size:15px}
+.brand h1{font-size:15px;font-weight:700;letter-spacing:.2px}
+.brand p{font-size:11px;color:var(--muted);margin-top:1px}
+nav a{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;color:var(--muted);
+  text-decoration:none;font-size:13.5px;font-weight:500;cursor:pointer;margin-bottom:2px;transition:.13s}
+nav a:hover{background:var(--panel2);color:var(--txt)}
+nav a.on{background:linear-gradient(90deg,rgba(200,164,92,.16),transparent);color:var(--accent);
+  box-shadow:inset 2px 0 0 var(--accent)}
+nav a i{font-style:normal;width:18px;text-align:center;font-size:14px}
+.sep{height:1px;background:var(--line);margin:14px 8px}
+/* ---------- MAIN ---------- */
+main{flex:1;min-width:0;padding:26px 30px 90px;max-width:1500px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+h2{font-size:23px;font-weight:700;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.modes{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px}
+.modes button{background:none;border:0;color:var(--muted);padding:7px 14px;border-radius:6px;cursor:pointer;
+  font-size:12.5px;font-weight:600;font-family:inherit}
+.modes button.on{background:var(--accent);color:#141414}
+/* ---------- CARDS ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:17px 18px}
+.card h3{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:600;margin-bottom:11px}
+.big{font-size:29px;font-weight:700;letter-spacing:-.6px}
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.045);font-size:13.5px}
+.kv:last-child{border:0}
+.kv span:first-child{color:var(--muted)}
+/* ---------- PROGRESS ---------- */
+.prog{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.progbox{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.progbox .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600}
+.bar{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:11px 0 8px}
+.bar i{display:block;height:100%;border-radius:4px}
+.progbox .val{font-size:26px;font-weight:700}
+.warnline{background:rgba(176,109,212,.09);border:1px solid rgba(176,109,212,.3);border-radius:var(--r);
+  padding:13px 16px;font-size:13px;color:#dcc4ec;margin-bottom:20px}
+/* ---------- PHASES ---------- */
+.ph{display:flex;gap:14px;padding:13px 15px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:.13s;align-items:center}
+.ph:hover{border-color:#3d4a55;transform:translateX(2px)}
+.ph .num{width:36px;height:36px;flex:0 0 36px;border-radius:8px;background:var(--panel2);display:grid;
+  place-items:center;font-weight:700;font-size:13px;color:var(--muted)}
+.ph .t{flex:1;min-width:0}
+.ph .t b{font-size:14.5px;display:block}
+.ph .t small{color:var(--muted);font-size:12px;display:block;margin-top:2px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:4px 9px;border-radius:5px;white-space:nowrap}
+.b-ok{background:rgba(63,168,107,.15);color:var(--ok)}
+.b-ver{background:rgba(92,143,200,.15);color:var(--accent2)}
+.b-hyp{background:rgba(217,155,43,.15);color:var(--warn)}
+.b-gate{background:rgba(176,109,212,.15);color:var(--gate)}
+.b-blk{background:rgba(212,83,78,.15);color:var(--bad)}
+.b-unk{background:rgba(107,122,136,.18);color:var(--unk)}
+/* ---------- TABLE ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+  padding:9px 10px;border-bottom:1px solid var(--line);font-weight:600}
+td{padding:10px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:hover td{background:rgba(255,255,255,.017)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+/* ---------- PLANS ---------- */
+.viewer{position:relative;overflow:hidden;height:clamp(340px,62vh,760px);width:100%;max-width:100%;background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
+  position:relative;cursor:grab}
+.viewer.drag{cursor:grabbing}
+.viewer #svgHost{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform;transition:transform .1s}
+.viewer #svgHost svg{display:block;overflow:visible}
+.viewer img{display:block;position:absolute;top:0;left:0;transform-origin:0 0;transition:transform .1s;max-width:none;user-select:none;will-change:transform}
+.vbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.vbar button,.btn{background:var(--panel2);border:1px solid var(--line);color:var(--txt);padding:8px 13px;
+  border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;font-family:inherit;transition:.13s}
+.vbar button:hover,.btn:hover{border-color:var(--accent);color:var(--accent)}
+.vbar button.on{background:var(--accent);color:#141414;border-color:var(--accent)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pills button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 11px;
+  border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500}
+.pills button.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+/* ---------- ASSISTANT ---------- */
+.msrc{margin-top:8px;font-size:10.5px;color:var(--muted);opacity:.75;font-family:ui-monospace,Menlo,monospace}
+.mact{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.mact .act{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:6px 11px;
+  border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.13s}
+.mact .act:hover{background:var(--accent);color:#fff}
+.chat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;
+  height:62vh;overflow-y:auto;display:flex;flex-direction:column;gap:13px}
+.msg{max-width:82%;padding:12px 15px;border-radius:11px;font-size:13.8px;white-space:pre-wrap;
+  font-family:ui-monospace,Menlo,monospace;line-height:1.5}
+.msg.u{align-self:flex-end;background:var(--accent2);color:#fff;font-family:inherit}
+.msg.a{align-self:flex-start;background:var(--panel2);border:1px solid var(--line)}
+.msg.a.secu{border-color:var(--gate);background:rgba(176,109,212,.09)}
+.inrow{display:flex;gap:9px;margin-top:12px}
+.inrow input{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--txt);padding:13px 15px;
+  border-radius:9px;font-size:14px;font-family:inherit;outline:none}
+.inrow input:focus{border-color:var(--accent)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.chips button{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 12px;
+  border-radius:16px;font-size:12px;cursor:pointer;font-family:inherit}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+/* ---------- MISC ---------- */
+.note{font-size:12.5px;color:var(--muted);background:var(--panel2);border-left:2px solid var(--accent);
+  padding:11px 14px;border-radius:0 7px 7px 0;margin-top:12px}
+.err{background:rgba(212,83,78,.1);border:1px solid rgba(212,83,78,.35);color:#e8a9a6;padding:12px;
+  border-radius:8px;font-size:13px}
+.HG{position:fixed;bottom:22px;right:22px;background:linear-gradient(135deg,var(--accent),#a3843f);color:#141414;
+  border:0;padding:15px 23px;border-radius:26px;font-weight:700;font-size:13.5px;cursor:pointer;
+  box-shadow:0 7px 26px rgba(200,164,92,.3);font-family:inherit;z-index:50}
+.HG:hover{transform:translateY(-2px)}
+.mob{display:none}
+.hide{display:none!important}
+@media(max-width:900px){
+  /* M1 — correction du debordement horizontal : le layout desktop (flex) doit
+     cesser de contraindre la largeur. Sans cela, cartes et CTA sont coupes. */
+  html,body{overflow-x:hidden;max-width:100%}
+  .app{display:block}
+  main{max-width:100%;padding-left:15px;padding-right:15px}
+  .g2,.g3{grid-template-columns:1fr!important}
+  /* Le header etait la VRAIE cause : logo ~200px + Plus + CTA ~140px > 390px
+     -> sa largeur minimale elargissait toute la page. On le rend compressible. */
+  .hd{gap:8px;padding:0 10px;overflow-x:hidden}
+  .hd .brand{min-width:0;flex-shrink:1;overflow:hidden}
+  .hd .nm{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hd .nm small{display:none}
+  .hd .mk{width:26px;height:26px;font-size:12px;flex:0 0 26px}
+  .hd nav{display:none}
+  .hd .more{flex:0 1 auto;padding:7px 9px;font-size:12px;white-space:nowrap}
+  .hd .cta{flex:0 1 auto;padding:8px 10px;font-size:11.5px;white-space:nowrap}
+  .hdmenu{right:10px}
+  aside{display:none}
+  main{padding:18px 15px 96px}
+  .mob{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);
+    justify-content:space-around;padding:9px 4px 11px;z-index:60}
+  .mob a{flex:1;text-align:center;color:var(--muted);font-size:10px;cursor:pointer;padding:3px}
+  .mob a i{display:block;font-size:19px;font-style:normal;margin-bottom:2px}
+  .mob a.on{color:var(--accent)}
+  /* M9 : le bouton flottant masquait 7 elements (jusqu a 9 894 px2).
+     Retire en mobile ; sa fonction entre dans la navigation basse. */
+  .HG{display:none!important}
+  table{font-size:12.5px}th,td{padding:8px 6px}
+  .msg{max-width:94%}
+  #bimGrid{grid-template-columns:1fr!important}   /* panneau BIM -> carte sous la 3D */
+  #gl{height:330px!important}                     /* viewer adapte au mobile */
+}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="imm" class="imm"></div>
+<header class="hd">
+  <div class="brand" onclick="go('accueil')">
+    <div class="mk">CA</div>
+    <div class="nm">CONSTRUCTION AGENT<small>BIM · IA</small></div>
+  </div>
+  <nav id="navH"></nav>
+  <button class="more" onclick="toggleMore(event)" aria-label="Plus">&#8943; Plus</button>
+  <button class="cta" onclick="newProject()">NOUVEAU PROJET</button>
+</header>
+<div id="moreMenu" class="hdmenu" style="display:none">
+  <a onclick="go('etapes');toggleMore()">&#128203; Etapes</a>
+  <a onclick="go('gates');toggleMore()">&#128274; Validations</a>
+  <a onclick="go('assistant');toggleMore()">&#128172; Assistant IA</a>
+</div>
+<div class="app"><aside>
+  <div class="brand"><div class="mk">CA</div><div><h1>Construction Agent</h1><p>PRJ_1701484686</p></div></div>
+  <nav id="nav"></nav>
+  <div class="sep"></div>
+  <div style="padding:0 10px">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:600">Moteur</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:5px" class="mono">construction_guide<br>_engine v1.0.0</div>
+  </div>
+</aside>
+<main>
+  <div class="top">
+    <div><h2 id="ttl">Accueil</h2><div class="sub" id="sub"></div></div>
+    <div class="modes"><button id="mB" class="on" onclick="setMode(0)">Débutant</button>
+      <button id="mP" onclick="setMode(1)">Professionnel</button></div>
+  </div>
+  <div id="view"></div>
+</main>
+</div>
+<nav class="mob" id="mob"></nav>
+<button class="HG" onclick="whereAmI()">🏠 OÙ EN EST MA MAISON ?</button>
+
+<script>
+/* ================= ETAT ================= */
+let PRO = false, PAGE = "accueil", CACHE = {}, PLANS = [], ZOOM = 1, TX = 0, TY = 0, CURPLAN = null;
+const MENU = [["accueil","🏠","Accueil"],["projet","🏗️","Mon projet"],["etapes","📋","Étapes"],
+  ["plans","📐","Plans"],["3d","🧊","3D"],["budget","💰","Budget"],["docs","📄","Documents"],
+  ["assistant","💬","Assistant"],["gates","🔒","Validations"]];
+
+async function api(p, opt){
+  try{ const r = await fetch(p, opt); if(!r.ok) throw new Error("HTTP "+r.status);
+    return await r.json(); }
+  catch(e){ return {erreur:"Réel : "+e.message, statut:"UNKNOWN", _echec:true}; }
+}
+
+/* ===== HERO CAROUSEL — 2 RENDUS REELS du projet (aucune maquette) =====
+   Les images viennent de /api/renders ; si l API ne repond pas, le hero reste
+   affiche avec son degrade sombre et AUCUNE image inventee. */
+const HERO = [
+  {fichier:"R01_vue_principale.png", legende:"Rendu du projet - vue principale"},
+  {fichier:"R07_salon.png",          legende:"Rendu du projet - salon"}
+];
+let _heroI = 0, _heroT = null;
+function heroApply(){
+  HERO.forEach((h, i) => {
+    const el = document.getElementById("sl" + i);
+    if(!el) return;
+    /* Si l API n a pas fourni d URL, on retombe sur le chemin REEL du rendu
+       (/files/renders/NOM), verifie en HTTP 200. Aucune image inventee. */
+    if(!el.dataset.url && HERO[i] && HERO[i].fichier)
+      el.dataset.url = "/files/renders/" + HERO[i].fichier;
+    if(!el.dataset.url) return;                       /* pas d image reelle : rien a afficher */
+    el.style.backgroundImage = "url('" + el.dataset.url + "')";
+    el.className = "sl" + (i === _heroI ? " on" : "");
+  });
+  const c = document.getElementById("hcap");
+  if(c && HERO[_heroI]) c.textContent = HERO[_heroI].legende;
+  document.querySelectorAll("#hdots i").forEach((d, i) =>
+    d.className = (i === _heroI ? "on" : ""));
+}
+function heroGo(i){ _heroI = i % HERO.length; heroApply(); }
+function heroStart(){ go("projet"); }
+function heroVisit(){ go("3d"); }
+async function heroInit(){
+  try{
+    const r = await api("/api/renders");
+    const liste = (r && r.rendus) || [];
+    HERO.forEach((h, i) => {
+      const el = document.getElementById("sl" + i);
+      if(!el) return;
+      const m = liste.find(x => (x.nom || x.fichier || "").indexOf(h.fichier) >= 0);
+      if(m && (m.url || m.fichier)) el.dataset.url = m.url || ("/files/renders/" + h.fichier);
+    });
+  }catch(e){ /* API indisponible : hero sans image, aucun substitut invente */ }
+  heroApply();
+  if(_heroT) clearInterval(_heroT);
+  _heroT = setInterval(() => heroGo((_heroI + 1) % HERO.length), 7000);   /* defilement auto */
+}
+/* ===== M4 — DONNEES PROJET : source unique ==========================
+   /api/assistant/context est alimente par assistant_core.py, qui lit les
+   fichiers reels du projet. Aucune valeur projet n'est codee en dur ici.
+   =================================================================== */
+let CTX = null;
+async function ctxLoad(){
+  if(CTX) return CTX;
+  try{ CTX = await api("/api/assistant/context"); }catch(e){ CTX = null; }
+  return CTX;
+}
+/* Formate un entier avec separateurs de milliers (fr). */
+function fn(n){
+  if(n === null || n === undefined) return "UNKNOWN";
+  try{ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }catch(e){ return String(n); }
+}
+/* Valeur ou UNKNOWN — jamais 0 ni "undefined" a l'ecran. */
+function vu(v){ return (v === null || v === undefined || v === "") ? "UNKNOWN" : v; }
+
+/* ===== DEBUT assistant_immersion.js (valide par node --check) ===== */
+/* ============================================================================
+   CONSTRUCTION AGENT — M3 : PREMIERE IMMERSION
+   ----------------------------------------------------------------------------
+   Ecran d'accueil de premiere visite : une question simple, quatre entrees.
+   Chaque choix declenche un PARCOURS REEL.
+
+   REGLES RESPECTEES :
+   - aucune donnee fictive ;
+   - aucune creation de projet simulee : le serveur n'expose AUCUNE route
+     d'ecriture (do_GET / do_POST lecture seule) ;
+   - collecte locale a la session uniquement (sessionStorage) ;
+   - aucune dependance : ce fichier n'exige que des fonctions deja presentes
+     dans index.html (go, ask, alertBox, ctxLoad).
+
+   Ce fichier est volontairement ecrit en chaines simples, sans sequence
+   \u{...} ni template literal imbrique : c'est ce qui avait casse la
+   syntaxe lors de la premiere tentative d'integration.
+   ============================================================================ */
+
+var IMMERSION_CHOIX = [
+  {
+    id: "creer",
+    ic: "+",
+    titre: "Créer mon premier projet",
+    desc: "Je vous accompagne question par question, sans termes techniques."
+  },
+  {
+    id: "plans",
+    ic: "\u25A6",
+    titre: "J'ai déjà des plans",
+    desc: "Consultez vos plans 2D et leur lecture."
+  },
+  {
+    id: "comprendre",
+    ic: "\u2261",
+    titre: "Comprendre comment construire",
+    desc: "Les étapes expliquées par le Guide de construction."
+  },
+  {
+    id: "continuer",
+    ic: "\u25B6",
+    titre: "Continuer mon projet",
+    desc: "Villa_Test_001 — où en est le dossier, ce qui reste à faire."
+  }
+];
+
+/* Premiere visite de la session ? */
+function immersionVue() {
+  try {
+    return !sessionStorage.getItem("ca_immersion");
+  } catch (e) {
+    return true; /* sessionStorage indisponible : on montre l'ecran */
+  }
+}
+
+function immersionFermer() {
+  try { sessionStorage.setItem("ca_immersion", "vu"); } catch (e) {}
+  var el = document.getElementById("imm");
+  if (el) el.style.display = "none";
+}
+
+function immersionRendu() {
+  var el = document.getElementById("imm");
+  if (!el) return;
+
+  var cartes = IMMERSION_CHOIX.map(function (c) {
+    return '<button class="immC" onclick="immersionGo(\'' + c.id + '\')">' +
+             '<span class="immI">' + c.ic + '</span>' +
+             '<b>' + c.titre + '</b>' +
+             '<i>' + c.desc + '</i>' +
+           '</button>';
+  }).join("");
+
+  el.innerHTML =
+    '<div class="immBox">' +
+      '<div class="immLb">CONSTRUCTION AGENT</div>' +
+      '<h2>Que voulez-vous faire ?</h2>' +
+      '<p>Vous n\'avez pas besoin de connaître les termes techniques. ' +
+         'Choisissez une entrée — je vous accompagne à partir de là.</p>' +
+      '<div class="immGrid">' + cartes + '</div>' +
+      '<div class="immNote">Ces réponses ne sont pas enregistrées sur le serveur : ' +
+         'elles restent dans votre session.</div>' +
+    '</div>';
+  el.style.display = "flex";
+}
+
+/* Chaque choix declenche un parcours REELLEMENT different. */
+function immersionGo(id) {
+  try { sessionStorage.setItem("ca_immersion", id); } catch (e) {}
+  var el = document.getElementById("imm");
+  if (el) el.style.display = "none";
+
+  if (id === "plans") {
+    go("plans");
+    return;
+  }
+
+  if (id === "comprendre") {
+    /* Parcours reel : on ouvre l'assistant ET on interroge le Guide Engine. */
+    go("assistant");
+    setTimeout(function () {
+      if (typeof ask === "function") ask("C'est quoi une semelle ?");
+    }, 800);
+    return;
+  }
+
+  if (id === "continuer") {
+    go("projet");
+    return;
+  }
+
+  /* id === "creer" : aucun workflow de creation n'existe cote serveur.
+     On ne simule RIEN : on le dit clairement, puis on ouvre le projet reel. */
+  go("projet");
+  setTimeout(function () {
+    if (typeof alertBox === "function") {
+      alertBox("CRÉER MON PREMIER PROJET",
+        "La création de projet n'est pas disponible : le serveur de Construction Agent " +
+        "n'expose aucune route d'écriture.\n\n" +
+        "Aucune création n'est simulée.\n\n" +
+        "En attendant, vous pouvez explorer le projet réel Villa_Test_001 : " +
+        "données terrain, plans 2D, BIM 326 éléments, métrés, budget et validations.");
+    }
+  }, 350);
+}
+/* ===== FIN assistant_immersion.js ===== */
+
+function toggleMore(e){
+  if(e) e.stopPropagation();
+  const m = document.getElementById("moreMenu");
+  if(m) m.style.display = (m.style.display === "none" || !m.style.display) ? "block" : "none";
+}
+document.addEventListener("click", (e) => {
+  const m = document.getElementById("moreMenu");
+  if(m && m.style.display === "block" && !m.contains(e.target)) m.style.display = "none";
+});
+/* Le CTA ne simule AUCUNE creation de projet : la fonctionnalite n'existe pas.
+   Il renvoie vers la vue projet existante, avec une mention explicite. */
+function newProject(){
+  go("projet");
+  setTimeout(()=>alertBox("NOUVEAU PROJET", "Fonctionnalite non disponible.\n\n"+
+    "La plateforme gere aujourd'hui UN SEUL projet : PRJ_1701484686 — Villa_Test_001.\n"+
+    "La creation de projet n'est pas implementee cote serveur (aucune route d'ecriture).\n\n"+
+    "Aucun workflow de creation n'est simule."), 350);
+}
+function setMode(p){ PRO = !!p; document.getElementById("mB").className = PRO?"":"on";
+  document.getElementById("mP").className = PRO?"on":""; render(); }
+
+function go(p){ PAGE = p; ROUTE_SEL = null; try{ location.hash = "#" + p; }catch(e){} render(); window.scrollTo(0,0); }
+
+/* ================= BADGES / STATUTS ================= */
+function badge(s){
+  const t = (s||"").toUpperCase();
+  if(t.includes("HUMAN_GATE")||t.includes("GATE")||t.includes("PENDING_G3")) return '<span class="badge b-gate">⚿ HUMAN GATE</span>';
+  if(t.includes("INCONNU")||t.includes("UNKNOWN")||t.includes("NOT_DEFINED")) return '<span class="badge b-unk">? INCONNU</span>';
+  if(t.includes("HYPOTH")) return '<span class="badge b-hyp">⚠ HYPOTHÈSE</span>';
+  if(t.includes("VÉRIFI")||t.includes("VERIFI")||t.includes("CONNU")) return '<span class="badge b-ver">✓ VÉRIFIÉ</span>';
+  if(t.includes("BLOCK")||t.includes("FAIL")) return '<span class="badge b-blk">✕ BLOQUÉ</span>';
+  if(t.includes("PROPOSED")) return '<span class="badge b-hyp">◐ PROPOSED</span>';
+  if(t.includes("PARTIAL")) return '<span class="badge b-hyp">◐ PARTIEL</span>';
+  return '<span class="badge b-ok">✓ VALIDÉ</span>';
+}
+const eur = n => (n||0).toLocaleString("fr-FR").replace(/\u202f|,/g," ")+" FCFA";
+
+/* ================= VUES ================= */
+async function vAccueil(){
+  const CX = await ctxLoad();
+  /* #sl0/#sl1 sont crees par cette vue : on initialise APRES le rendu,
+     sinon heroInit() ne trouve aucun element et ne fait rien. */
+  setTimeout(function(){ if(document.getElementById("hero")) heroInit(); }, 120);
+  if(typeof immersionVue === "function" && immersionVue())
+    setTimeout(function(){ if(typeof immersionRendu === "function") immersionRendu(); }, 200);
+  if(typeof CA !== "undefined" && CA.boot) CA.boot();
+  /* B2 : vAccueil ne fait que RETOURNER le HTML ; le DOM est rempli apres
+     par render(). On attend que #hero existe, sinon getElementById renvoie
+     null et la mise en page a deux zones ne s applique jamais. */
+  if(typeof CA !== "undefined" && CA.heroBoot)
+    setTimeout(function(){ CA.heroBoot(); }, 300);
+  const [p, s, ph] = await Promise.all([api("/api/project"), api("/api/project/status"), api("/api/phases")]);
+  if(p._echec) return errBlock("Impossible de charger le projet", p);
+  let h = `<section class="hero" id="hero">
+    <div class="sl on" id="sl0"></div><div class="sl" id="sl1"></div>
+    <div class="ov"></div>
+    <div class="in">
+      <div class="lb">CONSTRUCTION AGENT</div>
+      <h1>Votre projet<br>de construction.<br><em>Compris et visualise.</em></h1>
+      <p>Un assistant intelligent pour comprendre votre maison, explorer vos plans,
+      visualiser votre BIM et suivre chaque etape — du plan au dossier de construction.</p>
+      <div class="acts">
+        <button class="b1" onclick="heroStart()">COMMENCER MON PROJET &#8594;</button>
+        <button class="b2" onclick="heroVisit()">&#9658; VOIR LA VISITE 3D</button>
+      </div>
+    </div>
+    <div class="dots" id="hdots"><i class="on" onclick="heroGo(0)"></i><i onclick="heroGo(1)"></i></div>
+    <div class="cap" id="hcap"></div>
+  </section>
+  <div class="hcaps">
+    <div><span class="ic">&#128208;</span><div><b>PLANS 2D</b><span>Clairs et detailles</span></div></div>
+    <div><span class="ic">&#129513;</span><div><b>BIM 3D</b><span>Interactif, ${CX?vu(CX.bim.total):"\u2026"} elements</span></div></div>
+    <div><span class="ic">&#128200;</span><div><b>BUDGET</b><span>Estimation de travail</span></div></div>
+    <div><span class="ic">&#128218;</span><div><b>GUIDE</b><span>Etape par etape</span></div></div>
+  </div>
+  <div class="pagehead">
+    <div class="progbox"><div class="lbl">Dossier numérique</div><div class="val" style="color:var(--accent2)">AVANCÉ</div>
+      <div class="bar"><i style="width:88%;background:var(--accent2)"></i></div>
+      <div style="font-size:12px;color:var(--muted)">Conception, BIM, plans, métrés, budget, documentation</div></div>
+    <div class="progbox"><div class="lbl">Chantier physique</div><div class="val" style="color:var(--bad)">0 %</div>
+      <div class="bar"><i style="width:2%;background:var(--bad)"></i></div>
+      <div style="font-size:12px;color:var(--muted)">Aucun travail de construction n'a commencé</div></div></div>
+    <div class="warnline">⚠️ ${p.avertissement} — Les deux progressions sont <b>permanentes et distinctes</b> dans cette application.</div>
+    <div class="grid g3" style="margin-bottom:20px">
+      <div class="card"><h3>Projet</h3><div class="big" style="font-size:19px">${p.nom}</div>
+        <div class="kv" style="margin-top:8px"><span>Type</span><b>${p.type}</b></div>
+        <div class="kv"><span>Terrain</span><b>${p.terrain}</b></div>
+        <div class="kv"><span>Intérieur</span><b>${p.surface_interieure}</b></div>
+        <div class="kv"><span>Chambres</span><b>${p.chambres}</b></div></div>
+      <div class="card"><h3>Localisation</h3><div style="font-size:15px">${p.localisation}</div>
+        <div class="note">Source : ${p.source}</div></div>
+      <div class="card"><h3>Variante</h3><div style="font-size:15px">${p.variante}</div>
+        <div class="note">G1 = CLOSED — décision de l'utilisateur</div></div>
+    </div>`;
+  h += `<h3 style="font-size:14px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:22px 0 12px">Les 18 étapes — statut réel</h3>`;
+  const ST = {"01":"IN_PROGRESS","02":"HUMAN_GATE","03":"VERIFIED","04":"VERIFIED","05":"VERIFIED","06":"VERIFIED",
+    "07":"IN_PROGRESS","08":"BLOCKED","09":"BLOCKED","10":"HUMAN_GATE","11":"HUMAN_GATE","12":"HUMAN_GATE",
+    "13":"HUMAN_GATE","14":"NOT_STARTED","15":"NOT_STARTED","16":"IN_PROGRESS","17":"NOT_STARTED","18":"IN_PROGRESS"};
+  ph.phases.forEach(f=>{ h += phRow(f, ST[f.id]||"NOT_STARTED"); });
+  return h;
+}
+
+function phRow(f, s){
+  const b = s==="VERIFIED"?'<span class="badge b-ver">✓ VÉRIFIÉ</span>':s==="HUMAN_GATE"?'<span class="badge b-gate">⚿ HUMAN GATE</span>':
+    s==="BLOCKED"?'<span class="badge b-blk">✕ BLOQUÉ</span>':s==="IN_PROGRESS"?'<span class="badge b-hyp">◐ EN COURS</span>':
+    '<span class="badge b-unk">○ NON COMMENCÉ</span>';
+  return `<div class="ph" onclick="openPhase('${f.id}')"><div class="num">${f.id}</div>
+    <div class="t"><b>${f.nom}</b><small>${f.objectif}</small></div>${b}</div>`;
+}
+
+async function vProjet(){
+  const [p, b, q, g] = await Promise.all([api("/api/project"), api("/api/budget"), api("/api/quantities"), api("/api/gates")]);
+  let h = `<div class="grid g2" style="margin-bottom:18px">
+    <div class="card"><h3>Identité</h3>
+      <div class="kv"><span>ID</span><b class="mono">${p.id}</b></div>
+      <div class="kv"><span>Nom</span><b>${p.nom}</b></div>
+      <div class="kv"><span>Localisation</span><b>${p.localisation}</b></div>
+      <div class="kv"><span>Type</span><b>${p.type}</b></div>
+      <div class="kv"><span>Terrain</span><b>${p.terrain}</b></div>
+      <div class="kv"><span>Variante</span><b>${p.variante}</b></div></div>
+    <div class="card"><h3>Programme (CONNU)</h3>
+      ${Object.entries(p.programme).map(([k,v])=>`<div class="kv"><span>${k}</span><b style="text-align:right;max-width:60%">${v}</b></div>`).join("")}
+      </div></div>
+    <div class="card"><h3>Structure — statuts réels</h3>
+      <div class="note" style="border-color:var(--gate)">⚠ Structure <b>PROPOSED / PENDING_G3</b> — modèle conceptuel, non dimensionnement exécutoire.</div>
+      <table style="margin-top:12px"><thead><tr><th>Élément</th><th>Quantité</th><th>Unité</th><th>Statut</th></tr></thead><tbody>
+      ${(q.quantites||[]).map(x=>`<tr><td>${x.element.replace(/_/g," ")}</td><td class="mono">${x.quantite}</td><td>${x.unite}</td><td>${badge(x.statut)}</td></tr>`).join("")}
+      </tbody></table></div>`;
+  if(PRO) h += `<div class="card" style="margin-top:16px"><h3>Sources (mode professionnel)</h3>
+    <div class="kv"><span>Métré</span><b class="mono">${(q.source||"")}</b></div>
+    <div class="kv"><span>SHA-256 métré</span><b class="mono" style="font-size:11px">${(q.sha256||"").slice(0,32)}…</b></div>
+    <div class="kv"><span>Budget</span><b class="mono">${(b.source||"")}</b></div>
+    <div class="kv"><span>SHA-256 budget</span><b class="mono" style="font-size:11px">${(b.sha256||"").slice(0,32)}…</b></div></div>`;
+  return h;
+}
+
+async function vEtapes(){
+  const ph = await api("/api/phases");
+  const ST = {"01":"IN_PROGRESS","02":"HUMAN_GATE","03":"VERIFIED","04":"VERIFIED","05":"VERIFIED","06":"VERIFIED",
+    "07":"IN_PROGRESS","08":"BLOCKED","09":"BLOCKED","10":"HUMAN_GATE","11":"HUMAN_GATE","12":"HUMAN_GATE",
+    "13":"HUMAN_GATE","14":"NOT_STARTED","15":"NOT_STARTED","16":"IN_PROGRESS","17":"NOT_STARTED","18":"IN_PROGRESS"};
+  return `<div class="note" style="margin-bottom:16px">Parcours en 18 étapes issues de <b>construction_guide_engine</b>.
+    Cliquez sur une étape pour ouvrir sa fiche. Statuts réels, jamais embellis.</div>`
+    + ph.phases.map(f=>phRow(f, ST[f.id]||"NOT_STARTED")).join("");
+}
+
+async function openPhase(id){
+  const d = await api("/api/phases/"+id);
+  const txt = (d.texte_brut||"").replace(/^=|^-+$/gm,"").trim();
+  alertBox(`ÉTAPE ${d.id} — ${d.nom}`, txt + (d.human_gate!=="—" && d.human_gate!==null ? `\n\n⚿ HUMAN GATE : ${d.human_gate}` : ""));
+}
+function alertBox(t, body){
+  const w = document.createElement("div");
+  w.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;display:grid;place-items:center;padding:20px";
+  w.innerHTML = `<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;max-width:760px;
+    max-height:84vh;overflow:auto;padding:24px">
+    <div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:14px">
+      <h3 style="font-size:16px">${t}</h3><button class="btn" onclick="this.closest('div').parentElement.parentElement.remove()">Fermer</button></div>
+    <pre style="font-family:ui-monospace,Menlo,monospace;font-size:12.7px;line-height:1.6;white-space:pre-wrap;color:var(--txt)">${body.replace(/</g,"&lt;")}</pre></div>`;
+  w.onclick = e => { if(e.target===w) w.remove(); };
+  document.body.appendChild(w);
+}
+
+async function vPlans(){
+  if(!PLANS.length){ const r = await api("/api/plans"); PLANS = r.plans||[]; }
+  let h = `<div class="pills" id="pills">${PLANS.map((p,i)=>
+    `<button class="${i===0?'on':''}" onclick="loadPlan(${i},this)">${p.nom.replace(/_/g," ").replace(".svg","")}</button>`).join("")}</div>
+    <div class="vbar">
+      <button onclick="setZoom(0.2)">🔍+</button><button onclick="setZoom(-0.2)">🔍−</button>
+      <button onclick="fitToScreen()">&#8635; Ajuster</button><button onclick="setZoom(0,1)">&#9634; 100 %</button><span id="zst" class="mono" style="padding:6px 10px;font-size:12px;color:var(--muted)">100%</span>
+      <button onclick="fs()">⛶ Plein écran</button>
+      <button onclick="dl()">⬇ Télécharger</button>
+      <button onclick="pr()">🖨 Imprimer</button></div>
+    <div class="viewer" id="vw"><img id="img" alt="plan" draggable="false"></div>
+    <div class="note" id="what">Que regardez-vous ? Sélectionnez un plan ci-dessus.</div>`;
+  setTimeout(()=>{ if(PLANS.length) loadPlan(0, document.querySelector("#pills button")); }, 60);
+  return h;
+}
+async function loadPlan(i, btn){
+  CURPLAN = PLANS[i];
+  document.querySelectorAll("#pills button").forEach(b=>b.className="");
+  if(btn) btn.className="on";
+  const vw = document.getElementById("vw");
+  if(!vw) return;
+  let host = document.getElementById("svgHost");
+  if(!host){ host = document.createElement("div"); host.id = "svgHost"; vw.appendChild(host); }
+  const im = document.getElementById("img");
+  if(im) im.style.display = "none";
+  /* --- Mesure de la bbox REELLE du contenu, puis viewBox EFFECTIF en memoire.
+         Les fichiers SVG sur disque ne sont jamais modifies. --- */
+  const nonce = ++_loadSeq;
+  fetch(CURPLAN.url).then(r => r.text()).then(txt => {
+    if(nonce !== _loadSeq) return;                 /* un autre plan a ete demande entre-temps */
+    host.innerHTML = txt;
+    const svg = host.querySelector("svg");
+    if(!svg) throw new Error("svg absent");
+    svg.removeAttribute("width"); svg.removeAttribute("height");
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+ /* CORRECTION DU BLANC : getBBox() sur la RACINE est fausse par des elements
+       parasites (ex. P02 : 984x1388 @ y=-524 au lieu de 985x864 @ y=0) -> le fit
+       reservait une bande vide au-dessus du dessin. On mesure l'UNION des bbox des
+       ELEMENTS VISIBLES (exclut defs/mask/marker et tout ce qui est invisible).
+       Traite nativement les coordonnees negatives. */
+    let bb = null;
+    (function(){
+      const IGN = ["defs","style","title","desc","metadata","clippath","mask","marker",
+                   "pattern","filter","lineargradient","radialgradient","symbol","script"];
+      let X0=1e9, Y0=1e9, X1=-1e9, Y1=-1e9, n=0;
+      svg.querySelectorAll("*").forEach(el => {
+        if(IGN.indexOf(el.tagName.toLowerCase()) >= 0) return;
+        const cs = getComputedStyle(el);
+        if(cs.display==="none" || cs.visibility==="hidden" || parseFloat(cs.opacity)===0) return;
+        let b;
+        try{ b = el.getBBox(); }catch(e){ return; }
+        if(!isFinite(b.width) || !isFinite(b.height)) return;
+        if(b.width <= 0 && b.height <= 0) return;
+        let x0=b.x, y0=b.y, x1=b.x+b.width, y1=b.y+b.height;
+        const M = el.getCTM ? el.getCTM() : null;
+        if(M){
+          const d = (M.a*M.d - M.b*M.c) || 1;
+          const pts = [[x0,y0],[x1,y0],[x0,y1],[x1,y1]].map(p => [
+            ( M.d*(p[0]-M.e) - M.c*(p[1]-M.f)) / d,
+            (-M.b*(p[0]-M.e) + M.a*(p[1]-M.f)) / d ]);
+          x0=Math.min(x0,Math.min.apply(null,pts.map(q=>q[0]))); x1=Math.max(x1,Math.max.apply(null,pts.map(q=>q[0])));
+          y0=Math.min(y0,Math.min.apply(null,pts.map(q=>q[1]))); y1=Math.max(y1,Math.max.apply(null,pts.map(q=>q[1])));
+        }
+        X0=Math.min(X0,x0); Y0=Math.min(Y0,y0); X1=Math.max(X1,x1); Y1=Math.max(Y1,y1); n++;
+      });
+      if(n && X1>X0 && Y1>Y0) bb = {x:X0, y:Y0, width:X1-X0, height:Y1-Y0, n:n};
+    })();
+    if(!bb){ try{ bb = svg.getBBox(); }catch(e){ bb = null; } }
+    let x, y, w, h2;
+    if(bb && bb.width > 0 && bb.height > 0){
+      const m = 8;                                 /* marge visuelle autour du dessin */
+      x = bb.x - m; y = bb.y - m; w = bb.width + 2*m; h2 = bb.height + 2*m;
+    }else{                                          /* repli : viewBox declare tel quel */
+      const vb = (svg.getAttribute("viewBox")||"0 0 1000 1000").split(/[\s,]+/).map(Number);
+      x = vb[0]||0; y = vb[1]||0; w = vb[2]||1000; h2 = vb[3]||1000;
+    }
+    svg.setAttribute("viewBox", [x, y, w, h2].join(" "));   /* viewBox EFFECTIF */
+    svg.setAttribute("width", w); svg.setAttribute("height", h2);
+    CURW = w; CURH = h2;
+    _bboxInfo = {n: (bb&&bb.n)||0, declare: CURPLAN.vb_declare || null, effectif: [x, y, w, h2], bbox: bb ? [bb.x,bb.y,bb.width,bb.height] : null};
+    ZOOM = 1; TX = 0; TY = 0;
+    fitToScreen();
+  }).catch(() => {                                  /* si le fetch echoue : repli sur <img> */
+    if(nonce !== _loadSeq) return;
+    if(host) host.innerHTML = "";
+    if(im){ im.style.display = "block"; im.src = CURPLAN.url;
+            im.onload = () => { CURW = im.naturalWidth; CURH = im.naturalHeight; fitToScreen(); };
+            if(im.complete && im.naturalWidth) im.onload(); }
+  });
+  const CXd = await ctxLoad();
+  const _tm = CXd && CXd.site && CXd.site.terrain_m ? CXd.site.terrain_m : null;
+  const _ter = _tm ? `${vu(_tm[0])} \u00d7 ${vu(_tm[1])} m` : "UNKNOWN";
+  const _nbch = CXd && CXd.program ? vu(CXd.program.chambres) : "UNKNOWN";
+  const desc = {"P01":`Implantation du bâtiment sur le terrain de ${_ter}.`,
+    "P02":"Plan du rez-de-chaussée : mur, cloisons, fenêtres, mobilier.",
+    "P03":`Plan de l'étage : ${_nbch} chambres, salles de bain, patio.`,
+    "P04":"Plan de toiture — statut PARTIEL (pente non définie).",
+    "P05":"Cotation du RDC — cotes issues du BIM.",
+    "P06":"Cotation de l'étage.","P07":"Portes et fenêtres — 17 fenêtres réelles.",
+    "P08":"Plan des sols.","P09":"Plafond / dalle haute — PENDING_G3.",
+    "P10":"Réseaux — exutoire EU UNKNOWN (G2).",
+    "C01":"Coupe longitudinale par l'escalier.","C02":"Coupe transversale.",
+    "F01":"Façade Nord.","F02":"Façade Sud.","F03":"Façade Est.","F04":"Façade Ouest."};
+  const k = (CURPLAN.nom||"").slice(0,3);
+  document.getElementById("what").innerHTML = "<b>Que regardez-vous ?</b> " + (desc[k]||"") +
+    (PRO?`<br><span class="mono" style="font-size:11.5px;color:var(--muted)">source : BIM_FINAL_A3.blend · ${CURPLAN.octets} o</span>`:"");
+  if(!vw._bound){
+    vw._bound = 1;
+    let dg = 0, lx = 0, ly = 0;                          /* pan souris */
+    vw.addEventListener("mousedown", e => { dg=1; lx=e.clientX; ly=e.clientY; vw.classList.add("drag"); e.preventDefault(); });
+    window.addEventListener("mouseup", () => { dg=0; vw.classList.remove("drag"); });
+    window.addEventListener("mousemove", e => { if(!dg) return;
+      TX += e.clientX - lx; TY += e.clientY - ly; lx = e.clientX; ly = e.clientY; applyT(); });
+    vw.addEventListener("wheel", e => {                    /* zoom molette, sans modificateur */
+      e.preventDefault();
+      const r = vw.getBoundingClientRect(), im = document.getElementById("img");
+      if(!im) return;
+      const z0 = ZOOM, z1 = Math.min(12, Math.max(0.05, ZOOM + (e.deltaY<0 ? 0.12 : -0.12)));
+      const cx = (e.clientX-r.left - TX)/z0, cy = (e.clientY-r.top - TY)/z0;
+      ZOOM = z1; TX = (e.clientX-r.left) - cx*z1; TY = (e.clientY-r.top) - cy*z1; applyT();
+      const st = document.getElementById("zst"); if(st) st.textContent = Math.round(ZOOM*100)+"%";
+    }, {passive:false});
+    /* Tactile : 1 doigt = pan, 2 doigts = zoom */
+    let t0x = 0, t0y = 0, td = 0, tz = 1;
+    const dist = t => Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY);
+    vw.addEventListener("touchstart", e => {
+      if(e.touches.length === 2){ td = dist(e.touches); tz = ZOOM; }
+      else if(e.touches.length === 1){ t0x = e.touches[0].clientX; t0y = e.touches[0].clientY; }
+    }, {passive:true});
+    vw.addEventListener("touchmove", e => {
+      if(e.touches.length === 2 && td > 0){                        /* pinch */
+        e.preventDefault();
+        const r = vw.getBoundingClientRect();
+        const z1 = Math.min(12, Math.max(0.05, tz * (dist(e.touches)/td)));
+        const cx = (r.width/2 - TX)/ZOOM, cy = (r.height/2 - TY)/ZOOM;
+        ZOOM = z1; TX = r.width/2 - cx*z1; TY = r.height/2 - cy*z1; applyT();
+      } else if(e.touches.length === 1){                           /* pan */
+        TX += e.touches[0].clientX - t0x; TY += e.touches[0].clientY - t0y;
+        t0x = e.touches[0].clientX; t0y = e.touches[0].clientY; applyT();
+      }
+    }, {passive:false});
+    /* Le FIT est recalcule quand la fenetre change de taille */
+    window.addEventListener("resize", () => { if(document.getElementById("vw")) fitToScreen(); });
+  }
+}
+/* ===== FIT TO SCREEN (correction plans 2D) =====
+   scale = min(cw/W, ch/H) puis centrage par translateX/translateY.
+   Marge visuelle de 30 px. Ne deforme jamais : un seul facteur d'echelle. */
+const PAD = 30;
+let _zref = 1;
+let _loadSeq = 0;
+let _bboxInfo = null;
+function z0ratio(){ return _zref; }
+/* Dimensions de reference = celles du contenu REEL du SVG (bbox), posees par loadPlan. */
+let CURW = 0, CURH = 0;
+function fitToScreen(){
+  const vw = document.getElementById("vw");
+  if(!vw) return;
+  let W = CURW, H = CURH;
+  if(!W || !H){                              /* repli : aucun fit invente */
+    const im = document.getElementById("img");
+    W = im ? im.naturalWidth : 0; H = im ? im.naturalHeight : 0;
+    if(!W || !H) return;
+  }
+  const cw = vw.clientWidth - PAD*2, ch = vw.clientHeight - PAD*2;
+  if(cw <= 0 || ch <= 0) return;
+  ZOOM = Math.min(cw / W, ch / H);           /* <= conserve le ratio */
+  TX = PAD + (cw - W*ZOOM)/2;                /* centrage horizontal */
+  TY = PAD + (ch - H*ZOOM)/2;                /* centrage vertical   */
+  applyT();
+  _zref = ZOOM;
+  const st = document.getElementById("zst");
+  if(st) st.textContent = Math.round(ZOOM*100) + "%";
+}
+function applyT(){
+  const h = document.getElementById("svgHost"), im = document.getElementById("img");
+  if(h) h.style.transform = `translate(${TX}px, ${TY}px) scale(${ZOOM})`;
+  else if(im) im.style.transform = `translate(${TX}px, ${TY}px) scale(${ZOOM})`;
+}
+function setZoom(d, reset){
+  if(reset){ fitToScreen(); return; }             /* Reinitialiser == FIT exact */
+  const vw = document.getElementById("vw"), im = document.getElementById("img");
+  if(!vw || !im || !im.naturalWidth){ applyT(); return; }
+  const z0 = ZOOM, z1 = Math.min(12, Math.max(0.05, ZOOM + d));
+  /* zoom centre sur le milieu de la zone : le point sous le curseur reste stable */
+  const cx = (vw.clientWidth/2 - TX)/z0, cy = (vw.clientHeight/2 - TY)/z0;
+  ZOOM = z1; TX = vw.clientWidth/2 - cx*z1; TY = vw.clientHeight/2 - cy*z1;
+  applyT();
+  const st = document.getElementById("zst");
+  if(st) st.textContent = Math.round(ZOOM*100) + "%";
+}
+function fs(){ const v=document.getElementById("vw"); (v.requestFullscreen||v.webkitRequestFullscreen||(()=>{})).call(v); }
+function dl(){ if(CURPLAN) window.open(CURPLAN.url,"_blank"); }
+function pr(){ if(!CURPLAN) return; const w=window.open(CURPLAN.url); w.onload=()=>w.print(); }
+
+let BIM3D = null;   /* etat global du viewer — un seul, detruit proprement */
+
+async function v3D(){
+  const b = await api("/api/bim");
+  const meta = await api("/api/bim/elements");
+  const n = meta.elements ? meta.elements.length : 0;
+  let h = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+    <span style="font-size:12px;color:var(--muted)">Niveau :</span>
+    <div class="pills" id="fNiv" style="margin:0">
+      ${["Tout","Terrain","RDC","Etage","Toiture","Fondation"].map((x,i)=>
+        `<button class="${i===0?'on':''}" onclick="bimFiltNiv('${x}',this)">${x}</button>`).join("")}
+    </div>
+    <span style="font-size:12px;color:var(--muted);margin-left:10px">Type :</span>
+    <div class="pills" id="fTyp" style="margin:0">
+      ${["Tout","Structure","Architecture","Exterieur"].map((x,i)=>
+        `<button class="${i===0?'on':''}" onclick="bimFiltTyp('${x}',this)">${x}</button>`).join("")}
+    </div>
+    <span style="font-size:12px;color:var(--muted);margin-left:10px">Statut :</span>
+    <div class="pills" id="fSta" style="margin:0">
+      ${["Tout","VERIFIED","PROPOSED","PENDING_G3","HYPOTHESIS"].map((x,i)=>
+        `<button class="${i===0?'on':''}" onclick="bimFiltSta('${x}',this)">${x}</button>`).join("")}
+    </div></div>
+    <div style="display:grid;grid-template-columns:1fr 330px;gap:14px" id="bimGrid">
+      <div>
+        <div class="vbar">
+          <button onclick="bimView('reset')">⟳ Reset</button>
+          <button onclick="bimView('dessus')">Vue dessus</button>
+          <button onclick="bimView('rdc')">Vue RDC</button>
+          <button onclick="bimView('etage')">Vue étage</button>
+          <button onclick="bimView('facade')">Vue façade</button>
+          <button onclick="bimView('persp')">Perspective</button>
+          <button onclick="bimZoom(1)">🔍+</button><button onclick="bimZoom(-1)">🔍−</button>
+        </div>
+        <div id="gl" style="height:560px;background:#0a0d10;border:1px solid var(--line);border-radius:10px;position:relative">
+          <div id="bimLoad" style="position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px">Chargement du modèle…</div>
+        </div>
+        <div class="note"><b>Cliquez sur un élément</b> pour ouvrir sa fiche. <span id="bimCount"></span>
+        · GLB réel <span class="mono">${b.glb?'('+(b.glb_octets/1024).toFixed(0)+' Ko)':'NON EXPORTÉ'}</span>
+        · BLEND <span class="mono">${(b.octets/1024).toFixed(0)} Ko</span> ${badge("VERIFIED")}</div>
+      </div>
+      <div id="bimPanel"><div class="card"><h3>Fiche élément</h3>
+        <div style="font-size:13px;color:var(--muted)">Aucun élément sélectionné.<br><br>
+        ${n} éléments BIM disponibles.<br><br>
+        ${PRO?'<span class="mono" style="font-size:11.5px">source : 3D/bim_elements.json<br>extrait de BIM_FINAL_A3.blend</span>':''}
+        </div></div></div>
+    </div>`;
+  setTimeout(()=>bimStart(b, meta), 80);
+  return h;
+}
+
+/* ================= INITIALISATION DU VIEWER ================= */
+async function bimStart(b, meta){
+  const el = document.getElementById("gl");
+  if(!el) return;
+  if(!b.glb){ el.innerHTML = '<div style="padding:24px;color:var(--muted);font-size:13px">'+
+    '<b>Vue 3D indisponible</b> — GLB non exporté.<br>Le fichier BLEND original est intact et vérifié.</div>';
+    return; }
+  try{
+    const T = await import("https://unpkg.com/three@0.160.0/build/three.module.js");
+    const {OrbitControls} = await import("https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js");
+    const {GLTFLoader} = await import("https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js");
+    bimDispose();
+    const scene = new T.Scene(); scene.background = new T.Color(0x0a0d10);
+    const cam = new T.PerspectiveCamera(46, el.clientWidth/el.clientHeight, 0.1, 800);
+    const ren = new T.WebGLRenderer({antialias:true}); ren.setPixelRatio(Math.min(2,devicePixelRatio));
+    ren.setSize(el.clientWidth, el.clientHeight); el.appendChild(ren.domElement);
+    scene.add(new T.HemisphereLight(0xe8eef4, 0x2a3038, 1.6));
+    const dl = new T.DirectionalLight(0xffffff, 2.0); dl.position.set(30,45,-20); scene.add(dl);
+    const dl2 = new T.DirectionalLight(0xffffff, 0.7); dl2.position.set(-25,20,25); scene.add(dl2);
+    const ctl = new OrbitControls(cam, ren.domElement); ctl.enableDamping = true;
+    const loader = new GLTFLoader();
+    const gltf = await loader.loadAsync(b.glb_url);
+    scene.add(gltf.scene);
+    /* index : nom de mesh normalise -> element BIM */
+    const byNom = {}; (meta.elements||[]).forEach(e => { byNom[e.id] = e; });
+    const meshes = [];
+    gltf.scene.traverse(o => { if(o.isMesh || o.isObject3D){
+      o.traverse && o.traverse(x=>{ if(x.isMesh) meshes.push(x); });
+      if(o.isMesh) meshes.push(o);
+    }});
+    const uniq = [...new Set(meshes)];
+    /* BIM3D doit exister AVANT la resolution : resolveBIMIdFromObject lit BIM3D.byNom */
+    BIM3D = {T, scene, cam, ren, ctl, meshes: uniq, byNom, meta, el, selected:null, hidden:[], sel:new T.Object3D()};
+    uniq.forEach(m => { m.userData.eid = resolveBIMIdFromObject(m);   /* NODE, pas mesh */
+      m.userData.baseColor = m.material && m.material.color ? m.material.color.clone() : null; });
+    /* contour de selection */
+    BIM3D.selBox = new T.BoxHelper(BIM3D.sel, 0xc8a45c); BIM3D.selBox.visible=false; scene.add(BIM3D.selBox);
+    const box = new T.Box3().setFromObject(gltf.scene); const ct = box.getCenter(new T.Vector3());
+    BIM3D.center = ct; BIM3D.size = box.getSize(new T.Vector3());
+    let bbox = null;
+    uniq.forEach(m => { const e = m.userData.eid ? byNom[m.userData.eid] : null;
+      if(e && e.type !== "Terrain"){ const b2 = new T.Box3().setFromObject(m); bbox = bbox ? bbox.union(b2) : b2; } });
+    if(bbox && !bbox.isEmpty()){ BIM3D.bCenter = bbox.getCenter(new T.Vector3()); BIM3D.bSize = bbox.getSize(new T.Vector3()); }
+    else { BIM3D.bCenter = ct; BIM3D.bSize = BIM3D.size; }
+    bimView("reset");
+    const ld = document.getElementById("bimLoad"); if(ld) ld.remove();
+    /* clic = selection */
+    const rc = new T.Raycaster(); const ptr = new T.Vector2();
+    let downX=0, downY=0;
+    ren.domElement.addEventListener("pointerdown", e => { downX=e.clientX; downY=e.clientY; });
+    ren.domElement.addEventListener("pointerup", e => {
+      if(Math.abs(e.clientX-downX) > 5 || Math.abs(e.clientY-downY) > 5) return;  /* c'etait un drag */
+      const r = ren.domElement.getBoundingClientRect();
+      ptr.x = ((e.clientX-r.left)/r.width)*2-1; ptr.y = -((e.clientY-r.top)/r.height)*2+1;
+      rc.setFromCamera(ptr, cam);
+      const vis = uniq.filter(m => m.visible);
+      const hits = rc.intersectObjects(vis, false);
+      if(hits.length){ bimSelect(hits[0].object); }
+    });
+    const cnt = document.getElementById("bimCount");
+    const ST = bimStatsResolution(); BIM3D.stats = ST;
+    if(cnt) cnt.textContent = uniq.length+" objets rendus · "+(meta.elements||[]).length+" éléments indexés · "+
+      (ST ? ST.ids_atteints+"/"+ST.ids_bim+" IDs résolus"+(ST.via_parent?" ("+ST.via_parent+" via node parent)":"") : "");
+    if(ROUTE_SEL){
+      let mm = uniq.find(x => x.userData.eid === ROUTE_SEL);
+      if(!mm) mm = uniq.find(x => x.userData.eid && x.userData.eid.indexOf(ROUTE_SEL) >= 0);
+      if(mm){ bimSelect(mm); }
+      else { const pn=document.getElementById("bimPanel");
+        if(pn) pn.innerHTML='<div class="card"><h3>Fiche élément</h3><div style="color:var(--warn);font-size:13px">Ancre '+
+          ROUTE_SEL+' : aucun élément correspondant dans 3D/bim_elements.json.</div></div>'; }
+    }
+    (function loop(){ if(!BIM3D || BIM3D.ren !== ren) return; requestAnimationFrame(loop); ctl.update();
+      BIM3D.selBox.visible = !!BIM3D.selected; if(BIM3D.selected) BIM3D.selBox.setFromObject(BIM3D.selected);
+      ren.render(scene, cam); })();
+    BIM3D.onResize = () => { if(!BIM3D) return; cam.aspect = el.clientWidth/el.clientHeight;
+      cam.updateProjectionMatrix(); ren.setSize(el.clientWidth, el.clientHeight); };
+    addEventListener("resize", BIM3D.onResize);
+  } catch(err){
+    const ld = document.getElementById("bimLoad");
+    if(ld) ld.innerHTML = '<div style="padding:24px;color:var(--muted);font-size:13px;text-align:center">'+
+      '<b>Viewer 3D non chargé</b><br>'+String(err.message||err).slice(0,120)+
+      '<br><br>Three.js est chargé depuis <span class="mono">unpkg.com</span> (CDN) — '+
+      'ce message apparaît si l\'accès réseau est indisponible.<br>'+
+      'Le GLB réel reste présent : vérifiez <span class="mono">/api/bim</span>.</div>';
+  }
+}
+
+/* ============================================================================
+   RESOLUTION BIM STRICTE  (BLOC 1 — mapping par NODE GLB, pas par mesh)
+   Mesure reelle : 326 nodes -> 326 IDs BIM ; meshes 309/326 seulement.
+   Les 17 meshes restants doivent remonter a leur NODE PARENT.
+   REGLE : nom EXACT uniquement. Aucune correspondance approximative,
+   aucune coordonnee, aucun type. Sinon -> null (jamais d'ID fabrique).
+   ============================================================================ */
+function resolveBIMIdFromObject(obj){
+  if(!obj || typeof BIM3D === "undefined" || !BIM3D) return null;
+  const byNom = BIM3D.byNom;
+  let cur = obj, prof = 0;
+  while(cur && prof < 24){
+    const n = cur.name;
+    if(n && Object.prototype.hasOwnProperty.call(byNom, n)) return n;   /* nom EXACT */
+    cur = cur.parent; prof++;
+  }
+  return null;
+}
+function bimStatsResolution(){
+  if(!BIM3D) return null;
+  let via=0, nul=0; const ids = new Set();
+  BIM3D.meshes.forEach(m => {
+    if(m.userData.eid && m.name !== m.userData.eid) via++;
+    if(!m.userData.eid) nul++;
+    if(m.userData.eid) ids.add(m.userData.eid);
+  });
+  return {meshes:BIM3D.meshes.length, via_parent:via, non_resolus:nul,
+          ids_atteints:ids.size, ids_bim:Object.keys(BIM3D.byNom).length};
+}
+
+function bimDispose(){
+  if(!BIM3D) return;
+  try{
+    if(BIM3D.onResize) removeEventListener("resize", BIM3D.onResize);
+    BIM3D.meshes.forEach(m=>{ if(m.geometry) m.geometry.dispose();
+      if(m.material){ (Array.isArray(m.material)?m.material:[m.material]).forEach(x=>x.dispose()); } });
+    BIM3D.ren.dispose(); BIM3D.ctl.dispose();
+    if(BIM3D.el && BIM3D.ren.domElement && BIM3D.ren.domElement.parentNode)
+      BIM3D.ren.domElement.parentNode.removeChild(BIM3D.ren.domElement);
+  }catch(e){}
+  BIM3D = null;
+}
+
+/* ================= SELECTION + PANNEAU ================= */
+function bimSelect(mesh){
+  const eid = resolveBIMIdFromObject(mesh) || mesh.userData.eid;   /* strict, au clic */
+  BIM3D.selected = mesh;
+  const e = eid ? BIM3D.byNom[eid] : null;
+  const p = document.getElementById("bimPanel");
+  if(!e){
+    p.innerHTML = `<div class="card"><h3>Fiche élément</h3>
+      <div class="notice" style="color:var(--warn);font-size:13px">Objet <span class="mono">${mesh.name}</span> rendu dans la 3D
+      mais <b>sans métadonnée BIM</b> correspondante.</div>
+      <div class="kv" style="margin-top:10px"><span>Nom mesh GLB</span><b class="mono">${mesh.name}</b></div>
+      <div class="kv"><span>Métadonnée</span><b>UNKNOWN</b></div>
+      <div class="note">Aucune donnée inventée : cet objet n'est pas indexé dans 3D/bim_elements.json.</div></div>`;
+    return;
+  }
+  const d = e.dimensions_m, v = e.volume_m3;
+  const GLOS = {Poteau:"poteau", Poutre:"poutre", Dalle:"dalle", Semelle:"semelle", Longrine:"longrine",
+                Mur:"mur", Cloison:"cloison", Fondation:"fondation", Escalier:"escalier"};
+  const gk = GLOS[e.type];
+  let peda = "";
+  if(!PRO && gk){
+    const def = GLOSSAIRE_UI[gk];
+    if(def) peda = `<div class="note" style="border-color:var(--accent2)">
+      <b>À quoi ça sert ?</b><br>${def}<br><br><b>Dans ce projet :</b></div>`;
+    else peda = `<div class="note" style="border-color:var(--unk)"><b>Explication non disponible</b>
+      pour ce type d'élément (aucune définition au glossaire du moteur).</div>`;
+  }
+  const qte = bimQte(e);
+  p.innerHTML = `<div class="card" style="border-color:${eid&&BIM3D.selected?'var(--accent)':'var(--line)'}">
+    ${peda}
+    <h3 style="margin-top:10px">ÉLÉMENT BIM</h3>
+    <div class="kv"><span>Nom</span><b class="mono" style="font-size:12px">${e.id}</b></div>
+    <div class="kv"><span>Type</span><b>${e.type}</b></div>
+    <div class="kv"><span>Niveau</span><b>${e.niveau}</b></div>
+    <div class="kv"><span>Dimensions</span><b class="mono">${d[0]} × ${d[1]} × ${d[2]} m</b></div>
+    <div class="kv"><span>Volume</span><b class="mono">${v} m³</b></div>
+    <div class="kv"><span>Z (base→haut)</span><b class="mono">${e.z_base} → ${e.z_haut} m</b></div>
+    <div class="kv"><span>Matériau</span><b>${e.materiau||"UNKNOWN"}</b></div>
+    <div class="kv"><span>Statut</span><b>${badge(e.statut)}</b></div>
+    <div class="kv"><span>Source</span><b class="mono" style="font-size:11px">${e.source}</b></div>
+    ${PRO?`<div class="kv"><span>SHA-256 BIM</span><b class="mono" style="font-size:10.5px">${(e.sha256_source||"").slice(0,32)}…</b></div>`:""}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn" onclick="bimIsolate()">Isoler</button>
+      <button class="btn" onclick="bimShowAll()">Tout afficher</button>
+      <button class="btn" onclick="bimFocus()">Centrer</button>
+    </div>
+    <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:10px">
+      <div class="kv"><span>Quantité (métré)</span><b>${qte?qte.n+" "+qte.u:'UNKNOWN'}</b></div>
+      ${qte?`<div class="kv"><span>Source métré</span><b class="mono" style="font-size:11px">${qte.src}</b></div>`:""}
+      <div class="kv"><span>Correspondance budget</span><b>${bimBudget(e)}</b></div>
+      <div class="kv"><span>Correspondance 2D</span><b>${e.correspondance_2D?
+        `<button class="btn" style="padding:4px 9px" onclick="bimPlan('${e.correspondance_2D}')">Voir sur le plan</button>`:"UNKNOWN"}</b></div>
+      <div class="kv"><span>Voir la source</span><b><button class="btn" style="padding:4px 9px" onclick="bimSrc()">Document BIM</button></b></div>
+    </div></div>`;
+}
+const GLOSSAIRE_UI = {
+  poteau:"Un élément vertical qui reprend les charges et les transmet aux fondations. C'est une jambe de la maison.",
+  poutre:"Un élément horizontal qui reprend le plancher et le porte aux poteaux. C'est le bras qui relie les jambes.",
+  dalle:"La surface horizontale en béton qui forme le plancher. C'est ce sur quoi on marche à l'étage.",
+  semelle:"Un bloc de béton enterré sous chaque poteau, qui répartit la charge sur le sol.",
+  longrine:"Une poutre enterrée qui relie les semelles entre elles, pour qu'elles ne bougent pas séparément.",
+  mur:"La paroi extérieure de la maison : elle isole, protège et porte.",
+  cloison:"Une paroi intérieure légère qui sépare deux pièces.",
+  fondation:"La partie sous la maison qui transmet son poids au sol. Imaginez le pied de la maison.",
+  escalier:"L'ouvrage qui permet de monter d'un niveau à l'autre."};
+function bimQte(e){
+  const M = {"Poteau":{n:32,u:"m³ (total)",v:9.216,src:"metre/metre_final_v2.json"},
+             "Poutre":{n:16,u:"m³ (total)",v:13.856,src:"metre/metre_final_v2.json"},
+             "Dalle":{n:3,u:"m³ (total)",v:31.992,src:"metre/metre_final_v2.json"},
+             "Semelle":{n:16,u:"m³ (total)",v:5.760,src:"metre/metre_final_v2.json"},
+             "Longrine":{n:8,u:"m³ (total)",v:4.920,src:"metre/metre_final_v2.json"}};
+  const x = M[e.type]; if(!x) return null;
+  return {n:x.n+" éléments · "+x.v, u:x.u, src:x.src};
+}
+function bimBudget(e){
+  const b = {"Poteau":"PENDING_G3","Poutre":"PENDING_G3","Dalle":"PENDING_G3","Semelle":"PENDING_G3",
+             "Longrine":"PENDING_G3","Mur":"NON DISPONIBLE","Cloison":"NON DISPONIBLE","Fenetre":"NON DISPONIBLE"};
+  return b[e.type] || "NON DISPONIBLE";
+}
+function bimPlan(url){ go("plans"); setTimeout(()=>{ const i = PLANS.findIndex(p=>p.nom.includes(url.split("/").pop().replace(".svg","")));
+  if(i>=0) loadPlan(i, document.querySelectorAll("#pills button")[i]); }, 400); }
+function bimSrc(){ alertBox("SOURCE DOCUMENTAIRE", `Élément rendu depuis : 3D/BIM_FINAL_A3.blend\n`+
+  `Métadonnées : 3D/bim_elements.json\nDocumentation : docs/D02_synthese_BIM.md\n`+
+  `Métré : metre/metre_final_v2.json\nPlans 2D : plans/P02_plan_RDC.svg (RDC) · plans/P03_plan_etage.svg (Étage)\n\n`+
+  `Aucune source n'est inventée : seuls ces fichiers réels existent.`); }
+
+/* ================= FILTRES ================= */
+function bimSetFilt(id,val,btn){
+  document.querySelectorAll("#"+id+" button").forEach(b=>b.className="");
+  if(btn) btn.className="on";
+  if(id==="fNiv") BIM3D.fNiv=val; if(id==="fTyp") BIM3D.fTyp=val; if(id==="fSta") BIM3D.fSta=val;
+  bimApply();
+}
+function bimFiltNiv(v,b){ bimSetFilt("fNiv",v,b); }
+function bimFiltTyp(v,b){ bimSetFilt("fTyp",v,b); }
+function bimFiltSta(v,b){ bimSetFilt("fSta",v,b); }
+function bimApply(){
+  if(!BIM3D) return;
+  const groupe = {Poteau:"Structure",Poutre:"Structure",Dalle:"Structure",Semelle:"Structure",
+    Longrine:"Structure",Poutre2:"Structure",Mur:"Architecture",Cloison:"Architecture",Fenetre:"Architecture",
+    Meuble:"Architecture",Etancheite:"Architecture",Acrotere:"Architecture",Garde:"Exterieur",
+    Terrasse:"Exterieur",Garage:"Exterieur",Terrain:"Exterieur",Dallage:"Exterieur",Marche:"Structure"};
+  let vis = 0;
+  BIM3D.meshes.forEach(m=>{
+    const e = m.userData.eid ? BIM3D.byNom[m.userData.eid] : null;
+    let ok = true;
+    if(BIM3D.fNiv && BIM3D.fNiv!=="Tout") ok = ok && e && (e.niveau===BIM3D.fNiv ||
+      (BIM3D.fNiv==="Toiture" && e.niveau==="Toiture") || (BIM3D.fNiv==="Etage" && e.niveau==="Etage"));
+    if(ok && BIM3D.fTyp && BIM3D.fTyp!=="Tout") ok = ok && e && groupe[e.type]===BIM3D.fTyp;
+    if(ok && BIM3D.fSta && BIM3D.fSta!=="Tout") ok = ok && e && e.statut===BIM3D.fSta;
+    if(ok && BIM3D.hidden.indexOf(m.userData.eid)>=0) ok = false;
+    m.visible = ok; if(ok) vis++;
+  });
+  const c = document.getElementById("bimCount");
+  if(c) c.textContent = vis+" / "+BIM3D.meshes.length+" objets affichés";
+}
+function bimIsolate(){
+  if(!BIM3D || !BIM3D.selected) return;
+  const keep = BIM3D.selected.userData.eid;
+  BIM3D.meshes.forEach(m=>{ m.visible = (m.userData.eid===keep); });
+  const c = document.getElementById("bimCount"); if(c) c.textContent = "1 objet isolé ("+keep+")";
+}
+function bimShowAll(){
+  if(!BIM3D) return;
+  BIM3D.hidden = [];
+  BIM3D.fNiv="Tout"; BIM3D.fTyp="Tout"; BIM3D.fSta="Tout";
+  document.querySelectorAll("#fNiv button,#fTyp button,#fSta button").forEach((b,i)=>b.className = b.textContent==="Tout"?"on":"");
+  BIM3D.meshes.forEach(m=>m.visible=true);
+  bimApply();
+}
+function bimFocus(){
+  if(!BIM3D || !BIM3D.selected) return;
+  const T = BIM3D.T; const box = new T.Box3().setFromObject(BIM3D.selected);
+  const ct = box.getCenter(new T.Vector3()); const s = box.getSize(new T.Vector3()).length();
+  BIM3D.ctl.target.copy(ct); BIM3D.cam.position.set(ct.x+s*1.3, ct.y+s*1.3, ct.z+s*1.3);
+  BIM3D.cam.lookAt(ct); BIM3D.ctl.update();
+}
+function bimZoom(dir){
+  if(!BIM3D) return; const d = new BIM3D.T.Vector3();
+  BIM3D.cam.getWorldDirection(d); BIM3D.cam.position.addScaledVector(d, dir*2.5); BIM3D.ctl.update();
+}
+function bimView(kind){
+  if(!BIM3D) return;
+  const {cam, ctl} = BIM3D;
+  const c = BIM3D.bCenter || BIM3D.center;
+  const L = BIM3D.bSize || BIM3D.size;
+  const span = Math.max(L.x, L.y, L.z);
+  if(kind==="reset"||kind==="persp"){ cam.position.set(c.x+span*0.8, c.y+span*0.8, c.z+span*0.8); }
+  else if(kind==="dessus"){ cam.position.set(c.x, c.y+span*1.7, c.z+0.001); }
+  else if(kind==="facade"){ cam.position.set(c.x, c.y+span*0.12, c.z+span*1.5); }
+  else if(kind==="rdc"){ cam.position.set(c.x+span*0.6, 2.0, c.z+span*0.6); }
+  else if(kind==="etage"){ cam.position.set(c.x+span*0.6, 5.2, c.z+span*0.6); }
+  ctl.target.copy(c); cam.lookAt(c); ctl.update();
+}
+
+async function vBudget(){
+  const b = await api("/api/budget");
+  if(b._echec) return errBlock("Budget indisponible", b);
+  return `<div class="card" style="margin-bottom:16px;border-color:var(--warn)">
+    <h3 style="color:var(--warn)">⚠ ${b.mention}</h3>
+    <div class="big" style="color:var(--accent)">${eur(b.total_fcfa)}</div>
+    <div class="grid g3" style="margin-top:14px">
+      <div class="kv"><span>Indépendant de G3</span><b>${eur(b.independant_g3_fcfa)}</b></div>
+      <div class="kv"><span>Dépendant de G3</span><b>${eur(b.dependant_g3_fcfa)}</b></div>
+      <div class="kv"><span>Ancien budget</span><b>${eur(b.ancien_budget_fcfa)}</b></div></div>
+    <div class="note">${b.comparabilite}</div>
+    ${PRO?`<div class="kv" style="margin-top:10px"><span>Source</span><b class="mono">${b.source}</b></div>
+      <div class="kv"><span>SHA-256</span><b class="mono" style="font-size:11px">${(b.sha256||"").slice(0,40)}…</b></div>`:""}</div>
+    <div class="card"><h3>Détail des postes</h3><table><thead><tr><th>Poste</th><th>Qté</th><th>Unité</th><th>P.U.</th><th>Montant</th><th>Statut</th></tr></thead><tbody>
+    ${(b.lignes||[]).map(l=>`<tr><td>${l.designation.replace(/_/g," ")}</td><td class="mono">${l.quantite}</td><td>${l.unite}</td>
+      <td class="mono">${(l.prix_unitaire_fcfa||0).toLocaleString("fr-FR")}</td><td class="mono">${(l.montant_fcfa||0).toLocaleString("fr-FR")}</td>
+      <td>${badge(l.statut)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+async function vDocs(){
+  const [d, r] = await Promise.all([api("/api/documents"), api("/api/renders")]);
+  return `<div class="card" style="margin-bottom:16px"><h3>Documents du dossier (${(d.documents||[]).length})</h3>
+    <table><thead><tr><th>Document</th><th>Taille</th><th>Statut</th><th></th></tr></thead><tbody>
+    ${(d.documents||[]).map(x=>`<tr><td class="mono">${x.nom}</td><td class="mono">${(x.octets/1024).toFixed(1)} Ko</td>
+      <td>${badge(x.statut)}</td><td><button class="btn" onclick="openFile('${x.chemin}')">Ouvrir</button></td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="card"><h3>Rendus 3D (${r.total})</h3>
+    <div class="note">${r.avertissement||""}</div>
+    <div class="grid g3" style="margin-top:14px">${(r.rendus||[]).map(x=>`<div><img src="${x.url}" loading="lazy"
+      style="width:100%;border-radius:8px;border:1px solid var(--line)"><div style="font-size:11.5px;color:var(--muted);margin-top:5px"
+      class="mono">${x.nom}</div></div>`).join("")}</div></div>`;
+}
+function openFile(p){ window.open("/files/"+p,"_blank"); }
+
+async function vGates(){
+  const g = await api("/api/gates");
+  let h = `<div class="note" style="margin-bottom:16px">Statuts autorisés : ${(g.legende_statuts||[]).map(s=>`<span class="mono">${s}</span>`).join(" · ")}</div>`;
+  (g.gates||[]).forEach(x=>{
+    const op = x.statut.includes("OPEN");
+    h += `<div class="card" style="margin-bottom:14px;border-color:${op?"var(--gate)":"var(--ok)"}">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+        <h3 style="margin:0;color:${op?"var(--gate)":"var(--ok)"};font-size:15px">${x.id} — ${x.objet}</h3>
+        ${badge(x.statut)}</div>
+      <div style="margin-top:11px;font-size:13.5px">${x.detail||x.detail===""?"":x.detail}</div>
+      ${x.pourquoi?`<div class="note" style="border-color:${op?"var(--gate)":"var(--ok)"}"><b>Pourquoi cette validation est nécessaire :</b> ${x.pourquoi}</div>`:""}
+      <div class="kv" style="margin-top:11px"><span>Qui doit intervenir ?</span><b>${(x.intervenants||[]).join(" · ")}</b></div>
+      ${x.champs_a_remplir?`<div class="kv"><span>Champs à remplir</span><b>${x.champs_a_remplir}</b></div>
+        <div class="kv"><span>Fiche</span><b class="mono">${x.fiche}</b></div>`:""}</div>`;
+  });
+  return h;
+}
+
+async function vAssistant(){
+  const h = `<div class="chat" id="chat"><div class="msg a">Bonjour. Je suis l'assistant de votre projet.
+Je réponds uniquement à partir des données réelles du dossier — jamais d'invention.
+Mode actuel : <b>${PRO?"PROFESSIONNEL":"DÉBUTANT"}</b>.</div></div>
+  <div class="chips">${["Où en est mon projet ?","Puis-je construire les fondations maintenant ?",
+    "Qu'est-ce qu'une longrine ?","Explique-moi les fondations.","Combien coûte le projet ?","Pourquoi G3 est bloqué ?"]
+    .map(q=>`<button onclick="ask('${q}')">${q}</button>`).join("")}</div>
+  <div class="inrow"><input id="qi" placeholder="Posez votre question..." onkeydown="if(event.key==='Enter')ask()">
+    <button class="btn" onclick="ask()">Envoyer</button></div>`;
+  return h;
+}
+async function ask(preset){
+  const inp = document.getElementById("qi");
+  const q = preset || (inp ? inp.value.trim() : "");
+  if(!q) return;
+  const c = document.getElementById("chat");
+  c.insertAdjacentHTML("beforeend", `<div class="msg u">${q.replace(/</g,"&lt;")}</div>`);
+  if(inp) inp.value = "";
+  c.insertAdjacentHTML("beforeend", `<div class="msg a" id="ld">…</div>`);
+  c.scrollTop = c.scrollHeight;
+  /* L'assistant interroge le MOTEUR REEL cote serveur (assistant_core.py).
+     Aucune donnee du projet n'est reproduite en JavaScript. */
+  const d = await api("/api/assistant/ask", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({question:q, pro:PRO})});
+  const t = ((d.reponse||d.erreur||"—")+"").replace(/^=+$/gm,"").trim();
+  const ld = document.getElementById("ld");
+  if(!ld){ return; }
+  ld.outerHTML = `<div class="msg a ${d.securite?"secu":""}">${t.replace(/</g,"&lt;")}
+    <div class="msrc">source : ${d.source||"UNKNOWN"} &middot; statut ${d.statut||"UNKNOWN"} &middot; intention ${d.intent||"—"}</div>
+    ${(d.actions||[]).length?`<div class="mact">${(d.actions||[]).map(a=>
+      `<button class="act" onclick="assistAct('${a.type}','${a.cible||""}')">${a.label} &#8594;</button>`).join("")}</div>`:""}</div>`;
+  if(d.securite) document.getElementById("chat").insertAdjacentHTML("beforeend",
+    `<div class="msg a secu">⚿ BLOCAGE — ${d.securite.raison}\nIntervenants : ${d.securite.intervenants.join(", ")}\nValidation : ${d.securite.validation_necessaire}</div>`);
+  c.scrollTop = c.scrollHeight;
+}
+
+/* M2 — l'assistant est ACTIONNABLE : une reponse peut ouvrir une page reelle. */
+function assistAct(type, cible){
+  if(type === "navigate" && cible) go(cible);
+}
+
+async function whereAmI(){
+  /* M4 — toutes les valeurs viennent de l'API, aucune n'est codee en dur. */
+  const [CX, NS] = await Promise.all([ctxLoad(), api("/api/assistant/next-step")]);
+  if(!CX){ alertBox("OÙ EN EST MA MAISON ?", "Contexte indisponible : /api/assistant/context n'a pas repondu.\nAucune valeur n'est affichee plutot que d'en inventer une."); return; }
+  const d = CX.documents || {};
+  const gates = (CX.human_gates || []).map(x =>
+    `${x.statut === "CLOSED" ? "\u2713" : "\u26bf"} ${x.id} ${x.statut} — ${x.objet}` +
+    (x.professionnel ? `\n     → ${x.professionnel}` : "")).join("\n");
+  const t = `DOSSIER NUMÉRIQUE — ${vu(CX.project_name)} (${vu(CX.project_id)})
+\u2713 programme ${vu(CX.program && CX.program.data_status)} \u2014 ${vu(CX.program && CX.program.pieces)} pieces, ${vu(CX.program && CX.program.chambres)} chambres
+\u2713 BIM ${vu(CX.bim && CX.bim.total)} elements \u2014 source ${vu(CX.bim && CX.bim.source)}
+\u2713 plans ${vu(d.plans)} + coupes ${vu(d.coupes)} + façades ${vu(d.facades)}
+\u2713 métrés ${vu(CX.metre && CX.metre.status)}
+\u2713 budget ${vu(CX.budget && CX.budget.status)} \u2014 ${fn(CX.budget && CX.budget.total_fcfa)} FCFA (estimation de travail)
+\u2713 documentation ${vu(d.docs)} \u2713 rendus ${vu(d.renders)}
+
+VALIDATIONS (etat reel)
+${gates}
+
+CHANTIER PHYSIQUE — 0 %
+Aucun travail physique de construction n'a commence.
+
+PROCHAINE ETAPE
+${vu(NS && NS.titre)}
+${NS && NS.raison ? NS.raison : ""}
+${NS && NS.methode ? "(methode : " + NS.methode + ")" : ""}`;
+  alertBox("OÙ EN EST MA MAISON ?", t);
+}
+
+function errBlock(t, d){
+  return `<div class="err"><b>${t}</b><br>${d.erreur||""}<br><span class="mono">statut : ${d.statut||"UNKNOWN"}</span></div>`;
+}
+
+/* ================= RENDU ================= */
+async function render(){
+  const nav = MENU.map(([k,i,l])=>`<a class="${PAGE===k?'on':''}" onclick="go('${k}')"><i>${i}</i>${l}</a>`).join("");
+  document.getElementById("nav").innerHTML = nav;
+  const navH = document.getElementById("navH");
+  if(document.getElementById("hero")) heroInit();
+  if(navH) navH.innerHTML = MENU.filter(m=>["accueil","projet","plans","3d","budget","docs"].indexOf(m[0])>=0)
+    .map(([k,i,l])=>`<a class="${PAGE===k?'on':''}" onclick="go('${k}')">${i} ${k==="3d"?"BIM 3D":l}</a>`).join("");
+  document.getElementById("mob").innerHTML = MENU.slice(0,5).map(([k,i,l])=>
+    `<a class="${PAGE===k?'on':''}" onclick="go('${k}')"><i>${i}</i>${l}</a>`).join("")
+      + `<a onclick="whereAmI()"><i>&#127968;</i>Ma maison</a>`;
+  const cur = MENU.find(m=>m[0]===PAGE);
+  document.getElementById("ttl").textContent = cur?cur[2]:"Accueil";
+  document.getElementById("sub").textContent = "PRJ_1701484686 · Villa_Test_001 · Abidjan — mode " + (PRO?"professionnel":"débutant");
+  const v = document.getElementById("view");
+  v.innerHTML = '<div style="color:var(--muted);padding:20px">Chargement…</div>';
+  const F = {accueil:vAccueil, projet:vProjet, etapes:vEtapes, plans:vPlans, "3d":v3D, budget:vBudget,
+    docs:vDocs, assistant:vAssistant, gates:vGates};
+  v.innerHTML = await (F[PAGE]||vAccueil)();
+}
+let ROUTE_SEL = null;
+function initRoute(){
+  const h = (location.hash||"").replace("#","");
+  if(MENU.some(m=>m[0]===h)){ PAGE = h; return; }
+  const m = h.match(/^(?:3d\/)?bim(?:\/(.+))?$/);
+  if(m){ PAGE = "3d"; ROUTE_SEL = m[1] ? decodeURIComponent(m[1]) : null; }
+}
+addEventListener("hashchange", ()=>{
+  const h = (location.hash||"").replace("#","");
+  if(MENU.some(m=>m[0]===h) && h!==PAGE){ PAGE=h; ROUTE_SEL=null; render(); return; }
+  const m = h.match(/^(?:3d\/)?bim(?:\/(.+))?$/);
+  if(m){ PAGE="3d"; ROUTE_SEL=m[1]?decodeURIComponent(m[1]):null; render(); }
+});
+initRoute();
+setMode(0);
+
+/* ===== DEBUT home_ui.js (B1 — valide par node --check) ===== */
+/* ============================================================================
+   CONSTRUCTION AGENT — B1 : FONDATION UI PREMIUM
+   ----------------------------------------------------------------------------
+   Ce fichier ne contient AUCUNE donnee projet et AUCUNE requete reseau propre.
+
+   PRINCIPES (mission UI Premium, §21 et §22) :
+     - une seule source de donnees : ctxLoad() existant, qui met deja en cache
+       /api/assistant/context. On ne cree PAS de deuxieme logique concurrente ;
+     - le frontend n'invente jamais : nom, localisation, chambres, surfaces,
+       nombre d'elements BIM, budget, progression, statuts viennent du contexte ;
+     - aucune valeur par defaut inventee : un champ absent donne "UNKNOWN" ;
+     - B1 ne construit AUCUNE des 12 sections : il prepare la fondation.
+
+   PROTECTIONS : ce fichier ne definit rien qui puisse ecraser une fonction
+   existante (heroInit, heroApply, immersionGo, bim*, loadPlan, fitToScreen...).
+   Tout est range sous le namespace CA.
+
+   Ecrit en chaines simples, sans sequence \u{...} ni template literal imbrique :
+   c'est exactement ce qui avait casse la syntaxe lors de la 1re tentative M3.
+   ============================================================================ */
+
+var CA = (typeof CA !== "undefined" && CA) ? CA : {};
+
+/* ---------------------------------------------------------------------------
+   1. CONTEXTE PROJET — reutilise ctxLoad(), sans dupliquer la requete
+   --------------------------------------------------------------------------- */
+CA._ctxPromise = null;
+
+/* loadProjectContext() : point d'entree unique des donnees projet.
+   Si ctxLoad() existe (defini par index.html), on l'utilise : il gere deja
+   le cache. Sinon on appelle /api/assistant/context une seule fois et on
+   memorise la promesse, pour ne jamais lancer deux requetes identiques. */
+CA.loadProjectContext = function () {
+  if (typeof ctxLoad === "function") {
+    return Promise.resolve(ctxLoad());
+  }
+  if (!CA._ctxPromise) {
+    if (typeof api !== "function") return Promise.resolve(null);
+    CA._ctxPromise = Promise.resolve(api("/api/assistant/context"))
+      .catch(function () { return null; });
+  }
+  return CA._ctxPromise;
+};
+
+/* Acces sur a un chemin imbrique : CA.at(ctx, "program.chambres", "UNKNOWN").
+   Jamais de 0 ni de undefined a l'ecran : un champ absent devient UNKNOWN. */
+CA.at = function (obj, path, def) {
+  var cur = obj;
+  var parts = String(path || "").split(".");
+  for (var i = 0; i < parts.length; i++) {
+    if (cur === null || cur === undefined) return (def === undefined ? "UNKNOWN" : def);
+    cur = cur[parts[i]];
+  }
+  if (cur === null || cur === undefined || cur === "") return (def === undefined ? "UNKNOWN" : def);
+  return cur;
+};
+
+/* Separateur de milliers a la francaise. Aucune valeur en dur. */
+CA.num = function (n) {
+  if (n === null || n === undefined || n === "") return "UNKNOWN";
+  if (typeof n !== "number") {
+    var t = parseInt(String(n).replace(/\s/g, ""), 10);
+    if (isNaN(t)) return String(n);
+    n = t;
+  }
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
+/* ---------------------------------------------------------------------------
+   2. PETIT CACHE LOCAL DU CONTEXTE (evite de re-demander le contexte a chaque
+      section lors du rendu de l'accueil)
+   --------------------------------------------------------------------------- */
+CA._ctx = null;
+
+CA.context = function () {
+  return CA._ctx;
+};
+
+CA.hydrate = function () {
+  return CA.loadProjectContext().then(function (c) {
+    CA._ctx = c || null;
+    return CA._ctx;
+  });
+};
+
+/* ---------------------------------------------------------------------------
+   3. OUTILS DE RENDU — sans dependance a une section particuliere
+   --------------------------------------------------------------------------- */
+CA.esc = function (s) {
+  return String(s === null || s === undefined ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+};
+
+/* Point de montage : remplace le contenu d'un element s'il existe.
+   Ne cree rien si la cible est absente (aucune erreur si la section n'est
+   pas encore branchee). */
+CA.mount = function (id, html) {
+  var el = document.getElementById(id);
+  if (!el) return false;
+  el.innerHTML = html;
+  return true;
+};
+
+/* ---------------------------------------------------------------------------
+   4. REGISTRE DES SECTIONS — PREPARE EN B1, CONSTRUIT EN B2..B8
+      Chaque entree est un emplacement reserve. En B1 elles renvoient une
+      chaine vide : la fondation est posee, les sections ne sont PAS baties.
+   --------------------------------------------------------------------------- */
+CA.SECTION_IDS = {
+  hero: "homeHero",
+  parcours: "homeParcours",
+  assistant: "homeAssistant",
+  projet: "homeProjet",
+  bim: "homeBim",
+  plans: "homePlans",
+  guide: "homeGuide",
+  budget: "homeBudget",
+  gates: "homeGates",
+  cta: "homeCta",
+  footer: "homeFooter"
+};
+
+CA.sections = {};
+
+/* B2 */ CA.sections.hero      = function () { return ""; };
+/* B3 */ CA.sections.parcours   = function () { return ""; };
+/* B4 */ CA.sections.assistant  = function () { return ""; };
+/* B5 */ CA.sections.projet     = function () { return ""; };
+/* B5 */ CA.sections.bim        = function () { return ""; };
+/* B5 */ CA.sections.plans      = function () { return ""; };
+/* B5 */ CA.sections.guide      = function () { return ""; };
+/* B5 */ CA.sections.budget     = function () { return ""; };
+/* B6 */ CA.sections.gates      = function () { return ""; };
+/* B6 */ CA.sections.cta        = function () { return ""; };
+/* B6 */ CA.sections.footer     = function () { return ""; };
+
+/* Etat de la fondation — utile pour verifier B1 dans le navigateur. */
+CA.status = function () {
+  return {
+    fondation: "B1",
+    ctxLoad_disponible: (typeof ctxLoad === "function"),
+    api_disponible: (typeof api === "function"),
+    namespace: (typeof CA === "object"),
+    contexte_charge: !!CA._ctx,
+    sections_preparees: Object.keys(CA.sections).length,
+    sections_construites: 0
+  };
+};
+
+/* ---------------------------------------------------------------------------
+   5. PARCOURS M3 — on APPELLE l'existant, on ne le reimplemente pas.
+      (M3 est VERIFIED : immersionGo() doit rester la seule logique.)
+   --------------------------------------------------------------------------- */
+CA.parcoursLancer = function (id) {
+  if (typeof immersionGo === "function") { immersionGo(id); return true; }
+  return false;
+};
+
+/* ---------------------------------------------------------------------------
+   6. NAVIGATION — delegue a go() existant. Aucun duplicata.
+   --------------------------------------------------------------------------- */
+CA.aller = function (page) {
+  if (typeof go === "function") { go(page); return true; }
+  return false;
+};
+
+/* ---------------------------------------------------------------------------
+   7. AMORCAGE — hydrate le contexte et signale l'etat.
+      Ne monte AUCUNE section (B1). Ne touche a aucune fonction existante.
+   --------------------------------------------------------------------------- */
+CA.boot = function () {
+  return CA.hydrate().then(function (ctx) {
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[CA] B1 fondation prete — contexte " + (ctx ? "charge" : "indisponible") +
+                  " · sections preparees : " + Object.keys(CA.sections).length);
+    }
+    return ctx;
+  });
+};
+
+if (typeof window !== "undefined") {
+  window.CA = CA;
+}
+/* ===== FIN home_ui.js ===== */
+
+/* ===== DEBUT home_hero.js (B2 — valide par node --check) ===== */
+/* ============================================================================
+   CONSTRUCTION AGENT — B2 : HERO EN DEUX ZONES
+   ----------------------------------------------------------------------------
+   OBJECTIF : mise en page GAUCHE = message + CTA, DROITE = rendu reel du projet.
+
+   MOTEUR NON TOUCHE. heroInit(), heroApply() et heroGo() ne sont ni redefinis
+   ni modifies. Aucune rotation, aucun dot, aucune URL n'est touchee.
+
+   POURQUOI DU CSS ET PAS DES <img> :
+     heroApply() fait  el.className = "sl" + (i === _heroI ? " on" : "");
+     -> il ECRAit les classes des slides a chaque changement. On ne touche donc
+        pas aux slides : on ajoute une classe sur .hero et on repositionne les
+        slides en CSS. Le moteur continue de poser ses fonds d'image exactement
+        comme avant, mais dans la moitie droite.
+
+   Aucune image creee, aucun base64, aucune valeur projet en dur.
+   ============================================================================ */
+
+var CA = (typeof CA !== "undefined" && CA) ? CA : {};
+
+/* ---------------------------------------------------------------------------
+   1. FEUILLE DE STYLE — injectee une seule fois, marquee pour verification
+   --------------------------------------------------------------------------- */
+CA.heroStyle = function () {
+  if (document.getElementById("ca-hero-b2")) return false;
+  var st = document.createElement("style");
+  st.id = "ca-hero-b2";
+  st.textContent = [
+    /* --- .hero passe en deux zones : le texte occupe la gauche --- */
+    ".hero.hero-split{min-height:clamp(480px,72vh,760px);display:block;",
+    "  border-radius:0 0 18px 18px;border-bottom:1px solid var(--line)}",
+    ".hero.hero-split .in{max-width:52%;padding:0 40px 76px 0}",
+    /* --- les slides sont confines a la moitie droite + fondu vers la gauche --- */
+    ".hero.hero-split .sl{left:52%;right:0;top:0;bottom:0;",
+    "  border-radius:14px 0 0 14px;",
+    "  -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.55) 14%,#000 34%);",
+    "          mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.55) 14%,#000 34%)}",
+    /* --- overlay : assombrit la gauche pour la lisibilite du titre --- */
+    ".hero.hero-split .ov{background:linear-gradient(90deg,",
+    "  rgba(11,18,32,.985) 0%,rgba(11,18,32,.97) 44%,rgba(11,18,32,.42) 62%,",
+    "  rgba(11,18,32,.10) 84%,rgba(11,18,32,0) 100%)}",
+    /* --- badge BIM dynamique, coin du rendu --- */
+    ".ca-heroBadge{position:absolute;right:26px;bottom:26px;z-index:6;",
+    "  display:flex;align-items:center;gap:10px;padding:11px 15px;",
+    "  background:rgba(11,18,32,.62);border:1px solid var(--line);border-radius:11px;",
+    "  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}",
+    ".ca-heroBadge .ic{width:26px;height:26px;border-radius:7px;flex:0 0 26px;",
+    "  background:linear-gradient(135deg,var(--accent),#b2460f);",
+    "  display:grid;place-items:center;font-size:13px}",
+    ".ca-heroBadge b{display:block;color:var(--txt);font-size:12.5px;font-weight:700;line-height:1.15}",
+    ".ca-heroBadge span{display:block;color:var(--muted);font-size:11px;margin-top:2px}",
+    /* --- tablette : la composition glisse vers le vertical --- */
+    "@media (max-width:1020px){",
+    "  .hero.hero-split .in{max-width:60%;padding-right:24px}",
+    "  .hero.hero-split .sl{left:46%}}",
+    /* --- mobile : rendu AU-DESSUS, texte en dessous. Jamais une grille comprimee --- */
+    "@media (max-width:900px){",
+    "  .hero.hero-split{min-height:0;display:block}",
+    "  .hero.hero-split .sl{left:0;right:0;top:0;bottom:52%;border-radius:0;",
+    "    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%);",
+    "            mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%)}",
+    "  .hero.hero-split .ov{background:linear-gradient(180deg,",
+    "    rgba(11,18,32,.30) 0%,rgba(11,18,32,.72) 42%,rgba(11,18,32,.97) 62%,var(--bg) 100%)}",
+    "  .hero.hero-split .in{max-width:100%;padding:44vh 18px 30px}",
+    "  .ca-heroBadge{right:14px;bottom:calc(52% + 14px)}}",
+    /* --- accessibilite : animations desactivees, le hero reste complet --- */
+    "@media (prefers-reduced-motion:reduce){",
+    "  .hero.hero-split .sl{transition:none}}"
+  ].join("\n");
+  (document.head || document.documentElement).appendChild(st);
+  return true;
+};
+
+/* ---------------------------------------------------------------------------
+   2. BADGE BIM — valeur DYNAMIQUE, jamais ecrite en dur
+   --------------------------------------------------------------------------- */
+CA.heroBadge = function () {
+  var h = document.getElementById("hero");
+  if (!h) return false;
+  var old = document.getElementById("ca-heroBadge");
+  if (old) old.parentNode.removeChild(old);
+
+  var el = document.createElement("div");
+  el.id = "ca-heroBadge";
+  el.className = "ca-heroBadge";
+  el.setAttribute("role", "status");
+  el.innerHTML =
+    '<span class="ic">&#129513;</span><div><b>BIM 3D</b><span>' +
+    CA.esc(CA.badgeTexte()) + '</span></div>';
+  h.appendChild(el);
+  return true;
+};
+
+/* Texte du badge : uniquement a partir du contexte reel.
+   Si le contexte est absent, on affiche UNKNOWN plutot qu'un chiffre invente. */
+CA.badgeTexte = function () {
+  var c = CA.context();
+  if (!c) return "UNKNOWN";
+  var n = CA.at(c, "bim.total", null);
+  if (n === null) return "UNKNOWN";
+  return CA.num(n) + " \u00e9l\u00e9ments";
+};
+
+/* ---------------------------------------------------------------------------
+   3. APPLICATION — une seule fois, apres que le hero soit dans le DOM
+   --------------------------------------------------------------------------- */
+CA.heroApplyLayout = function () {
+  var h = document.getElementById("hero");
+  if (!h) return false;
+  CA.heroStyle();
+  h.classList.add("hero-split");
+  CA.heroBadge();
+  return true;
+};
+
+/* Point d'entree appele par l'accueil. Ne touche a AUCUNE fonction existante. */
+CA.heroBoot = function () {
+  return CA.hydrate().then(function (c) {
+    CA.heroApplyLayout();           /* le badge se remplit avec CA.context() */
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[CA] B2 hero deux zones — contexte " + (c ? "charge" : "indisponible") +
+                  " · badge : " + CA.badgeTexte());
+    }
+    return true;
+  });
+};
+
+if (typeof window !== "undefined") {
+  window.CA = CA;
+}
+/* ===== FIN home_hero.js ===== */
+</script>
+</body>
+</html>

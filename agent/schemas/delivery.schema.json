@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "delivery",
+  "type": "object",
+  "required": [
+    "project_id",
+    "items",
+    "delivery_status"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "filename",
+          "exists",
+          "verified"
+        ],
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "size_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "format": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "resolution": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "package": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "package_verified": {
+      "type": "boolean"
+    },
+    "delivery_status": {
+      "enum": [
+        "DELIVERED",
+        "BLOCKED",
+        "FAILED"
+      ]
+    }
+  }
+}

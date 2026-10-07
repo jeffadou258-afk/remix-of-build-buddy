@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: constructionagent-api
+    runtime: docker
+    plan: starter            # un disque permanent exige une offre payante
+    healthCheckPath: /v1/health
+    envVars:
+      - key: CA_API_KEY
+        sync: false          # à saisir dans Render : même valeur que dans l'application
+      - key: CA_DATA_ROOT
+        value: /var/data/api_projects
+    disk:
+      name: ca-data
+      mountPath: /var/data
+      sizeGB: 1

@@ -1,0 +1,83 @@
+{
+  "AGENT": "Construction Agent",
+  "VERSION": "2.0.0",
+  "TEST": "MINIMAL_INSTALLATION_TEST",
+  "started_at": "2026-10-02T11:24:21",
+  "TESTS_EXECUTED": [
+    "txt__test_-f",
+    "txt__ls_-lh",
+    "txt__stat_nonzero",
+    "txt__content_exact",
+    "txt__sha256",
+    "blender__available",
+    "blend__blender_exit",
+    "blend__exists_nonzero",
+    "blend__ls_-lh",
+    "blend__sha256",
+    "png__blender_exit",
+    "png__exists",
+    "png__size_gt_5kb",
+    "png__resolution_1280x720",
+    "png__sha256"
+  ],
+  "TESTS_PASSED": [
+    "txt__test_-f",
+    "txt__ls_-lh",
+    "txt__stat_nonzero",
+    "txt__content_exact",
+    "txt__sha256",
+    "blender__available",
+    "blend__blender_exit",
+    "blend__exists_nonzero",
+    "blend__ls_-lh",
+    "blend__sha256",
+    "png__blender_exit",
+    "png__exists",
+    "png__size_gt_5kb",
+    "png__resolution_1280x720",
+    "png__sha256"
+  ],
+  "TESTS_FAILED": [],
+  "FILES_CREATED": [
+    "/Users/mac/ConstructionAgent/workspace/construction_agent_test.txt",
+    "/Users/mac/ConstructionAgent/workspace/construction_agent_test.blend",
+    "/Users/mac/ConstructionAgent/workspace/construction_agent_test.png"
+  ],
+  "FILES_VERIFIED": [
+    {
+      "path": "/Users/mac/ConstructionAgent/workspace/construction_agent_test.txt",
+      "size_bytes": 39,
+      "sha256": "4a19ea6250717e9ac97b8efbd4c9a0241495789ace332f64b29938136e7062ae"
+    },
+    {
+      "path": "/Users/mac/ConstructionAgent/workspace/construction_agent_test.blend",
+      "size_bytes": 89944,
+      "sha256": "e495fb874c25b9e309e633af84ea525e5587657306168be7df6ebf4daf5d8e4d"
+    },
+    {
+      "path": "/Users/mac/ConstructionAgent/workspace/construction_agent_test.png",
+      "size_bytes": 818930,
+      "sha256": "4c97625093315cebfb29ae61eba743ef3d7861fd3b19c9f80ecebea491326e02",
+      "resolution": "1280x720"
+    }
+  ],
+  "COMMANDS_EXECUTED": [
+    "test -f '/Users/mac/ConstructionAgent/workspace/construction_agent_test.txt' && echo EXISTS_OK",
+    "ls -lh '/Users/mac/ConstructionAgent/workspace/construction_agent_test.txt'",
+    "stat -f '%z' '/Users/mac/ConstructionAgent/workspace/construction_agent_test.txt'",
+    "'/Applications/Blender.app/Contents/MacOS/Blender' --version",
+    "'/Applications/Blender.app/Contents/MacOS/Blender' --background --factory-startup --python '/Users/mac/ConstructionAgent/scripts/_mini_test_scene.py' -- '/Users/mac/ConstructionAgent/workspace/construction_agent_test.blend'",
+    "ls -lh '/Users/mac/ConstructionAgent/workspace/construction_agent_test.blend'",
+    "'/Applications/Blender.app/Contents/MacOS/Blender' --background --factory-startup --python '/Users/mac/ConstructionAgent/scripts/_mini_test_render.py' -- '/Users/mac/ConstructionAgent/workspace/construction_agent_test.blend' '/Users/mac/ConstructionAgent/workspace/construction_agent_test.png'",
+    "sips -g pixelWidth -g pixelHeight '/Users/mac/ConstructionAgent/workspace/construction_agent_test.png'"
+  ],
+  "BLOCKERS": [],
+  "BLENDER_AVAILABLE": true,
+  "BLENDER_PATH": "/Applications/Blender.app/Contents/MacOS/Blender",
+  "BLENDER_VERSION": "Blender 5.2.2 LTS",
+  "TESTS_TOTAL": 15,
+  "REAL_EXECUTION": true,
+  "INSTALLATION": "SUCCESS",
+  "STATUS": "VERIFIED",
+  "completed_at": "2026-10-02T11:24:28"
+}
