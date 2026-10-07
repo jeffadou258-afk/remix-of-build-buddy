@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { InputsPanel } from "@/components/extraction/InputsPanel";
 import { ModelPanel } from "@/components/bim/ModelPanel";
 import { ca, CaError, type CaGate, type CaMessage, type CaRun, type CaState } from "@/lib/ca/client";
+import { GateDecisionCard } from "@/components/ca/GateDecisionCard";
 import { FIELD_META, inputsSchema, type FieldKey, type Inputs } from "@/lib/extraction/inputs";
 import type { BuildingModel } from "@/lib/bim/schema";
 
@@ -113,7 +114,9 @@ export function CaProjectView({ id, title, model }: { id: string; title: string;
             <p className="max-w-xl text-sm text-muted-foreground">Lance les moteurs réels de ConstructionAgent jusqu'à la prochaine validation humaine.</p>
             <Button onClick={run} disabled={running || !!offline || !!state?.pending_gate}>{running ? "Exécution…" : "Lancer l'exécution"}</Button>
           </div>
-          {state?.pending_gate && <p className="font-mono text-sm uppercase text-amber-500">Arrêt sur validation humaine : {state.pending_gate}. La décision n'est pas encore branchée dans l'application.</p>}
+          {state?.pending_gate && gates[state.pending_gate]?.status === "OPEN" && (
+            <GateDecisionCard projectId={id} gate={state.pending_gate} openedAt={gates[state.pending_gate]?.opened_at ?? null} onDone={refresh} />
+          )}
           {runBlock && <p className="text-sm text-destructive">Exécution refusée par ConstructionAgent : {runBlock}</p>}
           {lastRun && (
             <div>

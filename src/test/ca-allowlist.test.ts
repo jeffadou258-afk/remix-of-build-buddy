@@ -8,11 +8,16 @@ describe("relais ConstructionAgent — liste blanche /v1", () => {
     }
   });
   it("refuse les adresses non branchées ou inexistantes", () => {
-    expect(isAllowed("POST", "gates/design/decision")).toBe(false); // décisions pas encore branchées
+    expect(isAllowed("GET", "gates/design/decision")).toBe(false);
+    expect(isAllowed("POST", "gates/../decision")).toBe(false);
     expect(isAllowed("GET", "memory")).toBe(false);
     expect(isAllowed("DELETE", "")).toBe(false);
     expect(isAllowed("GET", "../projects")).toBe(false);
     expect(isAllowed("GET", "admin")).toBe(false);
+  });
+  it("laisse passer la vraie décision de Gate et le résumé Design", () => {
+    expect(isAllowed("POST", "gates/design/decision")).toBe(true);
+    expect(isAllowed("GET", "artifacts/design")).toBe(true);
   });
   it("refuse un identifiant ConstructionAgent mal formé", () => {
     expect(() => upstreamPath("../x", "state")).toThrow();
