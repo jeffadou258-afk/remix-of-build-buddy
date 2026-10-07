@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getAdminAccess } from "@/lib/security/admin-access.functions";
 
 const NAV = [
   { label: "Services", href: "#services" },
@@ -17,6 +20,10 @@ export function HomeHeader() {
   const navigate = useNavigate();
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  // Affichage seulement : /admin refait son propre contrôle serveur.
+  const fetchAccess = useServerFn(getAdminAccess);
+  const access = useQuery({ queryKey: ["admin-access", user?.id], queryFn: () => fetchAccess(), enabled: !!user, retry: false });
+  const isAdmin = !!user && access.data?.allowed === true;
 
   useEffect(() => {
     const on = () => setSolid(window.scrollY > 40);
@@ -45,6 +52,7 @@ export function HomeHeader() {
         <div className="flex shrink-0 items-center gap-3">
           {user ? (
             <>
+              {isAdmin && <Link to="/admin" className={`hidden sm:inline ${linkCls}`}>Admin</Link>}
               <Link to="/projets" className={`hidden sm:inline ${linkCls}`}>Mes projets</Link>
               <button className={`hidden sm:inline ${linkCls}`} onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }}>Déconnexion</button>
             </>
@@ -61,6 +69,7 @@ export function HomeHeader() {
         <div className="border-t border-border bg-background px-5 pb-8 pt-4 lg:hidden">
           <nav className="flex flex-col gap-5 text-foreground [&>*]:text-lg [&>*]:opacity-90">{items}</nav>
           <div className="mt-8 flex flex-col gap-3">
+            {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="rounded-full border border-foreground py-3 text-center text-sm">Admin</Link>}
             {!user && <Link to="/auth" className="rounded-full border border-foreground py-3 text-center text-sm">Connexion</Link>}
             <Link to="/projets" className="rounded-full bg-foreground py-3 text-center text-sm text-background">Commencer</Link>
           </div>
