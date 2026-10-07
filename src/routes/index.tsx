@@ -78,7 +78,7 @@ function Describe() {
     }
     setBusy(true);
     // Flux réel existant : projet → liaison ConstructionAgent → premier message (extraction réelle).
-    const title = t.split(/[.\n]/)[0].slice(0, 80) || "Nouveau projet";
+    const title = (t.split(/[.\n]/)[0] ?? "").slice(0, 80) || "Nouveau projet";
     const { data, error } = await supabase.from("projects").insert({ title, client_type: "particulier", user_id: user.id }).select("id").single();
     if (error || !data) { setBusy(false); toast.error("Création impossible."); return; }
     try {
@@ -134,8 +134,8 @@ function Home() {
         <img src="/constructionagent/hero.webp" alt="Villa contemporaine avec piscine à débordement au coucher du soleil" fetchPriority="high" decoding="async" className="luxe-zoom absolute inset-0 h-full w-full object-cover object-[70%_center]" />
         <div className="shade-hero absolute inset-0" />
         <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-20 md:px-8 md:pb-28">
-          <p className="luxe-rise text-[11px] tracking-[0.4em] text-champagne">CONSTRUCTIONAGENT</p>
-          <h1 className="luxe-rise mt-5 text-5xl leading-[0.98] [animation-delay:120ms] sm:text-6xl md:text-8xl">
+          <p className="luxe-rise text-[11px] tracking-[0.4em] opacity-90">CONSTRUCTIONAGENT</p>
+          <h1 className="luxe-rise mt-5 text-[2.4rem] leading-[0.98] [animation-delay:120ms] sm:text-6xl md:text-8xl">
             DE L’IDÉE À LA<br />CONSTRUCTION.
           </h1>
           <p className="luxe-rise mt-6 max-w-xl text-lg opacity-90 [animation-delay:240ms] md:text-xl">L’intelligence qui transforme votre vision en projet.</p>

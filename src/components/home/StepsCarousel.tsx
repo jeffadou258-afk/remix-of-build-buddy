@@ -25,7 +25,7 @@ export function StepsCarousel() {
     return () => window.clearTimeout(t);
   }, [i, paused, go]);
 
-  const s = SLIDES[i];
+  const s = SLIDES[i] ?? SLIDES[0];
   return (
     <section
       aria-roledescription="carrousel"
@@ -33,11 +33,11 @@ export function StepsCarousel() {
       className="relative bg-foreground text-on-image"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => { touch.current = e.touches[0].clientX; setPaused(true); }}
+      onTouchStart={(e) => { touch.current = e.touches[0]?.clientX ?? null; setPaused(true); }}
       onTouchEnd={(e) => {
         const start = touch.current; touch.current = null; setPaused(false);
         if (start == null) return;
-        const dx = e.changedTouches[0].clientX - start;
+        const dx = (e.changedTouches[0]?.clientX ?? start) - start;
         if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1);
       }}
       onKeyDown={(e) => { if (e.key === "ArrowRight") go(i + 1); if (e.key === "ArrowLeft") go(i - 1); }}
