@@ -33,7 +33,7 @@ export function GateDecisionCard({ projectId, gate, openedAt, onDone }: Props) {
 
   async function requestChange() {
     const t = comment.trim();
-    if (!t) return toast.error("Précisez ce que vous voulez modifier.");
+    if (!t) { toast.error("Précisez ce que vous voulez modifier."); return; }
     setBusy(true);
     try {
       // La Gate n'est pas décidée : la demande est enregistrée comme message utilisateur réel.
