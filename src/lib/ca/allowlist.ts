@@ -16,12 +16,17 @@ const ALLOWED: ReadonlyArray<readonly [CaMethod, string]> = [
   ["GET", "unknowns"],
   ["POST", "runs"],     // exécution réelle des moteurs
   ["GET", "gates"],
+  ["GET", "artifacts/design"], // résumé Design réel (design_variants.json)
 ];
+
+/** POST /v1/projects/{id}/gates/{gate}/decision — decision = approve | reject (pipeline.decide). */
+const GATE_DECISION = /^gates\/[a-z_]{1,40}\/decision$/;
 
 /** `sub` = partie après /v1/projects/{id}/ (sans slash). */
 export function isAllowed(method: string, sub: string): boolean {
   const s = sub.replace(/^\/+|\/+$/g, "");
   if (s.includes("..") || s.includes("?")) return false;
+  if (method === "POST" && GATE_DECISION.test(s)) return true;
   return ALLOWED.some(([m, p]) => m === method && p === s);
 }
 
